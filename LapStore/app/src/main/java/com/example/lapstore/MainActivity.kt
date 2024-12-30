@@ -6,19 +6,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -36,7 +35,6 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PhoneIphone
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material.icons.outlined.DensitySmall
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Person
@@ -59,9 +57,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import com.example.lapstore.ui.theme.LapStoreTheme
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.navigation.NavHostController
+import com.example.lapstore.viewmodels.SanPhamViewModel
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 data class CategoryData(
     val title: String,
@@ -167,6 +167,7 @@ class MainActivity : ComponentActivity() {
             LapStoreTheme {
                 val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                 val scope = rememberCoroutineScope()
+                val viewModel: SanPhamViewModel = viewModels<SanPhamViewModel>().value
                 val navController = rememberNavController()
                 var searchText by remember {
                     mutableStateOf("")
@@ -418,7 +419,7 @@ class MainActivity : ComponentActivity() {
                         }
                     ) { paddingValues ->
                         Box(modifier = Modifier.padding(paddingValues)) {
-                            NavgationGraph(navController = navController)
+                            NavgationGraph(navController,viewModel)
                         }
                     }
                 }

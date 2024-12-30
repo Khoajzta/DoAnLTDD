@@ -1,4 +1,4 @@
-package com.example.myapplication.model
+package com.example.lapstore.views
 
 data  class Product(
     val name: String,
