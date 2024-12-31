@@ -40,7 +40,7 @@ fun ProductCard(sanpham: SanPham) {
             AsyncImage(
                 model= sanpham.HinhAnh,
                 contentDescription = null,
-                modifier = Modifier.padding(8.dp).size(80.dp),
+                modifier = Modifier.padding(8.dp).size(200.dp),
                 contentScale = ContentScale.Fit
             )
 
