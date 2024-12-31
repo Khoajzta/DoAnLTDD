@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.lapstore.models.SanPham
 
 @Composable
@@ -36,6 +37,13 @@ fun ProductCard(sanpham: SanPham) {
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
+            AsyncImage(
+                model= sanpham.HinhAnh,
+                contentDescription = null,
+                modifier = Modifier.padding(8.dp).size(80.dp),
+                contentScale = ContentScale.Fit
+            )
+
             Text(
                 text = sanpham.TenSanPham,
                 fontSize = 18.sp,

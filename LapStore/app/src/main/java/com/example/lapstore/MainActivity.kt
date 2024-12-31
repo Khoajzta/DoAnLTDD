@@ -2,6 +2,7 @@ package com.example.lapstore
 
 import NavRoute
 import NavgationGraph
+import SanPhamViewModel
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -60,7 +61,6 @@ import com.example.lapstore.ui.theme.LapStoreTheme
 import kotlinx.coroutines.launch
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.navigation.NavHostController
-import com.example.lapstore.viewmodels.SanPhamViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 data class CategoryData(
@@ -167,7 +167,7 @@ class MainActivity : ComponentActivity() {
             LapStoreTheme {
                 val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                 val scope = rememberCoroutineScope()
-                val viewModel: SanPhamViewModel = viewModels<SanPhamViewModel>().value
+                val viewModel = SanPhamViewModel()
                 val navController = rememberNavController()
                 var searchText by remember {
                     mutableStateOf("")

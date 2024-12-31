@@ -14,10 +14,9 @@ data class SanPham(
     var Gia: Int,
     var SoLuong: Int,
     var MoTa: String,
-    var HinhAnh: Int,
+    var HinhAnh: String,
     var TrangThai: Int,
 )
-
 data class SanPhamResponse(
-    val sanpham: List<SanPham>
+    val sanpham:List<SanPham>
 )

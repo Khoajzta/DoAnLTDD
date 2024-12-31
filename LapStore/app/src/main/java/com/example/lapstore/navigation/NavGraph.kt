@@ -2,7 +2,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.lapstore.viewmodels.SanPhamViewModel
 import com.example.lapstore.views.AcccountScreen
 import com.example.lapstore.views.CardScreen
 import com.example.lapstore.views.HomeScreen

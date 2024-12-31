@@ -1,6 +1,7 @@
 // QuanLyBanLaptopRetrofitClient.kt
-package com.example.lapstore.apis
+package com.example.lapstore.api
 
+import SanPhamAPIService
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
