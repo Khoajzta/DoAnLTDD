@@ -19,7 +19,7 @@ $data = json_decode(file_get_contents("php://input"));
 
 // Kiểm tra nếu dữ liệu đầu vào tồn tại
 if (!isset($data->MaHoaDonBan)) {
-    echo json_encode(array('message' => 'Mã hóa đơn không tồn tại.'));
+    echo json_encode(array('message' => 'MaHoaDon exist.'));
     die();
 }
 
@@ -33,8 +33,8 @@ $hoadon->TrangThai = $data->TrangThai;
 
 // Cập nhật hóa đơn bán
 if ($hoadon->updateHoaDonBan()) {
-    echo json_encode(array('message' => 'Hóa đơn bán đã được cập nhật.'));
+    echo json_encode(array('message' => 'HoaDonBan update successful'));
 } else {
-    echo json_encode(array('message' => 'Không thể cập nhật hóa đơn bán.'));
+    echo json_encode(array('message' => 'HoaDonBan failed to update'));
 }
 ?>

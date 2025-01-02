@@ -29,9 +29,9 @@ $hoadon->TrangThai = $data->TrangThai;
 // Gọi hàm thêm mới hóa đơn bán
 if ($hoadon->addHoaDonBan()) {
     // Nếu thêm thành công
-    echo json_encode(array('message', 'Hóa đơn bán đã được thêm thành công.'));
+    echo json_encode(array('message', 'HoaDonBan create.'));
 } else {
     // Nếu thêm thất bại
-    echo json_encode(array('message' , 'Không thể thêm hóa đơn bán.'));
+    echo json_encode(array('message' , 'HoaDonBan not create'));
 }
 ?>

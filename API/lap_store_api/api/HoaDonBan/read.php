@@ -13,7 +13,7 @@ $conn = $database->Connect(); // Lấy kết nối PDO
 $hoadon = new HoaDonBan($conn);
 
 // Lấy tất cả dữ liệu hóa đơn bán
-$getAllHoaDon = $hoadon->GetAllHoaDon();
+$getAllHoaDon = $hoadon->getAllHoaDonBan();
 $num = $getAllHoaDon->rowCount();
 
 // Kiểm tra nếu có dữ liệu
