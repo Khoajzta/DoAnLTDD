@@ -36,34 +36,33 @@ class diachi{
         $this->SoNha = $row['SoNha'];
     } 
 
-    public function AddDiaChi(){
-        $query = "INSERT INTO diachi SET MaDiaChi =: MaDiaChi, MaTinh =:MaTinh, MaHuyen=: MaHuyen, MaXa=: MaXa, SoNha=:SoNha";
+    public function AddDiaChi() {
+    $query = "INSERT INTO diachi SET MaTinh=:MaTinh, MaHuyen=:MaHuyen, MaXa=:MaXa, SoNha=:SoNha";
 
-        $stmt = $this->conn->prepare($query);
+    $stmt = $this->conn->prepare($query);
 
-        $this->MaDiaChi = htmlspecialchars(strip_tags($this->MaDiaChi));
-        $this->MaTinh = htmlspecialchars(strip_tags($this->MaTinh));
-        $this->MaHuyen = htmlspecialchars(strip_tags($this->MaHuyen));
-        $this->MaXa = htmlspecialchars(strip_tags($this->MaXa));
-        $this->SoNha = htmlspecialchars(strip_tags($this->SoNha));
+    $this->MaDiaChi = htmlspecialchars(strip_tags($this->MaDiaChi));
+    $this->MaTinh = htmlspecialchars(strip_tags($this->MaTinh));
+    $this->MaHuyen = htmlspecialchars(strip_tags($this->MaHuyen));
+    $this->MaXa = htmlspecialchars(strip_tags($this->MaXa));
+    $this->SoNha = htmlspecialchars(strip_tags($this->SoNha));
 
+    $stmt->bindParam(':MaDiaChi', $this->MaDiaChi);
+    $stmt->bindParam(':MaTinh', $this->MaTinh);
+    $stmt->bindParam(':MaHuyen', $this->MaHuyen);
+    $stmt->bindParam(':MaXa', $this->MaXa);
+    $stmt->bindParam(':SoNha', $this->SoNha);
 
-        $stmt->bindParam(':MaDiaChi',$this->MaDiaChi);
-        $stmt->bindParam(':MaTinh',$this->MaTinh);
-        $stmt->bindParam(':MaHuyen',$this->MaHuyen);
-        $stmt->bindParam(':MaXa',$this->MaXa);
-        $stmt->bindParam(':SoNha',$this->SoNha);
-
-        
-        if($stmt->execute()){
-            return true;
-        }
-        printf("Error %s.\n",$stmt->error);
-        return false;
+    if ($stmt->execute()) {
+        return true;
     }
+    printf("Error: %s.\n", $stmt->error);
+    return false;
+}
+
 
     public function UpdateDiaChi(){
-        $query = "UPDATE diachi SET MaTinh =:MaTinh, MaHuyen=: MaHuyen, MaXa=: MaXa, SoNha=:SoNha  WHERE MaDiaChi =: MaDiaChi";
+        $query = "UPDATE diachi SET MaTinh =:MaTinh, MaHuyen=:MaHuyen, MaXa=:MaXa, SoNha=:SoNha  WHERE MaDiaChi =:MaDiaChi";
 
         $stmt = $this->conn->prepare($query);
 
@@ -88,7 +87,7 @@ class diachi{
     }
 
     public function deleteDiaChi(){
-        $query = "DELETE FROM diachi WHERE MaDiaChi =: MaDiaChi";
+        $query = "DELETE FROM diachi WHERE MaDiaChi =:MaDiaChi";
 
         $stmt = $this->conn->prepare($query);
 
