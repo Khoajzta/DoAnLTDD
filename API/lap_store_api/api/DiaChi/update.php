@@ -1,7 +1,7 @@
 <?php
     header('Access-Control-Allow-Origin:*');
     header('Content-Type: application/json');
-    header('Access-Control-Allow-Methods: POST');
+    header('Access-Control-Allow-Methods: PUT');
     header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type,Access-Control-Allow-Methods,Authorization,X-Requested-With');
     
     include_once('../../config/database.php');
@@ -15,6 +15,7 @@
     $diachi = new DiaChi($conn);
 
     $data = json_decode(file_get_contents("php://input"));
+
     $diachi->MaDiaChi = $data->MaDiaChi;
     $diachi->MaTinh = $data->MaTinh;
     $diachi->MaHuyen = $data->MaHuyen;
@@ -22,11 +23,11 @@
     $diachi->SoNha = $data->SoNha;
 
 
-    if($diachi->AddDiaChi()){
-        echo json_encode(array('message','Dia Chi Created'));
+    if($diachi->UpdateDiaChi()){
+        echo json_encode(array('message','Dia Chi Updated'));
     }
     else{
-        echo json_encode(array('message','Dia Chi Not Created'));
+        echo json_encode(array('message','Dia Chi Not Updated'));
     }
 
 ?>

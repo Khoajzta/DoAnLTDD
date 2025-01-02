@@ -9,10 +9,10 @@ include_once('../../model/diachi.php');
 $database = new database();
 $conn = $database->Connect(); // Lấy kết nối PDO
 
-// Khởi tạo lớp Khachhang với kết nối PDO
+// Khởi tạo lớp diachi với kết nối PDO
 $diachi = new DiaChi($conn);
 
-// Lấy tất cả khách hàng
+// Lấy tất cả diachi
 $getAllDiaChi = $diachi->GetAllDiaChi();
 
 $num = $getAllDiaChi->rowCount();
@@ -27,11 +27,11 @@ if($num>0){
         $diachi_item = array(
             'MaDiaChi'=> $MaDiaChi,
             'MaTinh'=> $MaTinh,
-            'Email'=> $Email,
-            'SoDienThoai'=> $SoDienThoai,
-            'MaDiaChi'=> $MaDiaChi
+            'MaHuyen'=> $MaHuyen,
+            'MaXa'=> $MaXa,
+            'SoNha'=> $SoNha
         );
-        array_push($diachi_array['khachhang'],$diachi_item);
+        array_push($diachi_array['diachi'],$diachi_item);
     }
     echo json_encode($diachi_array, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 }
