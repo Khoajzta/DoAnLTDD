@@ -43,7 +43,7 @@ if ($num > 0) {
 } else {
     // Trường hợp không có dữ liệu
     echo json_encode(
-        array('message' => 'Không có bình luận đánh giá nào.')
+        array('message' => 'Not BinhLuan ')
     );
 }
 ?>

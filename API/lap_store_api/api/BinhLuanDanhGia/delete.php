@@ -25,9 +25,9 @@
     // Gọi hàm deleteBinhLuanDanhGia() để xóa bình luận
     if ($binhluan->deleteBinhLuanDanhGia()) {
         // Nếu xóa thành công
-        echo json_encode(array('message' => 'Bình luận đánh giá đã được xóa.'));
+        echo json_encode(array('message' => 'BinhLuan delete.'));
     } else {
         // Nếu xóa thất bại
-        echo json_encode(array('message' => 'Không thể xóa bình luận đánh giá.'));
+        echo json_encode(array('message' => 'Binhluan not delete.'));
     }
 ?>

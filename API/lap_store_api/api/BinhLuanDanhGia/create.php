@@ -32,9 +32,9 @@
     // Gọi hàm thêm mới bình luận đánh giá
     if ($binhluan->AddBinhLuanDanhGia()) {
         // Nếu thêm thành công
-        echo json_encode(array('message' => 'Bình luận đánh giá đã được thêm thành công.'));
+        echo json_encode(array('message' => 'Binhluan create.'));
     } else {
         // Nếu thêm thất bại
-        echo json_encode(array('message' => 'Không thể thêm bình luận đánh giá.'));
+        echo json_encode(array('message' => 'binhluan not create'));
     }
 ?>

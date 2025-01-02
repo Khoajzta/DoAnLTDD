@@ -19,7 +19,7 @@
 
     // Kiểm tra nếu dữ liệu đầu vào tồn tại
     if (!isset($data->MaBinhLuan)) {
-        echo json_encode(array('message' => 'Mã bình luận không tồn tại.'));
+        echo json_encode(array('message' => 'MaBinhLuan not exist'));
         die();
     }
 
@@ -35,8 +35,8 @@
 
     // Cập nhật bình luận đánh giá
     if ($binhluan->UpdateBinhLuanDanhGia()) {
-        echo json_encode(array('message' => 'Bình luận đánh giá đã được cập nhật.'));
+        echo json_encode(array('message' => 'BinhLuan update.'));
     } else {
-        echo json_encode(array('message' => 'Không thể cập nhật bình luận đánh giá.'));
+        echo json_encode(array('message' => 'BinhLUan not update.'));
     }
 ?>

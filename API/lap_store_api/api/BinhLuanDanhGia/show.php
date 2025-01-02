@@ -13,7 +13,7 @@ $conn = $database->Connect(); // Lấy kết nối PDO
 $binhluan = new BinhLuanDanhGia($conn);
 
 // Lấy MaBinhLuan từ URL (phương thức GET)
-$binhluan->MaBinhLuan = isset($_GET['id']) ? $_GET['id'] : die(json_encode(array('message' => 'Mã bình luận không tồn tại.')));
+$binhluan->MaBinhLuan = isset($_GET['id']) ? $_GET['id'] : die(json_encode(array('message' => 'MaBinhLuan not exist')));
 
 // Lấy thông tin chi tiết bình luận đánh giá
 $binhluan->GetBinhLuanDanhGiaById();
@@ -36,6 +36,6 @@ if ($binhluan->MaBinhLuan) {
     echo json_encode($binhluan_item, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 } else {
     // Nếu không tìm thấy
-    echo json_encode(array('message' => 'Bình luận đánh giá không tồn tại.'));
+    echo json_encode(array('message' => 'binh luan not exist'));
 }
 ?>
