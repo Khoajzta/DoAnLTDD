@@ -5,6 +5,7 @@ class HinhAnh{
     //Thuoc tinh
     public $MaHinhAnh;
     public $TenHinhAnh;
+    public $MaSanPham;
     //connect db
 
     public function __construct($database){
@@ -28,19 +29,22 @@ class HinhAnh{
 
         $this->MaHinhAnh = $row['MaHinhAnh'];
         $this->TenHinhAnh = $row['TenHinhAnh'];
+        $this->TenHinhAnh = $row['MaSanPham'];
     } 
 
     public function AddHinhAnh(){
-        $query = "INSERT INTO hinhanh SET TenHinhAnh =:TenHinhAnh ,  MaHinhAnh =:MaHinhAnh";
+        $query = "INSERT INTO hinhanh SET TenHinhAnh =:TenHinhAnh ,  MaHinhAnh =:MaHinhAnh , MaSanPham =:MaSanPham";
 
         $stmt = $this->conn->prepare($query);
 
         $this->MaHinhAnh = htmlspecialchars(strip_tags($this->MaHinhAnh));
         $this->TenHinhAnh = htmlspecialchars(strip_tags($this->TenHinhAnh));
+        $this->MaSanPham = htmlspecialchars(strip_tags($this->MaSanPham));
 
 
         $stmt->bindParam(':MaHinhAnh',$this->MaHinhAnh);
         $stmt->bindParam(':TenHinhAnh',$this->TenHinhAnh);
+        $stmt->bindParam(':MaSanPham',$this->MaSanPham);
         
         if($stmt->execute()){
             return true;
@@ -50,15 +54,17 @@ class HinhAnh{
     }
 
     public function UpdateHinhAnh(){
-        $query = "UPDATE hinhanh SET TenHinhAnh =:TenHinhAnh  WHERE MaHinhAnh=:MaHinhAnh";
+        $query = "UPDATE hinhanh SET TenHinhAnh =:TenHinhAnh, MaSanPham =:MaSanPham  WHERE MaHinhAnh=:MaHinhAnh";
 
         $stmt = $this->conn->prepare($query);
 
         $this->MaHinhAnh = htmlspecialchars(strip_tags($this->MaHinhAnh));
         $this->TenHinhAnh = htmlspecialchars(strip_tags($this->TenHinhAnh));
+        $this->TenHinhAnh = htmlspecialchars(strip_tags($this->TenHinhAnh));
 
         $stmt->bindParam(':MaHinhAnh',$this->MaHinhAnh);
         $stmt->bindParam(':TenHinhAnh',$this->TenHinhAnh);
+        $stmt->bindParam(':MaSanPham',$this->MaSanPham);
 
         if($stmt->execute()){
             return true;

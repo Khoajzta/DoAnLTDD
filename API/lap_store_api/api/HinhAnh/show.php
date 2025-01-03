@@ -20,6 +20,7 @@
     $hinhanh_item = array(
         'MaHinhAnh'=> $hinhanh->MaHinhAnh,
         'TenHinhAnh'=> $hinhanh->TenHinhAnh,
+        'MaSanPham'=> $hinhanh->MaSanPham,
     );
 
     print_r(json_encode($hinhanh_item,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));

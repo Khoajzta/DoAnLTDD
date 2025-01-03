@@ -18,6 +18,7 @@
 
     $hinhanh->MaHinhAnh = $data->MaHinhAnh;
     $hinhanh->TenHinhAnh = $data->TenHinhAnh;
+    $hinhanh->MaSanPham = $data->MaSanPham;
 
     if($hinhanh->UpdateHinhAnh()){
         echo json_encode(array('message','Hinh Anh Updated'));
