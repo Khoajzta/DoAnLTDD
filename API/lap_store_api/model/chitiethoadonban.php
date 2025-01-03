@@ -17,17 +17,24 @@ class ChiTietHoaDonBan {
     }
 
     // Phương thức lấy tất cả chi tiết hóa đơn bán
+  
     public function getAllDetails() {
         try {
             $query = "SELECT * FROM chitiethoadonban ORDER BY MaChiTietHoaDonBan DESC";
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
-            return $stmt;
+    
+            // Fetch all results as an associative array
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+            // Return the results
+            return $results;
         } catch (PDOException $e) {
             echo "Lỗi: " . $e->getMessage();
             return null;
         }
     }
+    
 
     // Phương thức lấy chi tiết hóa đơn bán theo ID
     public function getDetailById() {

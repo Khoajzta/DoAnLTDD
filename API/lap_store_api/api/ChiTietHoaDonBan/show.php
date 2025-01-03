@@ -45,6 +45,6 @@ if ($num > 0) {
     echo json_encode($chitiet_array, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 } else {
     // Nếu không có chi tiết hóa đơn bán
-    echo json_encode(array('message' => 'Không có chi tiết hóa đơn bán cho hóa đơn này.'));
+    echo json_encode(array('message' => 'Không có ChiTietHoaDon cho hóa đơn này.'));
 }
 ?>
