@@ -27,7 +27,7 @@ if ($num > 0) {
         $carddohoa_item = array(
             'MaCardDoHoa' => $MaCardDoHoa,
             'TenCard' => $TenCard,
-            'DuongLuongBoNho' => $DuongLuongBoNho,
+            'DungLuongBoNho' => $DungLuongBoNho,
             'MaLoaiCard' => $MaLoaiCard
         );
 
@@ -39,7 +39,7 @@ if ($num > 0) {
 } else {
     // Trường hợp không có dữ liệu
     echo json_encode(
-        array('message' => 'Không có Card Đồ Họa nào.')
+        array('message' => 'card do hoa not have .')
     );
 }
 ?>

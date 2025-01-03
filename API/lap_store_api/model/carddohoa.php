@@ -5,7 +5,7 @@ class CardDoHoa {
     // Thuộc tính liên quan đến Card Đồ Họa
     public $MaCardDoHoa;
     public $TenCard;
-    public $DuongLuongBoNho;
+    public $DungLuongBoNho;
     public $MaLoaiCard;
 
     // Kết nối cơ sở dữ liệu
@@ -37,7 +37,7 @@ class CardDoHoa {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($row) {
                 $this->TenCard = $row['TenCard'];
-                $this->DuongLuongBoNho = $row['DuongLuongBoNho'];
+                $this->DungLuongBoNho = $row['DungLuongBoNho'];
                 $this->MaLoaiCard = $row['MaLoaiCard'];
             }
         } catch (PDOException $e) {
@@ -48,18 +48,18 @@ class CardDoHoa {
     // Phương thức thêm Card Đồ Họa
     public function addCard() {
         try {
-            $query = "INSERT INTO carddohoa (TenCard, DuongLuongBoNho, MaLoaiCard) 
-                      VALUES (:TenCard, :DuongLuongBoNho, :MaLoaiCard)";
+            $query = "INSERT INTO carddohoa (TenCard, DungLuongBoNho, MaLoaiCard) 
+                      VALUES (:TenCard, :DungLuongBoNho, :MaLoaiCard)";
             $stmt = $this->conn->prepare($query);
 
             // Làm sạch dữ liệu đầu vào
             $this->TenCard = htmlspecialchars(strip_tags($this->TenCard));
-            $this->DuongLuongBoNho = htmlspecialchars(strip_tags($this->DuongLuongBoNho));
+            $this->DungLuongBoNho = htmlspecialchars(strip_tags($this->DungLuongBoNho));
             $this->MaLoaiCard = htmlspecialchars(strip_tags($this->MaLoaiCard));
 
             // Gắn tham số
             $stmt->bindParam(':TenCard', $this->TenCard);
-            $stmt->bindParam(':DuongLuongBoNho', $this->DuongLuongBoNho);
+            $stmt->bindParam(':DungLuongBoNho', $this->DungLuongBoNho);
             $stmt->bindParam(':MaLoaiCard', $this->MaLoaiCard);
 
             return $stmt->execute();
@@ -74,7 +74,7 @@ class CardDoHoa {
         try {
             $query = "UPDATE carddohoa SET 
                       TenCard = :TenCard, 
-                      DuongLuongBoNho = :DuongLuongBoNho, 
+                      DungLuongBoNho = :DungLuongBoNho, 
                       MaLoaiCard = :MaLoaiCard 
                       WHERE MaCardDoHoa = :MaCardDoHoa";
 
@@ -82,13 +82,13 @@ class CardDoHoa {
 
             // Làm sạch dữ liệu
             $this->TenCard = htmlspecialchars(strip_tags($this->TenCard));
-            $this->DuongLuongBoNho = htmlspecialchars(strip_tags($this->DuongLuongBoNho));
+            $this->DungLuongBoNho = htmlspecialchars(strip_tags($this->DungLuongBoNho));
             $this->MaLoaiCard = htmlspecialchars(strip_tags($this->MaLoaiCard));
             $this->MaCardDoHoa = htmlspecialchars(strip_tags($this->MaCardDoHoa));
 
             // Gắn tham số
             $stmt->bindParam(':TenCard', $this->TenCard);
-            $stmt->bindParam(':DuongLuongBoNho', $this->DuongLuongBoNho);
+            $stmt->bindParam(':DungLuongBoNho', $this->DungLuongBoNho);
             $stmt->bindParam(':MaLoaiCard', $this->MaLoaiCard);
             $stmt->bindParam(':MaCardDoHoa', $this->MaCardDoHoa);
 

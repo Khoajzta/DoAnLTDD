@@ -13,7 +13,7 @@ $conn = $database->Connect(); // Lấy kết nối PDO
 $carddohoa = new CardDoHoa($conn);
 
 // Lấy MaCardDoHoa từ URL (phương thức GET)
-$carddohoa->MaCardDoHoa = isset($_GET['id']) ? $_GET['id'] : die(json_encode(array('message' => 'Mã Card Đồ Họa không tồn tại.')));
+$carddohoa->MaCardDoHoa = isset($_GET['id']) ? $_GET['id'] : die(json_encode(array('message' => 'macarddohoa not exist.')));
 
 // Lấy thông tin chi tiết Card Đồ Họa
 $carddohoa->getCardById();
@@ -24,7 +24,7 @@ if ($carddohoa->MaCardDoHoa) {
     $carddohoa_item = array(
         'MaCardDoHoa' => $carddohoa->MaCardDoHoa,
         'TenCard' => $carddohoa->TenCard,
-        'DuongLuongBoNho' => $carddohoa->DuongLuongBoNho,
+        'DungLuongBoNho' => $carddohoa->DungLuongBoNho,
         'MaLoaiCard' => $carddohoa->MaLoaiCard
     );
 
@@ -32,6 +32,6 @@ if ($carddohoa->MaCardDoHoa) {
     echo json_encode($carddohoa_item, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 } else {
     // Nếu không tìm thấy
-    echo json_encode(array('message' => 'Card Đồ Họa không tồn tại.'));
+    echo json_encode(array('message' => 'card not exist '));
 }
 ?>

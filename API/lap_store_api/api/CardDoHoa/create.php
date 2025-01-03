@@ -20,16 +20,17 @@ $carddohoa = new CardDoHoa($conn);
 $data = json_decode(file_get_contents("php://input"));
 
 // Gán dữ liệu cho các thuộc tính của đối tượng
+$carddohoa->MaCardDoHoa= $data->MaCardDohoa;
 $carddohoa->TenCard = $data->TenCard;
-$carddohoa->DuongLuongBoNho = $data->DuongLuongBoNho;
+$carddohoa->DungLuongBoNho = $data->DuongLuongBoNho;
 $carddohoa->MaLoaiCard = $data->MaLoaiCard;
 
 // Gọi hàm thêm mới Card Đồ Họa
 if ($carddohoa->addCard()) {
     // Nếu thêm thành công
-    echo json_encode(array('message' => 'Card Đồ Họa đã được thêm thành công.'));
+    echo json_encode(array('message' => 'card do hoa create '));
 } else {
     // Nếu thêm thất bại
-    echo json_encode(array('message' => 'Không thể thêm Card Đồ Họa.'));
+    echo json_encode(array('message' => 'card do not create '));
 }
 ?>

@@ -26,13 +26,13 @@ if (!isset($data->MaCardDoHoa)) {
 // Gán dữ liệu từ yêu cầu PUT vào đối tượng
 $carddohoa->MaCardDoHoa = $data->MaCardDoHoa;
 $carddohoa->TenCard = $data->TenCard;
-$carddohoa->DuongLuongBoNho = $data->DuongLuongBoNho;
+$carddohoa->DungLuongBoNho = $data->DungLuongBoNho;
 $carddohoa->MaLoaiCard = $data->MaLoaiCard;
 
 // Cập nhật Card Đồ Họa
 if ($carddohoa->updateCard()) {
-    echo json_encode(array('message' => 'Card Đồ Họa đã được cập nhật.'));
+    echo json_encode(array('message' => 'Card been update.'));
 } else {
-    echo json_encode(array('message' => 'Không thể cập nhật Card Đồ Họa.'));
+    echo json_encode(array('message' => 'card can not update.'));
 }
 ?>

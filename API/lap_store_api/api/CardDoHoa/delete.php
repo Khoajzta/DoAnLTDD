@@ -25,9 +25,9 @@ $carddohoa->MaCardDoHoa = $data->MaCardDoHoa;
 // Gọi hàm deleteCard() để xóa Card Đồ Họa
 if ($carddohoa->deleteCard()) {
     // Nếu xóa thành công
-    echo json_encode(array('message' => 'Card Đồ Họa đã được xóa.'));
+    echo json_encode(array('message' => 'Card do hoa been delete '));
 } else {
     // Nếu xóa thất bại
-    echo json_encode(array('message' => 'Không thể xóa Card Đồ Họa.'));
+    echo json_encode(array('message' => 'can not delete card '));
 }
 ?>
