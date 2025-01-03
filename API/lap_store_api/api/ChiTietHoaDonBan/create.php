@@ -30,9 +30,9 @@ $chitiet->GiamGia = $data->GiamGia;  // Giảm giá (nếu có)
 // Gọi hàm thêm chi tiết hóa đơn bán
 if ($chitiet->addDetail()) {
     // Nếu thêm thành công
-    echo json_encode(array('message' => 'Chi tiết hóa đơn bán đã được thêm thành công.'));
+    echo json_encode(array('message' => 'ChiTietHoaDonban has been create .'));
 } else {
     // Nếu thêm thất bại
-    echo json_encode(array('message' => 'Không thể thêm chi tiết hóa đơn bán.'));
+    echo json_encode(array('message' => 'ChiTietHoaDon has not been create '));
 }
 ?>

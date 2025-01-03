@@ -48,26 +48,29 @@ class CardDoHoa {
     // Phương thức thêm Card Đồ Họa
     public function addCard() {
         try {
-            $query = "INSERT INTO carddohoa (TenCard, DungLuongBoNho, MaLoaiCard) 
-                      VALUES (:TenCard, :DungLuongBoNho, :MaLoaiCard)";
+            $query = "INSERT INTO carddohoa (MaCardDoHoa, TenCard, DungLuongBoNho, MaLoaiCard) 
+                      VALUES (:MaCardDoHoa, :TenCard, :DungLuongBoNho, :MaLoaiCard)";
             $stmt = $this->conn->prepare($query);
-
+    
             // Làm sạch dữ liệu đầu vào
+            $this->MaCardDoHoa = htmlspecialchars(strip_tags($this->MaCardDoHoa));
             $this->TenCard = htmlspecialchars(strip_tags($this->TenCard));
             $this->DungLuongBoNho = htmlspecialchars(strip_tags($this->DungLuongBoNho));
             $this->MaLoaiCard = htmlspecialchars(strip_tags($this->MaLoaiCard));
-
+    
             // Gắn tham số
+            $stmt->bindParam(':MaCardDoHoa', $this->MaCardDoHoa);
             $stmt->bindParam(':TenCard', $this->TenCard);
             $stmt->bindParam(':DungLuongBoNho', $this->DungLuongBoNho);
             $stmt->bindParam(':MaLoaiCard', $this->MaLoaiCard);
-
+    
             return $stmt->execute();
         } catch (PDOException $e) {
             echo "Lỗi: " . $e->getMessage();
             return false;
         }
     }
+    
 
     // Phương thức cập nhật Card Đồ Họa
     public function updateCard() {
