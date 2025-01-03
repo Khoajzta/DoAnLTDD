@@ -25,15 +25,15 @@ if($num>0){
         extract($row);
 
         $sanpham_item = array(
-            'MaSanPham'=> $MaSanPham,
+            'MaSanPham'=> $MSanPham,
             'TenSanPham'=> $TenSanPham,
             'MaLoaiSanPham'=> $MaLoaiSanPham,
             'MaHangSanXuat'=> $MaHangSanXuat,
-            'MaCPU'=> $MaCPU,
-            'MaRAM'=> $MaRAM,
-            'MaCardDoHoa'=> $MaCardDoHoa,
-            'MaROM'=> $MaROM,
-            'MaManHinh'=> $MaManHinh,
+            'MaCPU'=> $TenHangCPU,
+            'MaRAM'=> $DungLuongRAM,
+            'MaCardDoHoa'=> $TenCard,
+            'MaROM'=> $DungLuongROM,
+            'MaManHinh'=> $DoPhanGiai,
             'MaMauSac'=> $MaMauSac,
             'Gia'=> $Gia,
             'SoLuong'=> $SoLuong,

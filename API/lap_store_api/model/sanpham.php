@@ -30,12 +30,21 @@ class SanPham
     //Doc dữ liệu
 
     public function GetAllSanPham()
-    {
-        $query = "SELECT * FROM SanPham sp join HinhAnh ha on sp.HinhAnh = ha.MaHinhAnh WHERE sp.MaSanPham";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        return $stmt; // Trả về PDOStatement
-    }
+{
+    $query = "SELECT * , ro.DungLuong as DungLuongROM ,  r.DungLuong as DungLuongRAM, sp.MaSanPham as MSanPham
+              FROM SanPham sp
+              JOIN HinhAnh ha ON sp.HinhAnh = ha.MaHinhAnh
+              JOIN CPU cpu ON sp.MaCPU = cpu.MaCPU
+              JOIN RAM r ON sp.MaRAM = r.MaRAM
+              JOIN ROM ro ON sp.MaROM = ro.MaROM
+              JOIN CardDoHoa cdh ON sp.MaCardDoHoa = cdh.MaCardDoHoa
+              JOIN ManHinh mh ON sp.MaManHinh = mh.MaManHinh";
+    
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    return $stmt; // Trả về PDOStatement
+}
+
     public function GetSanPhamById()
     {
         $query = "SELECT * FROM SanPham sp join HinhAnh ha on sp.HinhAnh = ha.MaHinhAnh WHERE sp.MaSanPham = ? LIMIT 1";
@@ -62,6 +71,43 @@ class SanPham
         $this->TrangThai = $row['TrangThai'] ?? null;
     }
 
+    public function GetSanPhamBySearch($searchTerm)
+{
+    $query = "SELECT * , ro.DungLuong as DungLuongROM ,  r.DungLuong as DungLuongRAM
+              FROM SanPham sp
+              JOIN HinhAnh ha ON sp.HinhAnh = ha.MaHinhAnh
+              JOIN CPU cpu ON sp.MaCPU = cpu.MaCPU
+              JOIN RAM r ON sp.MaRAM = r.MaRAM
+              JOIN ROM ro ON sp.MaROM = ro.MaROM
+              JOIN CardDoHoa cdh ON sp.MaCardDoHoa = cdh.MaCardDoHoa
+              JOIN ManHinh mh ON sp.MaManHinh = mh.MaManHinh
+              WHERE sp.TenSanPham LIKE ? OR sp.MoTa LIKE ?";
+    $stmt = $this->conn->prepare($query);
+    $searchTerm = "%".$searchTerm."%"; // Thêm dấu '%' để tìm kiếm theo kiểu "like"
+    $stmt->bindParam(1, $searchTerm);
+    $stmt->bindParam(2, $searchTerm);
+    $stmt->execute();
+    return $stmt; 
+}
+
+
+    public function GetSanPhamByLoai()
+    {
+        $query = "SELECT * , ro.DungLuong as DungLuongROM ,  r.DungLuong as DungLuongRAM
+              FROM SanPham sp
+              JOIN HinhAnh ha ON sp.HinhAnh = ha.MaHinhAnh
+              JOIN CPU cpu ON sp.MaCPU = cpu.MaCPU
+              JOIN RAM r ON sp.MaRAM = r.MaRAM
+              JOIN ROM ro ON sp.MaROM = ro.MaROM
+              JOIN CardDoHoa cdh ON sp.MaCardDoHoa = cdh.MaCardDoHoa
+              JOIN ManHinh mh ON sp.MaManHinh = mh.MaManHinh
+              WHERE sp.MaLoaiSanPham = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->MaLoaiSanPham);
+        $stmt->execute();
+        return $stmt; 
+    }
+    
 
     public function AddSanPham()
     {
