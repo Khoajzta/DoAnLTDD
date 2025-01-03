@@ -44,6 +44,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -61,7 +62,10 @@ import com.example.lapstore.ui.theme.LapStoreTheme
 import kotlinx.coroutines.launch
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.navigation.NavHostController
+import com.example.lapstore.views.ProductItem
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import androidx.compose.foundation.lazy.items
+import com.example.lapstore.models.SanPham
 
 data class CategoryData(
     val title: String,
@@ -174,6 +178,11 @@ class MainActivity : ComponentActivity() {
                 }
                 val systemUiController = rememberSystemUiController()
                 val keyboardController = LocalSoftwareKeyboardController.current
+
+
+                var searchQuery by remember { mutableStateOf("") }
+                val searchResults by viewModel.searchSanPham(searchQuery).observeAsState(emptyList())
+
                 ModalNavigationDrawer(
                     modifier = Modifier.background(Color.White),
                     scrimColor = DrawerDefaults.scrimColor,
@@ -278,7 +287,11 @@ class MainActivity : ComponentActivity() {
 
                                         OutlinedTextField(
                                             value = searchText,
-                                            onValueChange = { searchText = it },
+                                            onValueChange = {
+                                                    query ->
+                                                searchQuery = query
+
+                                            },
                                             modifier = Modifier
                                                 .height(50.dp)
                                                 .fillMaxWidth(),
@@ -314,6 +327,8 @@ class MainActivity : ComponentActivity() {
 
 
                                 }
+
+
                             )
                         },
                         bottomBar = {
@@ -420,6 +435,8 @@ class MainActivity : ComponentActivity() {
                     ) { paddingValues ->
                         Box(modifier = Modifier.padding(paddingValues)) {
                             NavgationGraph(navController,viewModel)
+
+
                         }
                     }
                 }
@@ -428,5 +445,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+
 
 

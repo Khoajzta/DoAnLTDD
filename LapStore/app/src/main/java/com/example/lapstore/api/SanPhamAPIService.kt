@@ -7,6 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 data class SanPhamResponse(
     val sanpham: List<SanPham>
@@ -17,26 +18,13 @@ interface SanPhamAPIService{
     @GET("SanPham/read.php")
     fun getAllSanPham(): Call<SanPhamResponse>
 
-//    @GET("music/{id}")
-//    suspend fun getMusic(
-//        @Path("id") musicId:String,
-//    ):SanPham
-//
-//    @POST("/music")
-//    suspend fun addMusic(
-//        @Body music:Music
-//    ):retrofit2.Response<MusicResponse>
-//
-//    @PUT("/music/{id}")
-//    suspend fun updateMusic(
-//        @Path("id") musicId:String,
-//        @Body music:Music
-//    ):retrofit2.Response<MusicResponse>
-//
-//    @DELETE("/music/{id}")
-//    suspend fun deleteMusic(
-//        @Path("id") musicId:String
-//    ):retrofit2.Response<MusicResponse>
+    @GET("SanPham/readByLoaiSanPham.php?MaLoaiSanPham=2")
+    fun getAllSanPhamGaming(): Call<SanPhamResponse>
 
+    @GET("SanPham/readByLoaiSanPham.php?MaLoaiSanPham=1")
+    fun getAllSanPhamVanPhong(): Call<SanPhamResponse>
+
+    @GET("SanPhamapi/searchSanPham.php")
+    fun searchSanPham(@Query("search") search: String): Call<SanPhamResponse>
 
 }
