@@ -1,6 +1,8 @@
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,6 +14,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,61 +24,67 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import com.example.lapstore.models.SanPham
 
 @Composable
-fun ProductCard(
-    productName: String,
-    productPrice: String,
-    productImageResId: Int,
-    onAddToCartClick: () -> Unit
-) {
+fun ProductCard(sanpham: SanPham) {
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .size(width = 260.dp, height = 450.dp),
+            .size(width = 260.dp, height = 480.dp),
         shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp
-        )
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(10.dp)
-        ) {
-            // Hình ảnh sản phẩm
-            Image(
-                painter = painterResource(id = productImageResId),
+        Column(modifier = Modifier.padding(10.dp)) {
+            AsyncImage(
+                model= sanpham.HinhAnh,
                 contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .height(300.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(8.dp))
+                modifier = Modifier.padding(8.dp).size(200.dp),
+                contentScale = ContentScale.Fit
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Tên sản phẩm
             Text(
-                text = productName,
+                text = sanpham.TenSanPham,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(vertical = 4.dp)
             )
+            Card(
+                modifier = Modifier.size(width = 270.dp, height = 120.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFCCCCCC)),
+            ) {
+                Column(
+                    modifier = Modifier.padding(10.dp),
+                    verticalArrangement = Arrangement.SpaceAround
+                ) {
 
+                        Text("CPU: "+sanpham.MaCPU)
+                        Text("Card: "+sanpham.MaCardDoHoa)
+                        Text("RAM: "+sanpham.MaRAM.toString()+" GB")
+                        Text("ROM: "+sanpham.MaROM.toString()+" GB")
+
+//                    Row {
+//                        Text(sanpham.MaRAM.toString())
+//                        Text(sanpham.MaROM.toString())
+//                        Text(sanpham.MaManHinh)
+//                    }
+
+                }
+
+            }
             // Giá sản phẩm
             Text(
-                text = productPrice,
+                text = sanpham.Gia.toString()+"đ",
                 fontSize = 16.sp,
                 color = Color.Red,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(vertical = 4.dp)
             )
-
         }
     }
 }
