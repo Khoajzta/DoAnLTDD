@@ -2,6 +2,7 @@ package com.example.lapstore.views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Visibility
@@ -44,11 +46,17 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.lapstore.models.KhachHang
+import com.example.lapstore.viewmodels.KhachHangViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AcccountScreen() {
+fun AcccountScreen(khachHangViewModel: KhachHangViewModel = viewModel()) {
+    val khachHangList by khachHangViewModel.allKhachHang.observeAsState(emptyList())
+    val currentKhachHang = if (khachHangList.isNotEmpty()) khachHangList[0] else null
+
     var currentTab by remember { mutableStateOf("accountInfo") } // Tab hiện tại
 
     LazyColumn(
@@ -62,9 +70,9 @@ fun AcccountScreen() {
                     .padding(start = 16.dp, end = 16.dp, top = 16.dp)
             ) {
                 when (currentTab) {
-                    "accountInfo" -> AccountInfoSection()
+                    "accountInfo" -> AccountInfoSection(currentKhachHang)
                     "cartManagement" -> CartManagementSection()
-                    "viewedProducts" -> ViewedProductsSection()
+                    "changePassword" -> ChangePasswordSection()
                     "addresses" -> AddressesSection()
                 }
             }
@@ -84,10 +92,13 @@ fun AcccountScreen() {
 }
 
 @Composable
-fun AccountInfoSection() {
+fun AccountInfoSection(currentKhachHang: KhachHang?) {
     var selectedDay by remember { mutableStateOf("1") }
     var selectedMonth by remember { mutableStateOf("1") }
     var selectedYear by remember { mutableStateOf("2000") }
+    val lsGenders = mutableListOf("Nam", "Nữ")
+    var selection by remember { mutableStateOf(lsGenders[0]) }
+
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -96,94 +107,89 @@ fun AccountInfoSection() {
         Column(modifier = Modifier.padding(16.dp)) {
             Text("Thông tin tài khoản", fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))
+
             Text("Họ Tên", fontWeight = FontWeight.Bold)
-            OutlinedTextField(value = "Huỳnh Khoa",
-                onValueChange = {}, modifier = Modifier.fillMaxWidth(), readOnly = false
+            OutlinedTextField(
+                value = currentKhachHang?.HoTen ?: "",
+                onValueChange = {},
+                modifier = Modifier.fillMaxWidth(),
+                readOnly = true
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            var selectedGender by remember { mutableStateOf("Nam") }
-
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Giới tính", fontWeight = FontWeight.Bold)
+                Text("Giới tính:", fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.width(16.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    // Nút radio cho Nam
-                    RadioButton(
-                        selected = selectedGender == "Nam",
-                        onClick = { selectedGender = "Nam" }
-                    )
-                    Text("Nam")
-
-                    Spacer(modifier = Modifier.width(16.dp))
-
-                    // Nút radio cho Nữ
-                    RadioButton(
-                        selected = selectedGender == "Nữ",
-                        onClick = { selectedGender = "Nữ" }
-                    )
-                    Text("Nữ")
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    lsGenders.forEach { gender ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(selected = selection == gender,
+                                onClick = { selection = gender })
+                            Text(text = gender)
+                        }
+                    }
                 }
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text("Số điện thoại", fontWeight = FontWeight.Bold)
-            Row {
-                OutlinedTextField(value = "*******",
-                    onValueChange = {}, Modifier.fillMaxWidth(), readOnly = false
-                )
-            }
+            OutlinedTextField(
+                value = currentKhachHang?.SoDienThoai ?: "",
+                onValueChange = {},
+                modifier = Modifier.fillMaxWidth(),
+                readOnly = true
+            )
 
             Text("Email", fontWeight = FontWeight.Bold)
-            Row {
-                OutlinedTextField("kh*******@gmail.com",
-                    onValueChange = {}, Modifier.fillMaxWidth(), readOnly = false
-                )
-            }
+            OutlinedTextField(
+                value = currentKhachHang?.Email ?: "",
+                onValueChange = {},
+                modifier = Modifier.fillMaxWidth(),
+                readOnly = true
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text("Ngày sinh", fontWeight = FontWeight.Bold)
-//            Row(
-//                modifier = Modifier.fillMaxWidth(),
-//                horizontalArrangement = Arrangement.SpaceBetween
-//            ) {
-//                // Dropdown cho ngày
-//                DropdownMenuField(
-//                    label = "Ngày",
-//                    items = (1..31).map { it.toString() },
-//                    selectedValue = selectedDay,
-//                    onValueChange = { selectedDay = it },
-//                    modifier = Modifier
-//                        .weight(1.1f)
-//                        .padding(end = 1.5.dp)
-//                )
-//
-//
-//                // Dropdown cho tháng
-//                DropdownMenuField(
-//                    label = "Tháng",
-//                    items = (1..12).map { it.toString() },
-//                    selectedValue = selectedMonth,
-//                    onValueChange = { selectedMonth = it },
-//                    modifier = Modifier
-//                        .weight(1.1f)
-//                        .padding(horizontal = 1.5.dp)
-//                )
-//
-//                // Dropdown cho năm giảm dần
-//                DropdownMenuField(
-//                    label = "Năm",
-//                    items = (1900..2025).map { it.toString() }.reversed(),
-//                    selectedValue = selectedYear,
-//                    onValueChange = { selectedYear = it },
-//                    modifier = Modifier
-//                        .weight(1.4f)
-//                        .padding(start = 1.5.dp),
-//                )
-//            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                // Dropdown cho ngày
+                DropdownMenuField(
+                    label = "Ngày",
+                    items = (1..31).map { it.toString() },
+                    selectedValue = selectedDay,
+                    onValueChange = { selectedDay = it },
+                    modifier = Modifier.weight(1.15f).padding(end = 0.5.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+
+                // Dropdown cho tháng
+                DropdownMenuField(
+                    label = "Tháng",
+                    items = (1..12).map { it.toString() },
+                    selectedValue = selectedMonth,
+                    onValueChange = { selectedMonth = it },
+                    modifier = Modifier.weight(1.2f).padding(horizontal = 0.5.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+
+                // Dropdown cho năm giảm dần
+                DropdownMenuField(
+                    label = "Năm",
+                    items = (1900..2025).map { it.toString() }.reversed(),
+                    selectedValue = selectedYear,
+                    onValueChange = { selectedYear = it },
+                    modifier = Modifier.weight(1.4f).padding(start = 0.5.dp)
+                )
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -204,8 +210,7 @@ fun DropdownMenuField(
     items: List<String>,
     selectedValue: String,
     onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    maxLength: Int
+    modifier: Modifier = Modifier
 ) {
     var isExpanded by remember { mutableStateOf(false) } // Trạng thái mở menu
 
@@ -213,34 +218,27 @@ fun DropdownMenuField(
         // OutlinedTextField với nút xổ xuống
         OutlinedTextField(
             value = selectedValue,
-            onValueChange = {
-//                if (it.length <= maxLength) {
-//                    items = it
-//                }
-            },
+            onValueChange = { onValueChange(it) }, // Cập nhật giá trị khi nhập
             label = { Text(label) },
             readOnly = false, // Cho phép nhập trực tiếp
             trailingIcon = { // Biểu tượng xổ xuống
                 Text(
                     text = "▼",
-                    maxLines = 1,
                     modifier = Modifier
                         .clickable { isExpanded = !isExpanded }
                         .padding(8.dp)
                 )
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth(),
-
-            )
+            modifier = Modifier.fillMaxWidth()
+        )
 
         // DropdownMenu
         DropdownMenu(
             expanded = isExpanded,
             onDismissRequest = { isExpanded = false },
             modifier = Modifier
-                .heightIn(max = 300.dp)
-                .widthIn(500.dp)
+                .fillMaxWidth()
+                .heightIn(max = 300.dp) // Giới hạn chiều cao menu
         ) {
             items.forEach { item ->
                 DropdownMenuItem(
@@ -284,10 +282,10 @@ fun AccountOptionsSection(onOptionSelected: (String) -> Unit, currentTab: String
                 onClick = { onOptionSelected("cartManagement") }
             )
             AccountOptionItem(
-                iconRes = Icons.Filled.Visibility,
-                label = "Sản phẩm đã xem",
-                isSelected = currentTab == "viewedProducts",
-                onClick = { onOptionSelected("viewedProducts") }
+                iconRes = Icons.Filled.Lock,
+                label = "Đổi mật khẩu",
+                isSelected = currentTab == "changePassword",
+                onClick = { onOptionSelected("changePassword") }
             )
             AccountOptionItem(
                 iconRes = Icons.Filled.ExitToApp,
@@ -335,8 +333,8 @@ fun CartManagementSection() {
 }
 
 @Composable
-fun ViewedProductsSection() {
-    Text("Đây là trang Sản phẩm đã xem", fontWeight = FontWeight.Bold)
+fun ChangePasswordSection() {
+    Text("Đây là trang đổi mật khẩu", fontWeight = FontWeight.Bold)
 }
 
 @Composable
