@@ -16,15 +16,17 @@ data class SanPhamResponse(
 
 interface SanPhamAPIService{
     @GET("SanPham/read.php")
-    fun getAllSanPham(): Call<SanPhamResponse>
+    suspend fun getAllSanPham(): SanPhamResponse
 
-    @GET("SanPham/readByLoaiSanPham.php?MaLoaiSanPham=2")
-    fun getAllSanPhamGaming(): Call<SanPhamResponse>
 
-    @GET("SanPham/readByLoaiSanPham.php?MaLoaiSanPham=1")
-    fun getAllSanPhamVanPhong(): Call<SanPhamResponse>
+    @GET("SanPham/readByLoaiSanPham.php")
+    suspend fun getSanPhamByLoai(
+        @Query("MaLoaiSanPham") maLoaiSanPham: Int
+    ): SanPhamResponse
 
-    @GET("SanPhamapi/searchSanPham.php")
-    fun searchSanPham(@Query("search") search: String): Call<SanPhamResponse>
 
+    @GET("SanPham/show.php")
+    suspend fun getSanPhamById(
+        @Query("id") id: String
+    ): SanPham
 }

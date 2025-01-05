@@ -141,289 +141,291 @@ fun Boxtheodoi() {
 }
 @Composable
 fun CardScreen() {
+
+    Text("hsjfhdjfhdf")
     // Trạng thái danh sách sản phẩm
-    val products = remember {
-        mutableStateListOf(
-            Product(
-                name = "Laptop gaming Acer Nitro 16 Phoenix AN16 41 R76E",
-                Describe="null",
-                discountPrice=31300000,
-                originalPrice = 29490000,
-                quantity = 1,
-                gift = "Đế Tản Nhiệt Cooler Master Notepal C3 - Trị giá: 230.000đ",
-                imageRes = 1
-            )
-        )
-    }
+//    val products = remember {
+//        mutableStateListOf(
+////            Product(
+////                name = "Laptop gaming Acer Nitro 16 Phoenix AN16 41 R76E",
+////                Describe="null",
+////                discountPrice=31300000,
+////                originalPrice = 29490000,
+////                quantity = 1,
+////                gift = "Đế Tản Nhiệt Cooler Master Notepal C3 - Trị giá: 230.000đ",
+////                imageRes = 1
+////            )
+//        )
+//    }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Top
-    ) {
-        // Tiêu đề giỏ hàng
-        Text(
-            text = "Giỏ hàng của bạn",
-            fontSize = 20.sp,
-            color = Color.Black,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-
-        // Thông tin sản phẩm
-        LazyColumn {
-            items(products) { product ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(10.dp)
-                    ) {
-                        // Hàng đầu tiên: Hình ảnh và tên sản phẩm
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            // Hình ảnh sản phẩm
-//                            Image(
-//                                painter = painterResource(id = R.drawable.laptop1),
-//                                contentDescription = "Sản phẩm",
-//                                modifier = Modifier.size(60.dp)
-//                            )
-
-                            // Tên sản phẩm và quà tặng
-                            Column(
-                                modifier = Modifier.weight(1f)
-                            ) {
-                                Text(
-                                    text = product.name,
-                                    fontSize = 16.sp,
-                                    color = Color.Black
-                                )
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(
-                                    text = "Quà tặng: ${product.gift}",
-                                    fontSize = 12.sp,
-                                    color = Color.Gray
-                                )
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        // Hàng thứ hai: Điều chỉnh số lượng và hiển thị giá
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            // Nút trừ, hiển thị số lượng, và nút cộng
-                            Row {
-                                Button(
-                                    onClick = {
-                                        if (product.quantity > 1) {
-                                            product.quantity -= 1
-                                        }
-                                    },
-                                    modifier = Modifier.size(40.dp),
-                                    shape = RoundedCornerShape(0.dp),
-                                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                                    contentPadding = PaddingValues(0.dp)
-                                ) {
-                                    Text("-", fontSize = 20.sp, color = Color.Black)
-                                }
-
-                                Text(
-                                    text = "${product.quantity}",
-                                    modifier = Modifier
-                                        .padding(horizontal = 16.dp)
-                                        .align(Alignment.CenterVertically),
-                                    fontSize = 16.sp
-                                )
-
-                                Button(
-                                    onClick = {
-                                        product.quantity += 1
-                                    },
-                                    modifier = Modifier.size(40.dp),
-                                    shape = RoundedCornerShape(0.dp),
-                                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                                    contentPadding = PaddingValues(0.dp)
-                                ) {
-                                    Text("+", fontSize = 20.sp, color = Color.Black)
-                                }
-                            }
-
-                            // Hiển thị giá bên phải
-                            Column(
-                                horizontalAlignment = Alignment.End
-                            ) {
-                                Text(
-                                    text = "${product.discountPrice * product.quantity}đ",
-                                    fontSize = 16.sp,
-                                    color = Color.Red
-                                )
-                                Text(
-                                    text = "31.490.000đ", // Giá cũ (nếu có)
-                                    fontSize = 12.sp,
-                                    color = Color.Gray,
-                                    textDecoration = TextDecoration.LineThrough
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // Tổng tiền
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "Tổng tiền:",
-                fontSize = 16.sp,
-                color = Color.Black
-            )
-            val total = products.sumOf { it.originalPrice * it.quantity }
-            Text(
-                text = "${total}đ",
-                fontSize = 16.sp,
-                color = Color.Red
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Nút "Đặt hàng ngay"
-        Button(
-            onClick = { /* Xử lý đặt hàng */ },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            shape = RoundedCornerShape(4.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
-        ) {
-            Text(
-                text = "ĐẶT HÀNG NGAY",
-                fontSize = 16.sp,
-                color = Color.White
-            )
-        }
-    }
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(16.dp),
+//        verticalArrangement = Arrangement.Top
+//    ) {
+//        // Tiêu đề giỏ hàng
+//        Text(
+//            text = "Giỏ hàng của bạn",
+//            fontSize = 20.sp,
+//            color = Color.Black,
+//            modifier = Modifier.padding(bottom = 16.dp)
+//        )
+//
+//        // Thông tin sản phẩm
+//        LazyColumn {
+//            items(products) { product ->
+//                Card(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(10.dp),
+//                    colors = CardDefaults.cardColors(containerColor = Color.White)
+//                ) {
+//                    Column(
+//                        modifier = Modifier.padding(10.dp)
+//                    ) {
+//                        // Hàng đầu tiên: Hình ảnh và tên sản phẩm
+//                        Row(
+//                            modifier = Modifier.fillMaxWidth(),
+//                            horizontalArrangement = Arrangement.SpaceBetween
+//                        ) {
+//                            // Hình ảnh sản phẩm
+////                            Image(
+////                                painter = painterResource(id = R.drawable.laptop1),
+////                                contentDescription = "Sản phẩm",
+////                                modifier = Modifier.size(60.dp)
+////                            )
+//
+//                            // Tên sản phẩm và quà tặng
+//                            Column(
+//                                modifier = Modifier.weight(1f)
+//                            ) {
+//                                Text(
+//                                    text = product.name,
+//                                    fontSize = 16.sp,
+//                                    color = Color.Black
+//                                )
+//                                Spacer(modifier = Modifier.height(4.dp))
+//                                Text(
+//                                    text = "Quà tặng: ${product.gift}",
+//                                    fontSize = 12.sp,
+//                                    color = Color.Gray
+//                                )
+//                            }
+//                        }
+//
+//                        Spacer(modifier = Modifier.height(8.dp))
+//
+//                        // Hàng thứ hai: Điều chỉnh số lượng và hiển thị giá
+//                        Row(
+//                            modifier = Modifier.fillMaxWidth(),
+//                            horizontalArrangement = Arrangement.SpaceBetween,
+//                            verticalAlignment = Alignment.CenterVertically
+//                        ) {
+//                            // Nút trừ, hiển thị số lượng, và nút cộng
+//                            Row {
+//                                Button(
+//                                    onClick = {
+//                                        if (product.quantity > 1) {
+//                                            product.quantity -= 1
+//                                        }
+//                                    },
+//                                    modifier = Modifier.size(40.dp),
+//                                    shape = RoundedCornerShape(0.dp),
+//                                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+//                                    contentPadding = PaddingValues(0.dp)
+//                                ) {
+//                                    Text("-", fontSize = 20.sp, color = Color.Black)
+//                                }
+//
+//                                Text(
+//                                    text = "${product.quantity}",
+//                                    modifier = Modifier
+//                                        .padding(horizontal = 16.dp)
+//                                        .align(Alignment.CenterVertically),
+//                                    fontSize = 16.sp
+//                                )
+//
+//                                Button(
+//                                    onClick = {
+//                                        product.quantity += 1
+//                                    },
+//                                    modifier = Modifier.size(40.dp),
+//                                    shape = RoundedCornerShape(0.dp),
+//                                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+//                                    contentPadding = PaddingValues(0.dp)
+//                                ) {
+//                                    Text("+", fontSize = 20.sp, color = Color.Black)
+//                                }
+//                            }
+//
+//                            // Hiển thị giá bên phải
+//                            Column(
+//                                horizontalAlignment = Alignment.End
+//                            ) {
+//                                Text(
+//                                    text = "${product.discountPrice * product.quantity}đ",
+//                                    fontSize = 16.sp,
+//                                    color = Color.Red
+//                                )
+//                                Text(
+//                                    text = "31.490.000đ", // Giá cũ (nếu có)
+//                                    fontSize = 12.sp,
+//                                    color = Color.Gray,
+//                                    textDecoration = TextDecoration.LineThrough
+//                                )
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        // Tổng tiền
+//        Spacer(modifier = Modifier.height(16.dp))
+//        Row(
+//            modifier = Modifier.fillMaxWidth(),
+//            horizontalArrangement = Arrangement.SpaceBetween
+//        ) {
+//            Text(
+//                text = "Tổng tiền:",
+//                fontSize = 16.sp,
+//                color = Color.Black
+//            )
+//            val total = products.sumOf { it.originalPrice * it.quantity }
+//            Text(
+//                text = "${total}đ",
+//                fontSize = 16.sp,
+//                color = Color.Red
+//            )
+//        }
+//
+//        Spacer(modifier = Modifier.height(16.dp))
+//
+//        // Nút "Đặt hàng ngay"
+//        Button(
+//            onClick = { /* Xử lý đặt hàng */ },
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(vertical = 8.dp),
+//            shape = RoundedCornerShape(4.dp),
+//            colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+//        ) {
+//            Text(
+//                text = "ĐẶT HÀNG NGAY",
+//                fontSize = 16.sp,
+//                color = Color.White
+//            )
+//        }
+//    }
 }
 
 @Composable
 fun ProductItem(
-    product: Product,
-    onQuantityChange: (Int) -> Unit,
-    onRemoveProduct: () -> Unit
+//    product: Product,
+//    onQuantityChange: (Int) -> Unit,
+//    onRemoveProduct: () -> Unit
 ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
-    ) {
-        Column {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Hình ảnh
-                Image(
-                    painter = painterResource(id = product.imageRes),
-                    contentDescription = product.name,
-                    modifier = Modifier.size(60.dp)
-                )
-
-                // Tên sản phẩm và thông tin
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = product.name,
-                        fontSize = 16.sp,
-                        color = Color.Black
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "Giá khuyến mãi: ${String.format("%,d", product.discountPrice)}đ",
-                        fontSize = 14.sp,
-                        color = Color.Red
-                    )
-                }
-
-                // Nút xóa
-                IconButton(onClick = onRemoveProduct) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Xóa sản phẩm",
-                        tint = Color.Gray
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Điều chỉnh số lượng
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Nút trừ
-                Button(
-                    onClick = { if (product.quantity > 1) onQuantityChange(product.quantity - 1) },
-                    modifier = Modifier.size(40.dp),
-                    shape = RoundedCornerShape(0.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.White)
-                ) {
-                    Text("-", fontSize = 20.sp, color = Color.Black)
-                }
-
-                // Hiển thị số lượng
-                Text(
-                    text = "${product.quantity}",
-                    fontSize = 16.sp,
-                    color = Color.Black
-                )
-
-                // Nút cộng
-                Button(
-                    onClick = { onQuantityChange(product.quantity + 1) },
-                    modifier = Modifier.size(40.dp),
-                    shape = RoundedCornerShape(0.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.White)
-                ) {
-                    Text("+", fontSize = 20.sp, color = Color.Black)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Tổng giá
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = "Tổng tiền:",
-                    fontSize = 14.sp,
-                    color = Color.Black
-                )
-                Text(
-                    text = "${String.format("%,d", product.quantity * product.discountPrice)}đ",
-                    fontSize = 16.sp,
-                    color = Color.Red
-                )
-            }
-        }
-    }
+//    Card(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(10.dp),
+//        colors = CardDefaults.cardColors(containerColor = Color.White)
+//    ) {
+//        Column {
+//            Row(
+//                modifier = Modifier.fillMaxWidth(),
+//                horizontalArrangement = Arrangement.SpaceBetween,
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//                // Hình ảnh
+//                Image(
+//                    painter = painterResource(id = product.imageRes),
+//                    contentDescription = product.name,
+//                    modifier = Modifier.size(60.dp)
+//                )
+//
+//                // Tên sản phẩm và thông tin
+//                Column(modifier = Modifier.weight(1f)) {
+//                    Text(
+//                        text = product.name,
+//                        fontSize = 16.sp,
+//                        color = Color.Black
+//                    )
+//                    Spacer(modifier = Modifier.height(4.dp))
+//                    Text(
+//                        text = "Giá khuyến mãi: ${String.format("%,d", product.discountPrice)}đ",
+//                        fontSize = 14.sp,
+//                        color = Color.Red
+//                    )
+//                }
+//
+//                // Nút xóa
+//                IconButton(onClick = onRemoveProduct) {
+//                    Icon(
+//                        imageVector = Icons.Default.Delete,
+//                        contentDescription = "Xóa sản phẩm",
+//                        tint = Color.Gray
+//                    )
+//                }
+//            }
+//
+//            Spacer(modifier = Modifier.height(8.dp))
+//
+//            // Điều chỉnh số lượng
+//            Row(
+//                modifier = Modifier.fillMaxWidth(),
+//                horizontalArrangement = Arrangement.SpaceEvenly,
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//                // Nút trừ
+//                Button(
+//                    onClick = { if (product.quantity > 1) onQuantityChange(product.quantity - 1) },
+//                    modifier = Modifier.size(40.dp),
+//                    shape = RoundedCornerShape(0.dp),
+//                    colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+//                ) {
+//                    Text("-", fontSize = 20.sp, color = Color.Black)
+//                }
+//
+//                // Hiển thị số lượng
+//                Text(
+//                    text = "${product.quantity}",
+//                    fontSize = 16.sp,
+//                    color = Color.Black
+//                )
+//
+//                // Nút cộng
+//                Button(
+//                    onClick = { onQuantityChange(product.quantity + 1) },
+//                    modifier = Modifier.size(40.dp),
+//                    shape = RoundedCornerShape(0.dp),
+//                    colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+//                ) {
+//                    Text("+", fontSize = 20.sp, color = Color.Black)
+//                }
+//            }
+//
+//            Spacer(modifier = Modifier.height(8.dp))
+//
+//            // Tổng giá
+//            Row(
+//                modifier = Modifier.fillMaxWidth(),
+//                horizontalArrangement = Arrangement.SpaceBetween
+//            ) {
+//                Text(
+//                    text = "Tổng tiền:",
+//                    fontSize = 14.sp,
+//                    color = Color.Black
+//                )
+//                Text(
+//                    text = "${String.format("%,d", product.quantity * product.discountPrice)}đ",
+//                    fontSize = 16.sp,
+//                    color = Color.Red
+//                )
+//            }
+//        }
+//    }
 }
 
 
