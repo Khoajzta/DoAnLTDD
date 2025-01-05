@@ -1,10 +1,12 @@
 package com.example.lapstore.views
 
+import NavRoute
 import ProductCard
 import SanPhamViewModel
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -15,6 +17,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,13 +36,23 @@ fun HomeScreen(navController: NavHostController, viewModel: SanPhamViewModel) {
     val allSanPhamVanPhong by viewModel.allSanPhamVanPhong.observeAsState(emptyList())
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
+
+        item {
+
+        }
         // LazyRow cho Laptop Văn Phòng
         item {
-            Text(
-                text = "Laptop Văn Phòng",
-                modifier = Modifier.padding(8.dp),
-                fontWeight = FontWeight.Bold
-            )
+            Row {
+                Text(
+                    text = "Laptop Văn Phòng",
+                    modifier = Modifier.padding(8.dp),
+                    fontWeight = FontWeight.Bold,
+                )
+
+
+            }
+
+
         }
         item {
             LazyRow(
@@ -47,7 +60,7 @@ fun HomeScreen(navController: NavHostController, viewModel: SanPhamViewModel) {
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(allSanPhamVanPhong) { sanpham ->
-                    ProductCard(sanpham)
+                    ProductCard(sanpham,navController)
                 }
             }
         }
@@ -67,7 +80,7 @@ fun HomeScreen(navController: NavHostController, viewModel: SanPhamViewModel) {
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(allSanPhamGaming) { sanpham ->
-                    ProductCard(sanpham)
+                    ProductCard(sanpham,navController)
                 }
             }
         }
@@ -86,10 +99,11 @@ fun HomeScreen(navController: NavHostController, viewModel: SanPhamViewModel) {
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(allSanPham) { sanpham ->
-                    ProductCard(sanpham)
+                    ProductCard(sanpham,navController)
                 }
             }
         }
+
 
     }
 }

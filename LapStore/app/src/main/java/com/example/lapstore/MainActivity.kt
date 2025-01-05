@@ -65,6 +65,7 @@ import androidx.navigation.NavHostController
 import com.example.lapstore.views.ProductItem
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.LaunchedEffect
 import com.example.lapstore.models.SanPham
 
 data class CategoryData(
@@ -169,19 +170,16 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             LapStoreTheme {
+                val isBottomBarVisible = remember { mutableStateOf(true) }
+
                 val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                 val scope = rememberCoroutineScope()
                 val viewModel = SanPhamViewModel()
                 val navController = rememberNavController()
-                var searchText by remember {
-                    mutableStateOf("")
-                }
+                var searchText by remember { mutableStateOf("") }
                 val systemUiController = rememberSystemUiController()
                 val keyboardController = LocalSoftwareKeyboardController.current
-
-
                 var searchQuery by remember { mutableStateOf("") }
-                val searchResults by viewModel.searchSanPham(searchQuery).observeAsState(emptyList())
 
                 ModalNavigationDrawer(
                     modifier = Modifier.background(Color.White),
@@ -190,15 +188,10 @@ class MainActivity : ComponentActivity() {
                     drawerContent = {
                         ModalDrawerSheet(
                             drawerContainerColor = Color.White,
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .background(Color.White)
+                            modifier = Modifier.fillMaxHeight().background(Color.White)
                         ) {
                             SideEffect {
-                                systemUiController.setStatusBarColor(
-                                    color = Color.Red,
-                                    darkIcons = false
-                                )
+                                systemUiController.setStatusBarColor(color = Color.Red, darkIcons = false)
                             }
                             Row(
                                 modifier = Modifier.fillMaxWidth().background(color = Color.Red),
@@ -207,11 +200,7 @@ class MainActivity : ComponentActivity() {
                             ) {
                                 Text(
                                     "DANH MỤC SẢN PHẨM",
-                                    style = TextStyle(
-                                        fontSize = 20.sp,
-                                        fontWeight = FontWeight.ExtraBold,
-                                        color = Color.White
-                                    ),
+                                    style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, color = Color.White),
                                     modifier = Modifier.padding(10.dp)
                                 )
                                 IconButton(
@@ -232,16 +221,14 @@ class MainActivity : ComponentActivity() {
                             }
                             CategoryMenuMain()
                             Text("Thông tin", modifier = Modifier.padding(10.dp))
-                            Row (
-                                modifier = Modifier.fillMaxWidth().padding(10.dp),
-                            ){
+                            Row(modifier = Modifier.fillMaxWidth().padding(10.dp)) {
                                 Icon(imageVector = Icons.Outlined.SupportAgent, contentDescription = "")
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Text("19001009")
                             }
                         }
-                    },
-                ){
+                    }
+                ) {
                     Scaffold(
                         containerColor = Color.White,
                         topBar = {
@@ -332,119 +319,121 @@ class MainActivity : ComponentActivity() {
                             )
                         },
                         bottomBar = {
-
-                            BottomAppBar(
-                                containerColor = Color.White,
-                                contentColor = Color.Black,
-                                tonalElevation = 4.dp
-                            ) {
-                                Column {
-                                    HorizontalDivider(color = Color.Red)
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.SpaceEvenly,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Column (
-                                            horizontalAlignment = Alignment.CenterHorizontally,
-                                            verticalArrangement = Arrangement.SpaceAround
-                                        ){
-                                            IconButton(
-                                                modifier = Modifier.size(45.dp),
-                                                onClick = {
-                                                    navController.navigate(NavRoute.HOME.route)
+                            if (isBottomBarVisible.value) { // Hiện BottomBar khi trạng thái là true
+                                BottomAppBar(
+                                    containerColor = Color.White,
+                                    contentColor = Color.Black,
+                                    tonalElevation = 4.dp
+                                ) {
+                                    Column {
+                                        HorizontalDivider(color = Color.Red)
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceEvenly,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Column (
+                                                horizontalAlignment = Alignment.CenterHorizontally,
+                                                verticalArrangement = Arrangement.SpaceAround
+                                            ){
+                                                IconButton(
+                                                    modifier = Modifier.size(45.dp),
+                                                    onClick = {
+                                                        navController.navigate(NavRoute.HOME.route)
+                                                    }
+                                                ) {
+                                                    Icon(
+                                                        Icons.Outlined.Home,
+                                                        contentDescription = "Profile",
+                                                        tint = Color.Red
+                                                    )
                                                 }
-                                            ) {
-                                                Icon(
-                                                    Icons.Outlined.Home,
-                                                    contentDescription = "Profile",
-                                                    tint = Color.Red
+                                                Text(
+                                                    text = "Home",
                                                 )
                                             }
-                                            Text(
-                                                text = "Home",
-                                            )
-                                        }
-                                        Column (
-                                            horizontalAlignment = Alignment.CenterHorizontally,
-                                            verticalArrangement = Arrangement.SpaceAround
-                                        ){
-                                            IconButton(
-                                                modifier = Modifier.size(45.dp),
-                                                onClick = {
-                                                    keyboardController?.hide()
-                                                    scope.launch {
-                                                        drawerState.apply {
-                                                            if (isClosed) open() else close()
+                                            Column (
+                                                horizontalAlignment = Alignment.CenterHorizontally,
+                                                verticalArrangement = Arrangement.SpaceAround
+                                            ){
+                                                IconButton(
+                                                    modifier = Modifier.size(45.dp),
+                                                    onClick = {
+                                                        keyboardController?.hide()
+                                                        scope.launch {
+                                                            drawerState.apply {
+                                                                if (isClosed) open() else close()
+                                                            }
                                                         }
                                                     }
+                                                ) {
+                                                    Icon(
+                                                        Icons.Outlined.Menu,
+                                                        contentDescription = "Profile",
+                                                        tint = Color.Red
+                                                    )
                                                 }
-                                            ) {
-                                                Icon(
-                                                    Icons.Outlined.Menu,
-                                                    contentDescription = "Profile",
-                                                    tint = Color.Red
+                                                Text(
+                                                    text = "Danh mục",
                                                 )
                                             }
-                                            Text(
-                                                text = "Danh mục",
-                                            )
-                                        }
-                                        Column (
-                                            horizontalAlignment = Alignment.CenterHorizontally,
-                                            verticalArrangement = Arrangement.SpaceAround
-                                        ){
-                                            IconButton(
-                                                modifier = Modifier.size(45.dp),
-                                                onClick = { }
-                                            ) {
-                                                Icon(
-                                                    Icons.Outlined.SupportAgent,
-                                                    contentDescription = "Profile",
-                                                    tint = Color.Red
+                                            Column (
+                                                horizontalAlignment = Alignment.CenterHorizontally,
+                                                verticalArrangement = Arrangement.SpaceAround
+                                            ){
+                                                IconButton(
+                                                    modifier = Modifier.size(45.dp),
+                                                    onClick = { }
+                                                ) {
+                                                    Icon(
+                                                        Icons.Outlined.SupportAgent,
+                                                        contentDescription = "Profile",
+                                                        tint = Color.Red
+                                                    )
+                                                }
+                                                Text(
+                                                    text = "Tư vấn",
                                                 )
                                             }
-                                            Text(
-                                                text = "Tư vấn",
-                                            )
-                                        }
-                                        Column (
-                                            horizontalAlignment = Alignment.CenterHorizontally,
-                                            verticalArrangement = Arrangement.SpaceAround
-                                        ){
-                                            IconButton(
-                                                modifier = Modifier.size(45.dp),
-                                                onClick = { navController.navigate(NavRoute.ACCOUNT.route)}
-                                            ) {
-                                                Icon(
-                                                    Icons.Outlined.Person,
-                                                    contentDescription = "Profile",
-                                                    tint = Color.Red
+                                            Column (
+                                                horizontalAlignment = Alignment.CenterHorizontally,
+                                                verticalArrangement = Arrangement.SpaceAround
+                                            ){
+                                                IconButton(
+                                                    modifier = Modifier.size(45.dp),
+                                                    onClick = { navController.navigate(NavRoute.ACCOUNT.route)}
+                                                ) {
+                                                    Icon(
+                                                        Icons.Outlined.Person,
+                                                        contentDescription = "Profile",
+                                                        tint = Color.Red
+                                                    )
+                                                }
+                                                Text(
+                                                    text = "Tài khoản",
                                                 )
                                             }
-                                            Text(
-                                                text = "Tài khoản",
-                                            )
-                                        }
 
+                                        }
                                     }
-                                }
 
+                                }
                             }
                         }
                     ) { paddingValues ->
                         Box(modifier = Modifier.padding(paddingValues)) {
-                            NavgationGraph(navController,viewModel)
-
-
+                            NavgationGraph(
+                                navController,
+                                viewModel,
+                            )
                         }
                     }
                 }
-
             }
         }
     }
 }
+
 
 
 

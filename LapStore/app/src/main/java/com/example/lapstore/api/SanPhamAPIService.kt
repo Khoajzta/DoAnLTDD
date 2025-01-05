@@ -24,7 +24,9 @@ interface SanPhamAPIService{
     @GET("SanPham/readByLoaiSanPham.php?MaLoaiSanPham=1")
     fun getAllSanPhamVanPhong(): Call<SanPhamResponse>
 
-    @GET("SanPhamapi/searchSanPham.php")
-    fun searchSanPham(@Query("search") search: String): Call<SanPhamResponse>
+    @GET("SanPham/show.php")
+    suspend fun getSanPhamById(
+        @Query("id") id: String
+    ): SanPham
 
 }

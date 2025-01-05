@@ -15,6 +15,30 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch/**/
 
 class SanPhamViewModel : ViewModel() {
+
+//    var sanpham: SanPham by mutableStateOf(
+//        SanPham(
+//            0,
+//            "",
+//            0,
+//            1,
+//            "",
+//            1,
+//            "",
+//            1,
+//            "",
+//            1,
+//            1,
+//            0,
+//            "",
+//            "",
+//            1
+//        )
+//    )
+
+    var sanPham by mutableStateOf<SanPham?>(null)
+        private set
+
     val allSanPham = liveData(Dispatchers.IO) {
         try {
             val response = QuanLyBanLaptopRetrofitClient.sanphamAPIService.getAllSanPham().execute()
@@ -54,19 +78,14 @@ class SanPhamViewModel : ViewModel() {
         }
     }
 
-    fun searchSanPham(search: String) = liveData(Dispatchers.IO) {
-        try {
-            val response = QuanLyBanLaptopRetrofitClient.sanphamAPIService.searchSanPham(search).execute()
-            if (response.isSuccessful) {
-                // Emit danh sách sản phẩm tìm thấy
-                emit(response.body()?.sanpham ?: emptyList())
-            } else {
-                emit(emptyList())  // Nếu API trả về lỗi
+    fun getSanPhamById(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                sanPham = QuanLyBanLaptopRetrofitClient.sanphamAPIService.getSanPhamById(id)
+            } catch (e: Exception) {
+                Log.e("SanPhamViewModel", "Error getting SanPham", e)
             }
-        } catch (e: Exception) {
-            emit(emptyList())  // Nếu có lỗi xảy ra trong quá trình gọi API
         }
     }
 
 }
-

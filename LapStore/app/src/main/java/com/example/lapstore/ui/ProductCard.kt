@@ -27,18 +27,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.lapstore.models.SanPham
 
 @Composable
-fun ProductCard(sanpham: SanPham) {
+fun ProductCard(
+    sanpham: SanPham,
+    navController: NavHostController
+) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .size(width = 260.dp, height = 480.dp),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        onClick = {
+            navController.navigate(NavRoute.PRODUCTDETAILSCREEN.route + "?id=${sanpham.MaSanPham}")
+        }
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
             AsyncImage(
