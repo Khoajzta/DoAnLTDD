@@ -16,7 +16,7 @@ sealed class NavRoute(val route: String) {
 }
 
 @Composable
-fun NavgationGraph(navController: NavHostController,viewmodel:SanPhamViewModel) {
+fun NavgationGraph(navController: NavHostController,viewmodel:SanPhamViewModel,hinhAnhViewModel: HinhAnhViewModel) {
     NavHost(navController = navController, startDestination = NavRoute.HOME.route){
         composable(NavRoute.HOME.route){
             HomeScreen(navController,viewmodel)
@@ -33,7 +33,7 @@ fun NavgationGraph(navController: NavHostController,viewmodel:SanPhamViewModel) 
         ){
             var id = it.arguments?.getString("id")
             if(id != null){
-                ProductDetail_Screen(navController = navController,id.toString(),viewModel = viewmodel)
+                ProductDetail_Screen(navController = navController,id.toString(),viewModel = viewmodel,hinhAnhViewModel)
             }
         }
     }

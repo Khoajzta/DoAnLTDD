@@ -15,66 +15,53 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch/**/
 
 class SanPhamViewModel : ViewModel() {
+    var danhSachAllSanPham by mutableStateOf<List<SanPham>>(emptyList())
 
-//    var sanpham: SanPham by mutableStateOf(
-//        SanPham(
-//            0,
-//            "",
-//            0,
-//            1,
-//            "",
-//            1,
-//            "",
-//            1,
-//            "",
-//            1,
-//            1,
-//            0,
-//            "",
-//            "",
-//            1
-//        )
-//    )
+    var danhSachSanPhamVanPhong by mutableStateOf<List<SanPham>>(emptyList())
+        private set
+    var danhSachSanPhamGaming by mutableStateOf<List<SanPham>>(emptyList())
+        private set
+    var isLoading by mutableStateOf(false)
+        private set
+    var errorMessage by mutableStateOf<String?>(null)
+        private set
 
     var sanPham by mutableStateOf<SanPham?>(null)
         private set
 
-    val allSanPham = liveData(Dispatchers.IO) {
-        try {
-            val response = QuanLyBanLaptopRetrofitClient.sanphamAPIService.getAllSanPham().execute()
-            if (response.isSuccessful) {
-                emit(response.body()?.sanpham ?: emptyList())  // Emit dữ liệu vào LiveData
-            } else {
-                emit(emptyList())
+    fun getAllSanPham() {
+        viewModelScope.launch(Dispatchers.IO) {
+            isLoading = true
+            errorMessage = null
+            try {
+                val response = QuanLyBanLaptopRetrofitClient.sanphamAPIService.getAllSanPham()
+                danhSachAllSanPham = response.sanpham // Lưu danh sách sản phẩm từ API
+            } catch (e: Exception) {
+                errorMessage = e.message
+                Log.e("SanPhamViewModel", "Error fetching all products", e)
+            } finally {
+                isLoading = false
             }
-        } catch (e: Exception) {
-            emit(emptyList())  // Emit danh sách trống nếu có lỗi
         }
     }
 
-    val allSanPhamGaming = liveData(Dispatchers.IO) {
-        try {
-            val response = QuanLyBanLaptopRetrofitClient.sanphamAPIService.getAllSanPhamGaming().execute()
-            if (response.isSuccessful) {
-                emit(response.body()?.sanpham ?: emptyList())
-            } else {
-                emit(emptyList())
+    fun getSanPhamTheoLoai(maLoaiSanPham: Int, isLoai1: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            isLoading = true
+            errorMessage = null
+            try {
+                val response = QuanLyBanLaptopRetrofitClient.sanphamAPIService.getSanPhamByLoai(maLoaiSanPham)
+                if (isLoai1) {
+                    danhSachSanPhamVanPhong = response.sanpham
+                } else {
+                    danhSachSanPhamGaming = response.sanpham
+                }
+            } catch (e: Exception) {
+                errorMessage = e.message
+                Log.e("SanPhamViewModel", "Error fetching products", e)
+            } finally {
+                isLoading = false
             }
-        } catch (e: Exception) {
-            emit(emptyList())
-        }
-    }
-
-    val allSanPhamVanPhong = liveData(Dispatchers.IO) {
-        try {
-            val response = QuanLyBanLaptopRetrofitClient.sanphamAPIService.getAllSanPhamVanPhong().execute()
-            if (response.isSuccessful) {
-                emit(response.body()?.sanpham ?: emptyList())
-            } else {
-                emit(emptyList())
-            }
-        } catch (e: Exception) {
-            emit(emptyList())
         }
     }
 

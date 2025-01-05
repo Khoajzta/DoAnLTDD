@@ -11,16 +11,13 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 data class HinhAnhResponse(
-    val sanpham: List<HinhAnh>
+    val hinhanh: List<HinhAnh>
 )
 
 
 interface HinhAnhAPIService{
-    @GET("SanPham/read.php")
-    fun getAllHinhAnh(): Call<HinhAnhResponse>
-
-    @GET("SanPham/readhinhanhbymasanpham.php")
+    @GET("HinhAnh/readhinhanhbymasanpham.php")
     suspend fun getHinhAnhBySanPham(
-        @Query("MaSanPham") id: String
-    ): Call<HinhAnhResponse>
+        @Query("MaSanPham") MaSanPham: String
+    ): HinhAnhResponse
 }

@@ -10,24 +10,29 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.lapstore.api.QuanLyBanLaptopRetrofitClient
+import com.example.lapstore.models.HinhAnh
 import com.example.lapstore.models.SanPham
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch/**/
+import kotlinx.coroutines.withContext
 
 class HinhAnhViewModel : ViewModel() {
+    var danhsachhinhanhtheosanpham by mutableStateOf<List<HinhAnh>>(emptyList())
 
-
-    fun getSanPhamById(id: String) {
+    fun getHinhAnhTheoSanPham(MaSanPham: String) {
         viewModelScope.launch {
             try {
-                // Gọi API và gán kết quả vào _sanPham
-                val result = QuanLyBanLaptopRetrofitClient.hinhAnhAPIService.getHinhAnhBySanPham(id)
-
-                Log.d("SanPhamViewModel", "Sản phẩm: $result")
+                // Thực hiện API request trong Dispatchers.IO
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.hinhAnhAPIService.getHinhAnhBySanPham(MaSanPham)
+                }
+                // Cập nhật dữ liệu lên UI (trong Dispatchers.Main)
+                danhsachhinhanhtheosanpham = response.hinhanh
             } catch (e: Exception) {
-                Log.e("SanPhamViewModel", "Lỗi khi lấy sản phẩm", e)
+                // Xử lý lỗi nếu có
+                Log.e("HinhAnhError", "Lỗi khi lấy hình ảnh: ${e.message}")
             }
         }
     }

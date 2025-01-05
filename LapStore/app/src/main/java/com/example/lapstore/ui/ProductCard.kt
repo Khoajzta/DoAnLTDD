@@ -1,3 +1,4 @@
+import android.icu.text.DecimalFormat
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -51,7 +52,9 @@ fun ProductCard(
             AsyncImage(
                 model= sanpham.HinhAnh,
                 contentDescription = null,
-                modifier = Modifier.padding(8.dp).size(200.dp),
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(200.dp),
                 contentScale = ContentScale.Fit
             )
 
@@ -69,24 +72,16 @@ fun ProductCard(
                     modifier = Modifier.padding(10.dp),
                     verticalArrangement = Arrangement.SpaceAround
                 ) {
-
-                        Text("CPU: "+sanpham.MaCPU)
-                        Text("Card: "+sanpham.MaCardDoHoa)
-                        Text("RAM: "+sanpham.MaRAM.toString()+" GB")
-                        Text("ROM: "+sanpham.MaROM.toString()+" GB")
-
-//                    Row {
-//                        Text(sanpham.MaRAM.toString())
-//                        Text(sanpham.MaROM.toString())
-//                        Text(sanpham.MaManHinh)
-//                    }
-
+                    Text("CPU: " + sanpham.MaCPU, fontWeight = FontWeight.Bold)
+                    Text("Card: " + sanpham.MaCardDoHoa, fontWeight = FontWeight.Bold)
+                    Text("RAM: " + sanpham.MaRAM.toString() + " GB", fontWeight = FontWeight.Bold)
+                    Text("ROM: " + sanpham.MaROM.toString() + " GB", fontWeight = FontWeight.Bold)
                 }
 
             }
             // Giá sản phẩm
             Text(
-                text = sanpham.Gia.toString()+"đ",
+                text = "Giá: ${formatGiaTien(sanpham.Gia)}",
                 fontSize = 16.sp,
                 color = Color.Red,
                 fontWeight = FontWeight.Bold,
@@ -94,4 +89,9 @@ fun ProductCard(
             )
         }
     }
+}
+
+fun formatGiaTien(gia: Int): String {
+    val formatter = DecimalFormat("#,###")
+    return "${formatter.format(gia)}đ"
 }

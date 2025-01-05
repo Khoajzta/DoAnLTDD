@@ -1,5 +1,6 @@
 package com.example.lapstore
 
+import HinhAnhViewModel
 import NavRoute
 import NavgationGraph
 import SanPhamViewModel
@@ -175,6 +176,7 @@ class MainActivity : ComponentActivity() {
                 val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                 val scope = rememberCoroutineScope()
                 val viewModel = SanPhamViewModel()
+                val hinhAnhViewModel = HinhAnhViewModel()
                 val navController = rememberNavController()
                 var searchText by remember { mutableStateOf("") }
                 val systemUiController = rememberSystemUiController()
@@ -425,6 +427,7 @@ class MainActivity : ComponentActivity() {
                             NavgationGraph(
                                 navController,
                                 viewModel,
+                                hinhAnhViewModel
                             )
                         }
                     }
