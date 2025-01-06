@@ -3,26 +3,26 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
 include_once('../../config/database.php');
-include_once('../../model/carddohoa.php');
+include_once('../../model/cardmanhinh.php');
 
 // Tạo đối tượng database và kết nối
 $database = new Database();
 $conn = $database->Connect(); // Lấy kết nối PDO
 
 // Khởi tạo lớp CardDoHoa với kết nối PDO
-$carddohoa = new CardDoHoa($conn);
+$carddohoa = new CardManHinh($conn);
 
 // Lấy MaCardDoHoa từ URL (phương thức GET)
-$carddohoa->MaCardDoHoa = isset($_GET['id']) ? $_GET['id'] : die(json_encode(array('message' => 'macarddohoa not exist.')));
+$carddohoa->MaCardManHinh = isset($_GET['id']) ? $_GET['id'] : die(json_encode(array('message' => 'macarddohoa not exist.')));
 
 // Lấy thông tin chi tiết Card Đồ Họa
 $carddohoa->getCardById();
 
 // Kiểm tra nếu Card Đồ Họa tồn tại
-if ($carddohoa->MaCardDoHoa) {
+if ($carddohoa->MaCardManHinh) {
     // Tạo mảng phản hồi
     $carddohoa_item = array(
-        'MaCardDoHoa' => $carddohoa->MaCardDoHoa,
+        'MaCardManHinh' => $carddohoa->MaCardManHinh,
         'TenCard' => $carddohoa->TenCard,
         'DungLuongBoNho' => $carddohoa->DungLuongBoNho,
         'MaLoaiCard' => $carddohoa->MaLoaiCard

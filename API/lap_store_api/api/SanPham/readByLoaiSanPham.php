@@ -9,19 +9,21 @@ include_once('../../model/sanpham.php');
 $database = new database();
 $conn = $database->Connect(); // Lấy kết nối PDO
 
-// Khởi tạo lớp Khachhang với kết nối PDO
+// Khởi tạo lớp SanPham với kết nối PDO
 $sanpham = new SanPham($conn);
 
-// Lấy tất cả khách hàng
-$getAllSanPham = $sanpham->GetAllSanPham();
+// Kiểm tra và lấy giá trị MaLoaiSanPham từ query string
+$sanpham->MaLoaiSanPham = isset($_GET['MaLoaiSanPham']) ? $_GET['MaLoaiSanPham'] : die(json_encode(["message" => "MaLoaiSanPham không được cung cấp."]));
 
-$num = $getAllSanPham->rowCount();
+// Lấy danh sách sản phẩm theo MaLoaiSanPham
+$getSanPhamByLoai = $sanpham->GetSanPhamByLoai();
+$numSanPhamByLoai = $getSanPhamByLoai->rowCount();
 
-if($num>0){
-    $sanpham_array =[];
-    $sanpham_array['sanpham'] =[];
+if ($numSanPhamByLoai > 0) {
+    $sanphamByLoai_array = [];
+    $sanphamByLoai_array['sanpham'] = [];
 
-    while($row = $getAllSanPham->fetch(PDO::FETCH_ASSOC)){
+    while ($row = $getSanPhamByLoai->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
 
         $sanpham_item = array(
@@ -41,9 +43,10 @@ if($num>0){
             'HinhAnh'=> $DuongDan,
             'TrangThai'=> $TrangThai,
         );
-        array_push($sanpham_array['sanpham'],$sanpham_item);
+        array_push($sanphamByLoai_array['sanpham'], $sanpham_item);
     }
-    print_r(json_encode($sanpham_array, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
-
+    echo json_encode($sanphamByLoai_array, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+} else {
+    echo json_encode(["message" => "Không tìm thấy sản phẩm nào với MaLoaiSanPham = " . $sanpham->MaLoaiSanPham]);
 }
 ?>

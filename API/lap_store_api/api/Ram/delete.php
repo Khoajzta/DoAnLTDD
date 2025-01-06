@@ -7,27 +7,27 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type
 
 // Kết nối đến database và model
 include_once('../../config/database.php');
-include_once('../../model/carddohoa.php');
+include_once('../../model/ram.php');
 
 // Tạo đối tượng database và kết nối
 $database = new Database();
 $conn = $database->Connect(); // Lấy kết nối PDO
 
-// Khởi tạo lớp CardDoHoa với kết nối PDO
-$carddohoa = new CardDoHoa($conn);
+// Khởi tạo lớp RAM với kết nối PDO
+$ram = new ram($conn);
 
 // Lấy dữ liệu JSON từ yêu cầu
 $data = json_decode(file_get_contents("php://input"));
 
-// Gán giá trị cho thuộc tính MaCardDoHoa
-$carddohoa->MaCardDoHoa = $data->MaCardDoHoa;
+// Gán giá trị cho thuộc tính MaRAM
+$ram->MaRAM = $data->MaRAM;
 
-// Gọi hàm deleteCard() để xóa Card Đồ Họa
-if ($carddohoa->deleteCard()) {
+// Gọi hàm deleteRAM() để xóa RAM
+if ($ram->DeleteRAM()) {
     // Nếu xóa thành công
-    echo json_encode(array('message' => 'Card do hoa been delete '));
+    echo json_encode(array('message' => 'RAM delete.'));
 } else {
     // Nếu xóa thất bại
-    echo json_encode(array('message' => 'can not delete card '));
+    echo json_encode(array('message' => 'can not delete'));
 }
 ?>
