@@ -4,7 +4,7 @@ class TaiKhoan{
 
     //Thuoc tinh
     public $TenTaiKhoan;
-    public $MaNguoiDung;
+    public $MaKhachHang;
     public $MatKhau;
 
     //connect db
@@ -29,21 +29,21 @@ class TaiKhoan{
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $this->TenTaiKhoan = $row['TenTaiKhoan'];
-        $this->MaNguoiDung = $row['MaNguoiDung'];
+        $this->MaKhachHang = $row['MaKhachHang'];
         $this->MatKhau = $row['MatKhau'];
     } 
 
     public function AddTaiKhoan(){
-        $query = "INSERT INTO taikhoan SET TenTaiKhoan =:TenTaiKhoan ,  MaNguoiDung =:MaNguoiDung, MatKhau =:MatKhau";
+        $query = "INSERT INTO taikhoan SET TenTaiKhoan =:TenTaiKhoan ,  MaKhachHang =:MaKhachHang, MatKhau =:MatKhau";
 
         $stmt = $this->conn->prepare($query);
 
         $this->TenTaiKhoan = htmlspecialchars(strip_tags($this->TenTaiKhoan));
-        $this->MaNguoiDung = htmlspecialchars(strip_tags($this->MaNguoiDung));
+        $this->MaKhachHang = htmlspecialchars(strip_tags($this->MaKhachHang));
         $this->MatKhau = htmlspecialchars(strip_tags($this->MatKhau));
 
         $stmt->bindParam(':TenTaiKhoan',$this->TenTaiKhoan);
-        $stmt->bindParam(':MaNguoiDung',$this->MaNguoiDung);
+        $stmt->bindParam(':MaKhachHang',$this->MaKhachHang);
         $stmt->bindParam(':MatKhau',$this->MatKhau);
 
         if($stmt->execute()){
@@ -77,7 +77,7 @@ class TaiKhoan{
 
         $stmt = $this->conn->prepare($query);
 
-        $this->MaNguoiDung = htmlspecialchars(strip_tags($this->TenTaiKhoan));
+        $this->MaKhachHang = htmlspecialchars(strip_tags($this->TenTaiKhoan));
 
         $stmt->bindParam(':TenTaiKhoan',$this->TenTaiKhoan);
 

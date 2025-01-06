@@ -31,7 +31,7 @@ if($num>0){
             'MaHangSanXuat'=> $MaHangSanXuat,
             'MaCPU'=> $MaCPU,
             'MaRAM'=> $MaRAM,
-            'MaCardDoHoa'=> $MaCardDoHoa,
+            'MaCardManHinh'=> $MaCardManHinh,
             'MaROM'=> $MaROM,
             'MaManHinh'=> $MaManHinh,
             'MaMauSac'=> $MaMauSac,

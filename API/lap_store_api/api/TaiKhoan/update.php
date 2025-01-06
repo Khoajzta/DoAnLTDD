@@ -17,7 +17,7 @@
     $data = json_decode(file_get_contents("php://input"));
 
     $taikhoan->TenTaiKhoan = $data->TenTaiKhoan;
-    $taikhoan->MaNguoiDung = $data->MaNguoiDung;
+    $taikhoan->MaKhachHang = $data->MaKhachHang;
     $taikhoan->MatKhau = $data->MatKhau;
 
     if($taikhoan->UpdateTaiKhoan()){

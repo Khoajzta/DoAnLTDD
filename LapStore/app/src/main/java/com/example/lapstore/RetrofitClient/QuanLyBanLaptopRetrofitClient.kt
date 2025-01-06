@@ -3,6 +3,7 @@ package com.example.lapstore.api
 
 import HinhAnhAPIService
 import SanPhamAPIService
+import TaiKhoanAPIService
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -26,5 +27,13 @@ object QuanLyBanLaptopRetrofitClient {
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()
             .create(HinhAnhAPIService::class.java)
+    }
+
+    val taiKhoanAPIService: TaiKhoanAPIService by lazy {
+        Retrofit.Builder()
+            .baseUrl(Constants.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+            .build()
+            .create(TaiKhoanAPIService::class.java)
     }
 }

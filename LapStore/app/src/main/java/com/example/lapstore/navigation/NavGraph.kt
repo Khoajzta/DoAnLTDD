@@ -6,6 +6,7 @@ import androidx.navigation.navArgument
 import com.example.lapstore.views.AcccountScreen
 import com.example.lapstore.views.CardScreen
 import com.example.lapstore.views.HomeScreen
+import com.example.lapstore.views.LoginScreen
 import com.example.lapstore.views.ProductDetail_Screen
 
 sealed class NavRoute(val route: String) {
@@ -13,6 +14,7 @@ sealed class NavRoute(val route: String) {
     object ACCOUNT: NavRoute("account_screen")
     object CARD: NavRoute("card_screen")
     object PRODUCTDETAILSCREEN: NavRoute("productdetail_screen")
+    object LOGINSCREEN: NavRoute("login_screen")
 }
 
 @Composable
@@ -26,6 +28,9 @@ fun NavgationGraph(navController: NavHostController,viewmodel:SanPhamViewModel,h
         }
         composable(NavRoute.CARD.route){
             CardScreen()
+        }
+        composable(NavRoute.LOGINSCREEN.route){
+            LoginScreen()
         }
         composable(
             route = NavRoute.PRODUCTDETAILSCREEN.route+"?id={id}",
