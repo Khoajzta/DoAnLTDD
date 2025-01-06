@@ -3,8 +3,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.lapstore.views.AcccountScreen
-import com.example.lapstore.views.CardScreen
 import com.example.lapstore.views.HomeScreen
+<<<<<<< Updated upstream
+=======
+import com.example.lapstore.views.ProductDetail_Screen
+import com.example.tapdieuhuong.MainContent
+>>>>>>> Stashed changes
 
 sealed class NavRoute(val route: String) {
     object HOME : NavRoute("home_screen")
@@ -22,7 +26,7 @@ fun NavgationGraph(navController: NavHostController,viewmodel:SanPhamViewModel) 
             AcccountScreen()
         }
         composable(NavRoute.CARD.route){
-            CardScreen()
+            MainContent()
         }
     }
 
