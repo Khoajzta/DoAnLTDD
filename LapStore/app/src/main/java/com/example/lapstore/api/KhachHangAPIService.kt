@@ -19,4 +19,7 @@ interface KhachHangAPIService {
     // Lấy tất cả khách hàng
     @GET("KhachHang/read.php")
     fun getAllKhachHang(): Call<KhachHangResponse>
+
+    @PUT("KhachHang/update.php")
+    fun updateKhachHang(@Body khachHang: KhachHang): Call<KhachHangResponse>
 }

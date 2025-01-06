@@ -93,116 +93,132 @@ fun AcccountScreen(khachHangViewModel: KhachHangViewModel = viewModel()) {
 
 @Composable
 fun AccountInfoSection(currentKhachHang: KhachHang?) {
-    var selectedDay by remember { mutableStateOf("1") }
-    var selectedMonth by remember { mutableStateOf("1") }
-    var selectedYear by remember { mutableStateOf("2000") }
-    val lsGenders = mutableListOf("Nam", "Nữ")
-    var selection by remember { mutableStateOf(lsGenders[0]) }
+    currentKhachHang?.let { khachHang ->
+        // Dùng state để lưu trữ thông tin người dùng nhập
+        val hoTen = remember { mutableStateOf(khachHang.HoTen) }
+        val soDienThoai = remember { mutableStateOf(khachHang.SoDienThoai) }
+        val email = remember { mutableStateOf(khachHang.Email) }
+        val gioiTinh = remember { mutableStateOf(khachHang.GioiTinh) }
+        val selectedDay = remember { mutableStateOf(khachHang.NgaySinh.split("-")[2]) }
+        val selectedMonth = remember { mutableStateOf(khachHang.NgaySinh.split("-")[1]) }
+        val selectedYear = remember { mutableStateOf(khachHang.NgaySinh.split("-")[0]) }
 
-    Card(
-        shape = RoundedCornerShape(8.dp),
-        elevation = CardDefaults.cardElevation(4.dp),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text("Thông tin tài khoản", fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(8.dp))
+        // Hiển thị thông tin tài khoản và cho phép người dùng chỉnh sửa
+        Card(
+            shape = RoundedCornerShape(8.dp),
+            elevation = CardDefaults.cardElevation(4.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text("Thông tin tài khoản", fontWeight = FontWeight.Bold)
 
-            Text("Họ Tên", fontWeight = FontWeight.Bold)
-            OutlinedTextField(
-                value = currentKhachHang?.HoTen ?: "",
-                onValueChange = {},
-                modifier = Modifier.fillMaxWidth(),
-                readOnly = true
-            )
+                // Họ tên
+                Text("Họ Tên: ", fontWeight = FontWeight.Bold)
+                OutlinedTextField(
+                    value = hoTen.value,
+                    onValueChange = { hoTen.value = it },
+                    modifier = Modifier.fillMaxWidth()
+                )
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Giới tính:", fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.width(16.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    lsGenders.forEach { gender ->
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            RadioButton(selected = selection == gender,
-                                onClick = { selection = gender })
-                            Text(text = gender)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("Giới tính: ", fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        listOf("Nam", "Nữ").forEach { gender ->
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                RadioButton(
+                                    selected = gioiTinh.value == gender,
+                                    onClick = { gioiTinh.value = gender }
+                                )
+                                Text(text = gender)
+                            }
                         }
                     }
                 }
-            }
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text("Số điện thoại", fontWeight = FontWeight.Bold)
-            OutlinedTextField(
-                value = currentKhachHang?.SoDienThoai ?: "",
-                onValueChange = {},
-                modifier = Modifier.fillMaxWidth(),
-                readOnly = true
-            )
-
-            Text("Email", fontWeight = FontWeight.Bold)
-            OutlinedTextField(
-                value = currentKhachHang?.Email ?: "",
-                onValueChange = {},
-                modifier = Modifier.fillMaxWidth(),
-                readOnly = true
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text("Ngày sinh", fontWeight = FontWeight.Bold)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                // Dropdown cho ngày
-                DropdownMenuField(
-                    label = "Ngày",
-                    items = (1..31).map { it.toString() },
-                    selectedValue = selectedDay,
-                    onValueChange = { selectedDay = it },
-                    modifier = Modifier.weight(1.15f).padding(end = 0.5.dp)
+                // Số điện thoại
+                Text("Số điện thoại: ", fontWeight = FontWeight.Bold)
+                OutlinedTextField(
+                    value = soDienThoai.value,
+                    onValueChange = { soDienThoai.value = it },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone),
+                    modifier = Modifier.fillMaxWidth()
                 )
-                Spacer(modifier = Modifier.width(4.dp))
 
-                // Dropdown cho tháng
-                DropdownMenuField(
-                    label = "Tháng",
-                    items = (1..12).map { it.toString() },
-                    selectedValue = selectedMonth,
-                    onValueChange = { selectedMonth = it },
-                    modifier = Modifier.weight(1.2f).padding(horizontal = 0.5.dp)
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Email
+                Text("Email: ", fontWeight = FontWeight.Bold)
+                OutlinedTextField(
+                    value = email.value,
+                    onValueChange = { email.value = it },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
+                    modifier = Modifier.fillMaxWidth()
                 )
-                Spacer(modifier = Modifier.width(4.dp))
 
-                // Dropdown cho năm giảm dần
-                DropdownMenuField(
-                    label = "Năm",
-                    items = (1900..2025).map { it.toString() }.reversed(),
-                    selectedValue = selectedYear,
-                    onValueChange = { selectedYear = it },
-                    modifier = Modifier.weight(1.4f).padding(start = 0.5.dp)
-                )
-            }
+                Spacer(modifier = Modifier.height(8.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+                // Ngày sinh
+                Text("Ngày sinh: ", fontWeight = FontWeight.Bold)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    DropdownMenuField(
+                        label = "Ngày",
+                        items = (1..31).map { it.toString() },
+                        selectedValue = selectedDay.value,
+                        onValueChange = { selectedDay.value = it },
+                        modifier = Modifier.weight(1.15f).padding(end = 0.5.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
 
-            Button(
-                onClick = { /* Lưu thay đổi */ },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("LƯU THAY ĐỔI", color = Color.White)
+                    DropdownMenuField(
+                        label = "Tháng",
+                        items = (1..12).map { it.toString() },
+                        selectedValue = selectedMonth.value,
+                        onValueChange = { selectedMonth.value = it },
+                        modifier = Modifier.weight(1.2f).padding(horizontal = 0.5.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+
+                    DropdownMenuField(
+                        label = "Năm",
+                        items = (1900..2025).map { it.toString() }.reversed(),
+                        selectedValue = selectedYear.value,
+                        onValueChange = { selectedYear.value = it },
+                        modifier = Modifier.weight(1.4f).padding(start = 0.5.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Nút "Lưu thay đổi"
+                Button(
+                    onClick = {
+                        // Cập nhật thông tin mới vào đối tượng KhachHang
+                        val updatedKhachHang = khachHang.copy(
+                            HoTen = hoTen.value,
+                            SoDienThoai = soDienThoai.value,
+                            Email = email.value,
+                            GioiTinh = gioiTinh.value,
+                            NgaySinh = "${selectedYear.value}-${selectedMonth.value}-${selectedDay.value}"
+                        )
+                        // Sau đó có thể gọi API hoặc thực hiện hành động lưu ở đây
+                        println("Thông tin đã được lưu: $updatedKhachHang")
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("LƯU THAY ĐỔI", color = Color.White)
+                }
             }
         }
     }
 }
+
 
 @Composable
 fun DropdownMenuField(
@@ -212,16 +228,15 @@ fun DropdownMenuField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var isExpanded by remember { mutableStateOf(false) } // Trạng thái mở menu
+    var isExpanded by remember { mutableStateOf(false) } // Trạng thái menu
 
-    Column(modifier = modifier.padding(8.dp)) {
-        // OutlinedTextField với nút xổ xuống
+    Column(modifier = modifier) {
         OutlinedTextField(
             value = selectedValue,
-            onValueChange = { onValueChange(it) }, // Cập nhật giá trị khi nhập
+            onValueChange = { onValueChange(it) },
             label = { Text(label) },
-            readOnly = false, // Cho phép nhập trực tiếp
-            trailingIcon = { // Biểu tượng xổ xuống
+            readOnly = true,
+            trailingIcon = {
                 Text(
                     text = "▼",
                     modifier = Modifier
@@ -232,26 +247,25 @@ fun DropdownMenuField(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // DropdownMenu
         DropdownMenu(
             expanded = isExpanded,
             onDismissRequest = { isExpanded = false },
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(max = 300.dp) // Giới hạn chiều cao menu
+            modifier = Modifier.fillMaxWidth()
         ) {
             items.forEach { item ->
                 DropdownMenuItem(
                     text = { Text(item) },
                     onClick = {
-                        onValueChange(item) // Cập nhật giá trị khi chọn
-                        isExpanded = false // Đóng menu
+                        onValueChange(item)
+                        isExpanded = false
                     }
                 )
             }
         }
     }
 }
+
+
 
 @Composable
 fun AccountOptionsSection(onOptionSelected: (String) -> Unit, currentTab: String) {
