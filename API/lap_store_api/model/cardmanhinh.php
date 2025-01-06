@@ -1,9 +1,9 @@
 <?php
-class CardDoHoa {
+class CardManHinh {
     private $conn;
 
     // Thuộc tính liên quan đến Card Đồ Họa
-    public $MaCardDoHoa;
+    public $MaCardManHinh;
     public $TenCard;
     public $DungLuongBoNho;
     public $MaLoaiCard;
@@ -16,7 +16,7 @@ class CardDoHoa {
     // Phương thức lấy tất cả Card Đồ Họa
     public function getAllCards() {
         try {
-            $query = "SELECT * FROM carddohoa ORDER BY MaCardDoHoa DESC";
+            $query = "SELECT * FROM cardmanhinh ORDER BY MaCardManHinh DESC";
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
             return $stmt;
@@ -29,9 +29,9 @@ class CardDoHoa {
     // Phương thức lấy Card Đồ Họa theo ID
     public function getCardById() {
         try {
-            $query = "SELECT * FROM carddohoa WHERE MaCardDoHoa = ? LIMIT 1";
+            $query = "SELECT * FROM cardmanhinh WHERE MaCardManHinh = ? LIMIT 1";
             $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(1, $this->MaCardDoHoa, PDO::PARAM_INT);
+            $stmt->bindParam(1, $this->MaCardManHinh, PDO::PARAM_INT);
             $stmt->execute();
 
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -48,38 +48,37 @@ class CardDoHoa {
     // Phương thức thêm Card Đồ Họa
     public function addCard() {
         try {
-            $query = "INSERT INTO carddohoa (MaCardDoHoa, TenCard, DungLuongBoNho, MaLoaiCard) 
-                      VALUES (:MaCardDoHoa, :TenCard, :DungLuongBoNho, :MaLoaiCard)";
+            $query = "INSERT INTO cardmanhinh (MaCardManHinh,TenCard, DungLuongBoNho, MaLoaiCard) 
+                      VALUES (:MaCardManHinh, :TenCard, :DungLuongBoNho, :MaLoaiCard)";
             $stmt = $this->conn->prepare($query);
-    
+
             // Làm sạch dữ liệu đầu vào
-            $this->MaCardDoHoa = htmlspecialchars(strip_tags($this->MaCardDoHoa));
+            $this->MaCardManHinh = htmlspecialchars(strip_tags($this->MaCardManHinh));
             $this->TenCard = htmlspecialchars(strip_tags($this->TenCard));
             $this->DungLuongBoNho = htmlspecialchars(strip_tags($this->DungLuongBoNho));
             $this->MaLoaiCard = htmlspecialchars(strip_tags($this->MaLoaiCard));
-    
+
             // Gắn tham số
-            $stmt->bindParam(':MaCardDoHoa', $this->MaCardDoHoa);
+            $stmt->bindParam(':MaCardManHinh', $this->MaCardManHinh);
             $stmt->bindParam(':TenCard', $this->TenCard);
             $stmt->bindParam(':DungLuongBoNho', $this->DungLuongBoNho);
             $stmt->bindParam(':MaLoaiCard', $this->MaLoaiCard);
-    
+
             return $stmt->execute();
         } catch (PDOException $e) {
             echo "Lỗi: " . $e->getMessage();
             return false;
         }
     }
-    
 
     // Phương thức cập nhật Card Đồ Họa
     public function updateCard() {
         try {
-            $query = "UPDATE carddohoa SET 
+            $query = "UPDATE cardmanhinh SET 
                       TenCard = :TenCard, 
                       DungLuongBoNho = :DungLuongBoNho, 
                       MaLoaiCard = :MaLoaiCard 
-                      WHERE MaCardDoHoa = :MaCardDoHoa";
+                      WHERE MaCardManHinh = :MaCardManHinh";
 
             $stmt = $this->conn->prepare($query);
 
@@ -87,13 +86,13 @@ class CardDoHoa {
             $this->TenCard = htmlspecialchars(strip_tags($this->TenCard));
             $this->DungLuongBoNho = htmlspecialchars(strip_tags($this->DungLuongBoNho));
             $this->MaLoaiCard = htmlspecialchars(strip_tags($this->MaLoaiCard));
-            $this->MaCardDoHoa = htmlspecialchars(strip_tags($this->MaCardDoHoa));
+            $this->MaCardManHinh = htmlspecialchars(strip_tags($this->MaCardManHinh));
 
             // Gắn tham số
             $stmt->bindParam(':TenCard', $this->TenCard);
             $stmt->bindParam(':DungLuongBoNho', $this->DungLuongBoNho);
             $stmt->bindParam(':MaLoaiCard', $this->MaLoaiCard);
-            $stmt->bindParam(':MaCardDoHoa', $this->MaCardDoHoa);
+            $stmt->bindParam(':MaCardManHinh', $this->MaCardManHinh);
 
             return $stmt->execute();
         } catch (PDOException $e) {
@@ -105,12 +104,12 @@ class CardDoHoa {
     // Phương thức xóa Card Đồ Họa
     public function deleteCard() {
         try {
-            $query = "DELETE FROM carddohoa WHERE MaCardDoHoa = :MaCardDoHoa";
+            $query = "DELETE FROM cardmanhinh WHERE MaCardManHinh = :MaCardManHinh";
             $stmt = $this->conn->prepare($query);
 
-            $this->MaCardDoHoa = htmlspecialchars(strip_tags($this->MaCardDoHoa));
+            $this->MaCardManHinh = htmlspecialchars(strip_tags($this->MaCardManHinh));
 
-            $stmt->bindParam(':MaCardDoHoa', $this->MaCardDoHoa);
+            $stmt->bindParam(':MaCardManHinh', $this->MaCardManHinh);
 
             return $stmt->execute();
         } catch (PDOException $e) {

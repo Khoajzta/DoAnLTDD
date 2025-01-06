@@ -24,7 +24,7 @@
         'MaHangSanXuat' => $sanpham->MaHangSanXuat,
         'MaCPU' => $sanpham->MaCPU,
         'MaRAM' => $sanpham->MaRAM,
-        'MaCardDoHoa' => $sanpham->MaCardDoHoa,
+        'MaCardManHinh' => $sanpham->MaCardManHinh,
         'MaROM' => $sanpham->MaROM,
         'MaManHinh' => $sanpham->MaManHinh,
         'MaMauSac' => $sanpham->MaMauSac,

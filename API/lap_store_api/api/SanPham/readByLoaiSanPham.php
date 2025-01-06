@@ -27,20 +27,20 @@ if ($numSanPhamByLoai > 0) {
         extract($row);
 
         $sanpham_item = array(
-            'MaSanPham'=> $MaSanPham,
+            'MaSanPham'=> $MSanPham,
             'TenSanPham'=> $TenSanPham,
             'MaLoaiSanPham'=> $MaLoaiSanPham,
             'MaHangSanXuat'=> $MaHangSanXuat,
-            'MaCPU'=> $TenHangCPU,
+            'MaCPU'=> $TenCPU,
             'MaRAM'=> $DungLuongRAM,
-            'MaCardDoHoa'=> $TenCard,
+            'MaCardManHinh'=> $TenCard,
             'MaROM'=> $DungLuongROM,
             'MaManHinh'=> $DoPhanGiai,
             'MaMauSac'=> $MaMauSac,
             'Gia'=> $Gia,
             'SoLuong'=> $SoLuong,
             'MoTa'=> $MoTa,
-            'HinhAnh'=> $TenHinhAnh,
+            'HinhAnh'=> $DuongDan,
             'TrangThai'=> $TrangThai,
         );
         array_push($sanphamByLoai_array['sanpham'], $sanpham_item);

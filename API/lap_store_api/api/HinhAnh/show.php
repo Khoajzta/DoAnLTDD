@@ -19,7 +19,7 @@
 
     $hinhanh_item = array(
         'MaHinhAnh'=> $hinhanh->MaHinhAnh,
-        'TenHinhAnh'=> $hinhanh->TenHinhAnh,
+        'DuongDan'=> $hinhanh->DuongDan,
         'MaSanPham'=> $hinhanh->MaSanPham,
     );
 

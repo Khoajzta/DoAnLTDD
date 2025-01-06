@@ -61,7 +61,7 @@ if ($num > 0) {
 } else {
     // Trường hợp không có dữ liệu
     echo json_encode(
-        array('message' => 'Do not  have HoaDonban ')
+        array('message' => 'Không có hóa đơn bán nào.')
     );
 }
 ?>

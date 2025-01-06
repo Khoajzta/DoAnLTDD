@@ -26,7 +26,7 @@ if($num>0){
 
         $hinhanh_item = array(
             'MaHinhAnh'=> $MaHinhAnh,
-            'TenHinhAnh'=> $TenHinhAnh,
+            'DuongDan'=> $DuongDan,
             'MaSanPham'=> $MaSanPham
         );
         array_push($hinhanhh_array['hinhanh'],$hinhanh_item);

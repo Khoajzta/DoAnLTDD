@@ -25,9 +25,9 @@ $chitiet->MaChiTietHoaDonBan = $data->MaChiTietHoaDonBan;
 // Gọi hàm deleteCard() để xóa chi tiết hóa đơn bán
 if ($chitiet->deleteDetail()) {
     // Nếu xóa thành công
-    echo json_encode(array('message' => 'ChitiethoaDonBan has been delete '));
+    echo json_encode(array('message' => 'Chi tiết hóa đơn bán đã được xóa.'));
 } else {
     // Nếu xóa thất bại
-    echo json_encode(array('message' => 'ChiTiethoaDonBan can not delete '));
+    echo json_encode(array('message' => 'Không thể xóa chi tiết hóa đơn bán.'));
 }
 ?>

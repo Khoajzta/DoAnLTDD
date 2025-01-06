@@ -7,20 +7,20 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type
 
 // Kết nối đến database và model
 include_once('../../config/database.php');
-include_once('../../model/carddohoa.php');
+include_once('../../model/cardmanhinh.php');
 
 // Tạo đối tượng database và kết nối
 $database = new Database();
 $conn = $database->Connect(); // Lấy kết nối PDO
 
 // Khởi tạo lớp CardDoHoa với kết nối PDO
-$carddohoa = new CardDoHoa($conn);
+$carddohoa = new CardManHinh($conn);
 
 // Lấy dữ liệu JSON từ yêu cầu
 $data = json_decode(file_get_contents("php://input"));
 
 // Gán giá trị cho thuộc tính MaCardDoHoa
-$carddohoa->MaCardDoHoa = $data->MaCardDoHoa;
+$carddohoa->MaCardManHinh = $data->MaCardManHinh;
 
 // Gọi hàm deleteCard() để xóa Card Đồ Họa
 if ($carddohoa->deleteCard()) {

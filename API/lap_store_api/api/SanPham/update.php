@@ -22,7 +22,7 @@
     $sanpham->MaHangSanXuat = $data->MaHangSanXuat;
     $sanpham->MaCPU = $data->MaCPU;
     $sanpham->MaRAM = $data->MaRAM;
-    $sanpham->MaCardDoHoa = $data->MaCardDoHoa;
+    $sanpham->MaCardManHinh = $data->MaCardManHinh;
     $sanpham->MaROM = $data->MaROM;
     $sanpham->MaManHinh = $data->MaManHinh;
     $sanpham->MaMauSac = $data->MaMauSac;
