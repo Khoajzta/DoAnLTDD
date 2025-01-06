@@ -404,7 +404,7 @@ class MainActivity : ComponentActivity() {
                                             ){
                                                 IconButton(
                                                     modifier = Modifier.size(45.dp),
-                                                    onClick = { navController.navigate(NavRoute.ACCOUNT.route)}
+                                                    onClick = { navController.navigate(NavRoute.CARD.route)}
                                                 ) {
                                                     Icon(
                                                         Icons.Outlined.Person,

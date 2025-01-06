@@ -21,17 +21,27 @@ class TaiKhoan{
         $stmt->execute();
         return $stmt; // Trả về PDOStatement
     }
-    public function GetTaiKhoanByUsername() {
-        $query = "SELECT * FROM taikhoan WHERE TenTaiKhoan = ? LIMIT 1"; 
+    public function KiemTraDangNhap() {
+        $query = "SELECT * FROM taikhoan WHERE TenTaiKhoan = ? AND MatKhau = ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(1,$this->TenTaiKhoan);
+        $stmt->bindParam(1, $this->TenTaiKhoan);
+        $stmt->bindParam(2, $this->MatKhau);
+    
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        $this->TenTaiKhoan = $row['TenTaiKhoan'];
-        $this->MaKhachHang = $row['MaKhachHang'];
-        $this->MatKhau = $row['MatKhau'];
-    } 
+    
+        if ($row) {
+            // Tìm thấy tài khoản, gán thông tin
+            $this->TenTaiKhoan = $row['TenTaiKhoan'];
+            $this->MaKhachHang = $row['MaKhachHang'];
+            $this->MatKhau = $row['MatKhau'];
+            return true; // Đăng nhập thành công
+        } else {
+            // Không tìm thấy tài khoản
+            return false; // Đăng nhập thất bại
+        }
+    }
+    
 
     public function AddTaiKhoan(){
         $query = "INSERT INTO taikhoan SET TenTaiKhoan =:TenTaiKhoan ,  MaKhachHang =:MaKhachHang, MatKhau =:MatKhau";
