@@ -6,7 +6,6 @@ import SanPhamAPIService
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import KhachHangAPIService
 
 object Constants {
     const val BASE_URL = "http://10.0.2.2/lap_store_api/api/" // Đảm bảo URL chính xác
@@ -20,7 +19,7 @@ object QuanLyBanLaptopRetrofitClient {
             .build()
             .create(SanPhamAPIService::class.java)
     }
-<<<<<<< HEAD
+
 
     val hinhAnhAPIService: HinhAnhAPIService by lazy {
         Retrofit.Builder()
@@ -29,8 +28,6 @@ object QuanLyBanLaptopRetrofitClient {
             .build()
             .create(HinhAnhAPIService::class.java)
     }
-=======
->>>>>>> minhman
     val khachHangAPIService: KhachHangAPIService by lazy {
         Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)

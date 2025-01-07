@@ -7,12 +7,11 @@ class SanPham
     public $MaSanPham;
     public $TenSanPham;
     public $MaLoaiSanPham;
-    public $MaHangSanXuat;
-    public $MaCPU;
-    public $MaRAM;
-    public $MaCardManHinh;
-    public $MaROM;
-    public $MaManHinh;
+    public $CPU;
+    public $RAM;
+    public $CardManHinh;
+    public $SSD;
+    public $ManHinh;
     public $MaMauSac;
     public $Gia;
     public $SoLuong;
@@ -31,15 +30,8 @@ class SanPham
 
     public function GetAllSanPham()
 {
-    $query = "SELECT * , ro.DungLuong as DungLuongROM ,  r.DungLuong as DungLuongRAM, sp.MaSanPham as MSanPham
-              FROM SanPham sp
-              JOIN HinhAnh ha ON sp.HinhAnh = ha.MaHinhAnh
-              JOIN CPU cpu ON sp.MaCPU = cpu.MaCPU
-              JOIN RAM r ON sp.MaRAM = r.MaRAM
-              JOIN ROM ro ON sp.MaROM = ro.MaROM
-              JOIN CardManHinh cdh ON sp.MaCardManHinh = cdh.MaCardManHinh
-              JOIN ManHinh mh ON sp.MaManHinh = mh.MaManHinh";
-    
+    $query = "SELECT * FROM SanPham sp 
+              join hinhanh ha on sp.HinhAnh = ha.MaHinhAnh";
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
     return $stmt; // Trả về PDOStatement
@@ -47,14 +39,9 @@ class SanPham
 
     public function GetSanPhamById()
     {
-        $query = "SELECT * , ro.DungLuong as DungLuongROM ,  r.DungLuong as DungLuongRAM, sp.MaSanPham as MSanPham
+        $query = "SELECT * 
                   FROM SanPham sp 
-                  join HinhAnh ha on sp.HinhAnh = ha.MaHinhAnh 
-                  JOIN CPU cpu ON sp.MaCPU = cpu.MaCPU
-                  JOIN RAM r ON sp.MaRAM = r.MaRAM
-                  JOIN ROM ro ON sp.MaROM = ro.MaROM
-                  JOIN CardManHinh cdh ON sp.MaCardManHinh = cdh.MaCardManHinh
-                  JOIN ManHinh mh ON sp.MaManHinh = mh.MaManHinh
+                  join hinhanh ha on sp.HinhAnh = ha.MaHinhAnh
                   WHERE sp.MaSanPham = ? LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->MaSanPham);
@@ -65,12 +52,11 @@ class SanPham
         // Gán giá trị từ kết quả vào các thuộc tính của đối tượng
         $this->TenSanPham = $row['TenSanPham'] ?? null;  // Sử dụng giá trị mặc định nếu không có giá trị
         $this->MaLoaiSanPham = $row['MaLoaiSanPham'] ?? null;
-        $this->MaHangSanXuat = $row['MaHangSanXuat'] ?? null;
-        $this->MaCPU = $row['TenCPU'] ?? null;
-        $this->MaRAM = $row['DungLuongRAM'] ?? null;
-        $this->MaCardManHinh = $row['TenCard'] ?? null;
-        $this->MaROM = $row['DungLuongROM'] ?? null;
-        $this->MaManHinh = $row['MaManHinh'] ?? null;
+        $this->CPU = $row['CPU'] ?? null;
+        $this->RAM = $row['RAM'] ?? null;
+        $this->CardManHinh = $row['CardManHinh'] ?? null;
+        $this->SSD = $row['SSD'] ?? null;
+        $this->ManHinh = $row['ManHinh'] ?? null;
         $this->MaMauSac = $row['MaMauSac'] ?? null;
         $this->Gia = $row['Gia'] ?? null;
         $this->SoLuong = $row['SoLuong'] ?? null;
@@ -101,43 +87,35 @@ class SanPham
 
     public function GetSanPhamByLoai()
     {
-        $query = "SELECT * , ro.DungLuong as DungLuongROM ,  r.DungLuong as DungLuongRAM, sp.MaSanPham as MSanPham
-              FROM SanPham sp
-              JOIN HinhAnh ha ON sp.HinhAnh = ha.MaHinhAnh
-              JOIN CPU cpu ON sp.MaCPU = cpu.MaCPU
-              JOIN RAM r ON sp.MaRAM = r.MaRAM
-              JOIN ROM ro ON sp.MaROM = ro.MaROM
-              JOIN CardManHinh cdh ON sp.MaCardManHinh = cdh.MaCardManHinh
-              JOIN ManHinh mh ON sp.MaManHinh = mh.MaManHinh
-              WHERE sp.MaLoaiSanPham = ?";
+        $query = "SELECT * 
+                  FROM SanPham sp 
+                  join hinhanh ha on sp.HinhAnh = ha.MaHinhAnh
+                  WHERE sp.MaLoaiSanPham = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->MaLoaiSanPham);
         $stmt->execute();
         return $stmt; 
     }
     
-
     public function AddSanPham()
     {
         $query = "INSERT INTO SanPham 
-        (MaSanPham, TenSanPham, MaLoaiSanPham, MaHangSanXuat, MaCPU, MaRAM, MaCardManHinh, 
-        MaROM, MaManHinh, MaMauSac, Gia, SoLuong, MoTa, HinhAnh, TrangThai) 
+        (MaSanPham, TenSanPham, MaLoaiSanPham, CPU, RAM, CardManHinh, 
+        SSD, ManHinh, MaMauSac, Gia, SoLuong, MoTa, HinhAnh, TrangThai) 
         VALUES 
-        (:MaSanPham, :TenSanPham, :MaLoaiSanPham, :MaHangSanXuat, :MaCPU, :MaRAM, :MaCardManHinh, 
-        :MaROM, :MaManHinh, :MaMauSac, :Gia, :SoLuong, :MoTa, :HinhAnh, :TrangThai)";
-
+        (:MaSanPham, :TenSanPham, :MaLoaiSanPham, :CPU, :RAM, :CardManHinh, 
+        :SSD, :ManHinh, :MaMauSac, :Gia, :SoLuong, :MoTa, :HinhAnh, :TrangThai)";
 
         $stmt = $this->conn->prepare($query);
 
         $this->MaSanPham = htmlspecialchars(strip_tags($this->MaSanPham));
         $this->TenSanPham = htmlspecialchars(strip_tags($this->TenSanPham));
         $this->MaLoaiSanPham = htmlspecialchars(strip_tags($this->MaLoaiSanPham));
-        $this->MaHangSanXuat = htmlspecialchars(strip_tags($this->MaHangSanXuat));
-        $this->MaCPU = htmlspecialchars(strip_tags($this->MaCPU));
-        $this->MaRAM = htmlspecialchars(strip_tags($this->MaRAM));
-        $this->MaCardManHinh = htmlspecialchars(strip_tags($this->MaCardManHinh));
-        $this->MaROM = htmlspecialchars(strip_tags($this->MaROM));
-        $this->MaManHinh = htmlspecialchars(strip_tags($this->MaManHinh));
+        $this->CPU = htmlspecialchars(strip_tags($this->CPU));
+        $this->RAM = htmlspecialchars(strip_tags($this->RAM));
+        $this->CardManHinh = htmlspecialchars(strip_tags($this->CardManHinh));
+        $this->SSD = htmlspecialchars(strip_tags($this->SSD));
+        $this->ManHinh = htmlspecialchars(strip_tags($this->ManHinh));
         $this->MaMauSac = htmlspecialchars(strip_tags($this->MaMauSac));
         $this->Gia = htmlspecialchars(strip_tags($this->Gia));
         $this->SoLuong = htmlspecialchars(strip_tags($this->SoLuong));
@@ -149,12 +127,11 @@ class SanPham
         $stmt->bindParam(':MaSanPham', $this->MaSanPham);
         $stmt->bindParam(':TenSanPham', $this->TenSanPham);
         $stmt->bindParam(':MaLoaiSanPham', $this->MaLoaiSanPham);
-        $stmt->bindParam(':MaHangSanXuat', $this->MaHangSanXuat);
-        $stmt->bindParam(':MaCPU', $this->MaCPU);
-        $stmt->bindParam(':MaRAM', $this->MaRAM);
-        $stmt->bindParam(':MaCardManHinh', $this->MaCardManHinh);
-        $stmt->bindParam(':MaROM', $this->MaROM);
-        $stmt->bindParam(':MaManHinh', $this->MaManHinh);
+        $stmt->bindParam(':CPU', $this->CPU);
+        $stmt->bindParam(':RAM', $this->RAM);
+        $stmt->bindParam(':CardManHinh', $this->CardManHinh);
+        $stmt->bindParam(':SSD', $this->SSD);
+        $stmt->bindParam(':ManHinh', $this->ManHinh);
         $stmt->bindParam(':MaMauSac', $this->MaMauSac);
         $stmt->bindParam(':Gia', $this->Gia);
         $stmt->bindParam(':SoLuong', $this->SoLuong);
@@ -174,12 +151,11 @@ class SanPham
         $query = "UPDATE SanPham 
         SET TenSanPham = :TenSanPham, 
         MaLoaiSanPham = :MaLoaiSanPham, 
-        MaHangSanXuat = :MaHangSanXuat, 
-        MaCPU = :MaCPU, 
-        MaRAM = :MaRAM, 
-        MaCardManHinh = :MaCardManHinh,
-        MaROM = :MaROM, 
-        MaManHinh = :MaManHinh, 
+        CPU = :CPU, 
+        RAM = :RAM, 
+        CardManHinh = :CardManHinh,
+        SSD = :SSD, 
+        ManHinh = :ManHinh, 
         MaMauSac = :MaMauSac, 
         Gia = :Gia, 
         SoLuong = :SoLuong, 
@@ -193,12 +169,11 @@ class SanPham
 
         $this->TenSanPham = htmlspecialchars(strip_tags($this->TenSanPham));
         $this->MaLoaiSanPham = htmlspecialchars(strip_tags($this->MaLoaiSanPham));
-        $this->MaHangSanXuat = htmlspecialchars(strip_tags($this->MaHangSanXuat));
-        $this->MaCPU = htmlspecialchars(strip_tags($this->MaCPU));
-        $this->MaRAM = htmlspecialchars(strip_tags($this->MaRAM));
-        $this->MaCardManHinh = htmlspecialchars(strip_tags($this->MaCardManHinh));
-        $this->MaROM = htmlspecialchars(strip_tags($this->MaROM));
-        $this->MaManHinh = htmlspecialchars(strip_tags($this->MaManHinh));
+        $this->CPU = htmlspecialchars(strip_tags($this->CPU));
+        $this->RAM = htmlspecialchars(strip_tags($this->RAM));
+        $this->CardManHinh = htmlspecialchars(strip_tags($this->CardManHinh));
+        $this->SSD = htmlspecialchars(strip_tags($this->SSD));
+        $this->ManHinh = htmlspecialchars(strip_tags($this->ManHinh));
         $this->MaMauSac = htmlspecialchars(strip_tags($this->MaMauSac));
         $this->Gia = htmlspecialchars(strip_tags($this->Gia));
         $this->SoLuong = htmlspecialchars(strip_tags($this->SoLuong));
@@ -210,12 +185,11 @@ class SanPham
 
         $stmt->bindParam(':TenSanPham', $this->TenSanPham);
         $stmt->bindParam(':MaLoaiSanPham', $this->MaLoaiSanPham);
-        $stmt->bindParam(':MaHangSanXuat', $this->MaHangSanXuat);
-        $stmt->bindParam(':MaCPU', $this->MaCPU);
-        $stmt->bindParam(':MaRAM', $this->MaRAM);
-        $stmt->bindParam(':MaCardDoHoa', $this->MaCardManHinh);
-        $stmt->bindParam(':MaROM', $this->MaROM);
-        $stmt->bindParam(':MaManHinh', $this->MaManHinh);
+        $stmt->bindParam(':CPU', $this->CPU);
+        $stmt->bindParam(':RAM', $this->RAM);
+        $stmt->bindParam(':CardManHinh', $this->CardManHinh);
+        $stmt->bindParam(':SSD', $this->SSD);
+        $stmt->bindParam(':ManHinh', $this->ManHinh);
         $stmt->bindParam(':MaMauSac', $this->MaMauSac);
         $stmt->bindParam(':Gia', $this->Gia);
         $stmt->bindParam(':SoLuong', $this->SoLuong);
@@ -231,7 +205,7 @@ class SanPham
         return false;
     }
 
-    public function deleteSanPham()
+    public function DeleteSanPham()
     {
         $query = "DELETE FROM SanPham WHERE MaSanPham=:MaSanPham";
 

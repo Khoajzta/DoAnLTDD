@@ -21,6 +21,19 @@ class TaiKhoan{
         $stmt->execute();
         return $stmt; // Trả về PDOStatement
     }
+
+    public function GetTaiKhoanByUsername() {
+        $query = "SELECT * FROM taikhoan WHERE TenTaiKhoan = ? LIMIT 1"; 
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1,$this->TenTaiKhoan);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $this->TenTaiKhoan = $row['TenTaiKhoan'];
+        $this->MaKhachHang = $row['MaKhachHang'];
+        $this->MatKhau = $row['MatKhau'];
+    }
+
     public function KiemTraDangNhap() {
         $query = "SELECT * FROM taikhoan WHERE TenTaiKhoan = ? AND MatKhau = ?";
         $stmt = $this->conn->prepare($query);

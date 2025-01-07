@@ -5,8 +5,6 @@ class Khachhang{
     //Thuoc tinh
     public $MaKhachHang;
     public $HoTen;
-    public $GioiTinh;
-    public $NgaySinh;
     public $Email;
     public $SoDienThoai;
     public $MaDiaChi;
@@ -33,29 +31,23 @@ class Khachhang{
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $this->HoTen = $row['HoTen'];
-        $this->GioiTinh = $row['GioiTinh'];
-        $this->NgaySinh = $row['NgaySinh'];
         $this->Email = $row['Email'];
         $this->SoDienThoai = $row['SoDienThoai'];
         $this->MaDiaChi = $row['MaDiaChi'];
     } 
 
     public function AddKhachHang(){
-        $query = "INSERT INTO khachhang SET HoTen =:HoTen, GioiTinh =:GioiTinh, NgaySinh =:NgaySinh,  Email =:Email, SoDienThoai =:SoDienThoai, MaDiaChi =:MaDiaChi";
+        $query = "INSERT INTO khachhang SET HoTen =:HoTen ,  Email =:Email, SoDienThoai =:SoDienThoai, MaDiaChi =:MaDiaChi";
 
         $stmt = $this->conn->prepare($query);
 
         $this->HoTen = htmlspecialchars(strip_tags($this->HoTen));
-        $this->GioiTinh = htmlspecialchars(strip_tags($this->GioiTinh));
-        $this->NgaySinh = htmlspecialchars(strip_tags($this->NgaySinh));
         $this->Email = htmlspecialchars(strip_tags($this->Email));
         $this->SoDienThoai = htmlspecialchars(strip_tags($this->SoDienThoai));
         $this->MaDiaChi = htmlspecialchars(strip_tags($this->MaDiaChi));
 
 
         $stmt->bindParam(':HoTen',$this->HoTen);
-        $stmt->bindParam(':GioiTinh',$this->GioiTinh);
-        $stmt->bindParam(':NgaySinh',$this->NgaySinh);
         $stmt->bindParam(':Email',$this->Email);
         $stmt->bindParam(':SoDienThoai',$this->SoDienThoai);
         $stmt->bindParam(':MaDiaChi',$this->MaDiaChi);
@@ -68,21 +60,17 @@ class Khachhang{
     }
 
     public function UpdateKhachHang(){
-        $query = "UPDATE khachhang SET HoTen =:HoTen , GioiTinh =:GioiTinh, NgaySinh =:NgaySinh,  Email =:Email, SoDienThoai =:SoDienThoai, MaDiaChi =:MaDiaChi WHERE MaKhachHang=:MaKhachHang";
+        $query = "UPDATE khachhang SET HoTen =:HoTen ,  Email =:Email, SoDienThoai =:SoDienThoai, MaDiaChi =:MaDiaChi WHERE MaKhachHang=:MaKhachHang";
 
         $stmt = $this->conn->prepare($query);
 
         $this->HoTen = htmlspecialchars(strip_tags($this->HoTen));
-        $this->GioiTinh = htmlspecialchars(strip_tags($this->GioiTinh));
-        $this->NgaySinh = htmlspecialchars(strip_tags($this->NgaySinh));
         $this->Email = htmlspecialchars(strip_tags($this->Email));
         $this->SoDienThoai = htmlspecialchars(strip_tags($this->SoDienThoai));
         $this->MaDiaChi = htmlspecialchars(strip_tags($this->MaDiaChi));
         $this->MaKhachHang = htmlspecialchars(strip_tags($this->MaKhachHang));
 
         $stmt->bindParam(':HoTen',$this->HoTen);
-        $stmt->bindParam(':GioiTinh',$this->GioiTinh);
-        $stmt->bindParam(':NgaySinh',$this->NgaySinh);
         $stmt->bindParam(':Email',$this->Email);
         $stmt->bindParam(':SoDienThoai',$this->SoDienThoai);
         $stmt->bindParam(':MaDiaChi',$this->MaDiaChi);
