@@ -85,33 +85,6 @@ fun HomeScreen(
     tentaikhoan:String?,
 ) {
 
-    data class CategoryData(
-        val title: String,
-        val items: List<String>,
-        val icon: ImageVector,
-    )
-
-    @Composable
-    fun CategoryMenuMain() {
-        val categories = listOf(
-            CategoryData("LAPTOP", listOf("Thương hiệu", "Giá bán", "CPU Intel - AMD", "Nhu cầu sử dụng"),Icons.Filled.Computer),
-            CategoryData("ĐIỆN THOẠI", listOf("Hãng sản xuất", "Giá bán", "Hệ điều hành", "Dung lượng pin"),Icons.Filled.PhoneIphone),
-            CategoryData("PHỤ KIỆN", listOf("Tai nghe", "Sạc dự phòng", "Cáp sạc", "Ốp lưng"),Icons.Filled.Headset)
-        )
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            items(categories.size) { index ->
-                val category = categories[index]
-                CategoryMenu(title = category.title, items = category.items, icon = category.icon)
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-        }
-    }
-
     val systemUiController = rememberSystemUiController()
     val keyboardController = LocalSoftwareKeyboardController.current
     val scope = rememberCoroutineScope()

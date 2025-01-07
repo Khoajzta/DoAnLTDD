@@ -54,41 +54,41 @@ import com.example.lapstore.viewmodels.KhachHangViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AcccountScreen(khachHangViewModel: KhachHangViewModel = viewModel()) {
-    val khachHangList by khachHangViewModel.allKhachHang.observeAsState(emptyList())
-    val currentKhachHang = if (khachHangList.isNotEmpty()) khachHangList[0] else null
-
-    var currentTab by remember { mutableStateOf("accountInfo") } // Tab hiện tại
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF2F2F2))
-    ) {
-        item {
-            Column(
-                modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-            ) {
-                when (currentTab) {
-                    "accountInfo" -> AccountInfoSection(currentKhachHang)
-                    "cartManagement" -> CartManagementSection()
-                    "changePassword" -> ChangePasswordSection()
-                    "addresses" -> AddressesSection()
-                }
-            }
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-
-        // Phần menu danh sách bên dưới
-        item {
-            AccountOptionsSection(onOptionSelected = { selectedTab ->
-                currentTab = selectedTab
-            }, currentTab = currentTab)
-        }
-    }
+//    val khachHangList by khachHangViewModel.allKhachHang.observeAsState(emptyList())
+//    val currentKhachHang = if (khachHangList.isNotEmpty()) khachHangList[0] else null
+//
+//    var currentTab by remember { mutableStateOf("accountInfo") } // Tab hiện tại
+//
+//    LazyColumn(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .background(Color(0xFFF2F2F2))
+//    ) {
+//        item {
+//            Column(
+//                modifier = Modifier
+//                    .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+//            ) {
+//                when (currentTab) {
+//                    "accountInfo" -> AccountInfoSection(currentKhachHang)
+//                    "cartManagement" -> CartManagementSection()
+//                    "changePassword" -> ChangePasswordSection()
+//                    "addresses" -> AddressesSection()
+//                }
+//            }
+//        }
+//
+//        item {
+//            Spacer(modifier = Modifier.height(16.dp))
+//        }
+//
+//        // Phần menu danh sách bên dưới
+//        item {
+//            AccountOptionsSection(onOptionSelected = { selectedTab ->
+//                currentTab = selectedTab
+//            }, currentTab = currentTab)
+//        }
+//    }
 }
 
 @Composable
