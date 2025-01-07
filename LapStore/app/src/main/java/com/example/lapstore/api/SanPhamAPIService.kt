@@ -13,7 +13,6 @@ data class SanPhamResponse(
     val sanpham: List<SanPham>
 )
 
-
 interface SanPhamAPIService{
     @GET("SanPham/read.php")
     suspend fun getAllSanPham(): SanPhamResponse

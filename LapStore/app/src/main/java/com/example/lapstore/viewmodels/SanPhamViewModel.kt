@@ -35,7 +35,7 @@ class SanPhamViewModel : ViewModel() {
             errorMessage = null
             try {
                 val response = QuanLyBanLaptopRetrofitClient.sanphamAPIService.getAllSanPham()
-                danhSachAllSanPham = response.sanpham // Lưu danh sách sản phẩm từ API
+                danhSachAllSanPham = response.sanpham
             } catch (e: Exception) {
                 errorMessage = e.message
                 Log.e("SanPhamViewModel", "Error fetching all products", e)

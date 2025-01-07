@@ -67,8 +67,12 @@ import com.example.lapstore.views.ProductItem
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.LaunchedEffect
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lapstore.models.SanPham
+import com.example.lapstore.viewmodels.TaiKhoanViewModel
 import com.example.lapstore.views.LoginScreen
+import androidx.compose.runtime.*
+import com.example.lapstore.models.TaiKhoan
 
 data class CategoryData(
     val title: String,
@@ -166,277 +170,27 @@ fun CategoryMenu(title: String, items: List<String>, icon: ImageVector) {
 }
 
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             LapStoreTheme {
-                val isBottomBarVisible = remember { mutableStateOf(true) }
-
-                val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-                val scope = rememberCoroutineScope()
+                val navController = rememberNavController()
                 val viewModel = SanPhamViewModel()
                 val hinhAnhViewModel = HinhAnhViewModel()
-                val navController = rememberNavController()
-                var searchText by remember { mutableStateOf("") }
-                val systemUiController = rememberSystemUiController()
-                val keyboardController = LocalSoftwareKeyboardController.current
-                var searchQuery by remember { mutableStateOf("") }
 
-                ModalNavigationDrawer(
-                    modifier = Modifier.background(Color.White),
-                    scrimColor = DrawerDefaults.scrimColor,
-                    drawerState = drawerState,
-                    drawerContent = {
-                        ModalDrawerSheet(
-                            drawerContainerColor = Color.White,
-                            modifier = Modifier.fillMaxHeight().background(Color.White)
-                        ) {
-                            SideEffect {
-                                systemUiController.setStatusBarColor(color = Color.Red, darkIcons = false)
-                            }
-                            Row(
-                                modifier = Modifier.fillMaxWidth().background(color = Color.Red),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    "DANH MỤC SẢN PHẨM",
-                                    style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, color = Color.White),
-                                    modifier = Modifier.padding(10.dp)
-                                )
-                                IconButton(
-                                    onClick = {
-                                        scope.launch {
-                                            drawerState.apply {
-                                                close()
-                                            }
-                                        }
-                                    }
-                                ) {
-                                    Icon(
-                                        Icons.Filled.ArrowForwardIos,
-                                        contentDescription = "",
-                                        tint = Color.White
-                                    )
-                                }
-                            }
-                            CategoryMenuMain()
-                            Text("Thông tin", modifier = Modifier.padding(10.dp))
-                            Row(modifier = Modifier.fillMaxWidth().padding(10.dp)) {
-                                Icon(imageVector = Icons.Outlined.SupportAgent, contentDescription = "")
-                                Spacer(modifier = Modifier.width(10.dp))
-                                Text("19001009")
-                            }
-                        }
-                    }
-                ) {
-                    Scaffold(
-                        containerColor = Color.White,
-                        topBar = {
-                            CenterAlignedTopAppBar(
-                                navigationIcon = {
-                                    IconButton(
-                                        onClick = {
-                                            keyboardController?.hide()
-                                            scope.launch {
-                                                drawerState.apply {
-                                                    if (isClosed) open() else close()
-                                                }
-                                            }
-                                        }) {
-                                        Icon(
-                                            imageVector = Icons.Filled.Menu,
-                                            contentDescription = "",
-                                            tint = Color.White
-                                        )
-                                    }
-                                },
-                                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                                    containerColor = Color.Red
-                                ),
-                                actions = {
-                                    IconButton(
-                                        onClick = {
-                                            navController.navigate(NavRoute.CARD.route)
-                                        }
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Filled.ShoppingCart,
-                                            contentDescription = "",
-                                            tint = Color.White
-                                        )
-                                    }
-                                },
-                                title = {
-                                    // Search Bar
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth()
-                                    ) {
-
-                                        OutlinedTextField(
-                                            value = searchText,
-                                            onValueChange = {
-                                                    query ->
-                                                searchQuery = query
-
-                                            },
-                                            modifier = Modifier
-                                                .height(50.dp)
-                                                .fillMaxWidth(),
-                                            textStyle = TextStyle(
-                                                color = Color.Black,
-                                                fontSize = 16.sp
-                                            ),
-                                            colors = OutlinedTextFieldDefaults.colors(
-                                                focusedContainerColor = Color.White,
-                                                unfocusedContainerColor = Color.White,
-                                                focusedBorderColor = Color.White,
-                                                unfocusedBorderColor = Color.White
-                                            ),
-                                            placeholder = {
-                                                Text(
-                                                    text = "Bạn cần tìm gì",
-                                                    style = TextStyle(
-                                                        color = Color.Black,
-                                                        fontSize = 13.sp
-                                                    ),
-                                                )
-                                            },
-                                            trailingIcon = {
-                                                Icon(
-                                                    imageVector = Icons.Filled.Search,
-                                                    contentDescription = "",
-                                                    tint = Color.Black
-                                                )
-                                            },
-                                            shape = RoundedCornerShape(50)
-                                        )
-                                    }
-
-
-                                }
-
-
-                            )
-                        },
-                        bottomBar = {
-                            if (isBottomBarVisible.value) { // Hiện BottomBar khi trạng thái là true
-                                BottomAppBar(
-                                    containerColor = Color.White,
-                                    contentColor = Color.Black,
-                                    tonalElevation = 4.dp
-                                ) {
-                                    Column {
-                                        HorizontalDivider(color = Color.Red)
-                                        Row(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            horizontalArrangement = Arrangement.SpaceEvenly,
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-                                            Column (
-                                                horizontalAlignment = Alignment.CenterHorizontally,
-                                                verticalArrangement = Arrangement.SpaceAround
-                                            ){
-                                                IconButton(
-                                                    modifier = Modifier.size(45.dp),
-                                                    onClick = {
-                                                        navController.navigate(NavRoute.HOME.route)
-                                                    }
-                                                ) {
-                                                    Icon(
-                                                        Icons.Outlined.Home,
-                                                        contentDescription = "Profile",
-                                                        tint = Color.Red
-                                                    )
-                                                }
-                                                Text(
-                                                    text = "Home",
-                                                )
-                                            }
-                                            Column (
-                                                horizontalAlignment = Alignment.CenterHorizontally,
-                                                verticalArrangement = Arrangement.SpaceAround
-                                            ){
-                                                IconButton(
-                                                    modifier = Modifier.size(45.dp),
-                                                    onClick = {
-                                                        keyboardController?.hide()
-                                                        scope.launch {
-                                                            drawerState.apply {
-                                                                if (isClosed) open() else close()
-                                                            }
-                                                        }
-                                                    }
-                                                ) {
-                                                    Icon(
-                                                        Icons.Outlined.Menu,
-                                                        contentDescription = "Profile",
-                                                        tint = Color.Red
-                                                    )
-                                                }
-                                                Text(
-                                                    text = "Danh mục",
-                                                )
-                                            }
-                                            Column (
-                                                horizontalAlignment = Alignment.CenterHorizontally,
-                                                verticalArrangement = Arrangement.SpaceAround
-                                            ){
-                                                IconButton(
-                                                    modifier = Modifier.size(45.dp),
-                                                    onClick = { }
-                                                ) {
-                                                    Icon(
-                                                        Icons.Outlined.SupportAgent,
-                                                        contentDescription = "Profile",
-                                                        tint = Color.Red
-                                                    )
-                                                }
-                                                Text(
-                                                    text = "Tư vấn",
-                                                )
-                                            }
-                                            Column (
-                                                horizontalAlignment = Alignment.CenterHorizontally,
-                                                verticalArrangement = Arrangement.SpaceAround
-                                            ){
-                                                IconButton(
-                                                    modifier = Modifier.size(45.dp),
-                                                    onClick = { navController.navigate(NavRoute.CARD.route)}
-                                                ) {
-                                                    Icon(
-                                                        Icons.Outlined.Person,
-                                                        contentDescription = "Profile",
-                                                        tint = Color.Red
-                                                    )
-                                                }
-                                                Text(
-                                                    text = "Tài khoản",
-                                                )
-                                            }
-
-                                        }
-                                    }
-
-                                }
-                            }
-                        }
-                    ) { paddingValues ->
-                        Box(modifier = Modifier.padding(paddingValues)) {
-                            NavgationGraph(
-                                navController,
-                                viewModel,
-                                hinhAnhViewModel
-                            )
-                        }
-                    }
-                }
+                NavgationGraph(
+                    navController,
+                    viewModel,
+                    hinhAnhViewModel,
+                )
             }
         }
     }
 }
+
+
+
 
 
 

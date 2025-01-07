@@ -64,7 +64,6 @@ fun ProductDetail_Screen(
 
     var hinhAnhHienTai by remember { mutableStateOf<String?>(null) }
 
-    // Khi MaSanPham thay đổi, gọi API để lấy danh sách hình ảnh
     LaunchedEffect(id) {
         if (id.isNotEmpty()) {
             viewModel.getSanPhamById(id)
@@ -72,14 +71,12 @@ fun ProductDetail_Screen(
         }
     }
 
-    // Cập nhật hình ảnh chính khi danh sách ảnh thay đổi
     LaunchedEffect(danhSachHinhAnh) {
         if (danhSachHinhAnh.isNotEmpty()) {
             hinhAnhHienTai = danhSachHinhAnh.first().DuongDan
         }
     }
 
-    // Kiểm tra trạng thái và hiển thị giao diện
     if (sanPham == null || danhSachHinhAnh.isEmpty() || hinhAnhHienTai == null) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -218,10 +215,10 @@ fun ProductDetail_Screen(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.padding(top = 8.dp)
                 ) {
-                    Text("CPU: ${sanPham!!.MaCPU}")
-                    Text("Card đồ họa: ${sanPham!!.MaCardDoHoa}")
-                    Text("RAM: ${sanPham!!.MaRAM} GB")
-                    Text("ROM: ${sanPham!!.MaROM} GB")
+                    Text("CPU: ${sanPham!!.CPU}")
+                    Text("Card đồ họa: ${sanPham!!.CardManHinh}")
+                    Text("RAM: ${sanPham!!.RAM} GB")
+                    Text("ROM: ${sanPham!!.SSD} GB")
                 }
             }
         }

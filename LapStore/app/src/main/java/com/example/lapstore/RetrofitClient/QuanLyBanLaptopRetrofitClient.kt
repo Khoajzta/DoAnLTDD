@@ -9,7 +9,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object Constants {
-    const val BASE_URL = "http://10.0.2.2/lap_store_api/api/" // Đảm bảo URL chính xác
+    const val BASE_URL = "http://10.0.2.2/lap_store_api/api/"
 }
 
 object QuanLyBanLaptopRetrofitClient {
@@ -28,12 +28,8 @@ object QuanLyBanLaptopRetrofitClient {
             .build()
             .create(HinhAnhAPIService::class.java)
     }
-<<<<<<< Updated upstream
 
     val taiKhoanAPIService: TaiKhoanAPIService by lazy {
-=======
-    val khachHangAPIService: KhachHangAPIService by lazy {
->>>>>>> Stashed changes
         Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))

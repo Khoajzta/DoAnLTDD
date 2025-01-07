@@ -72,10 +72,10 @@ fun ProductCard(
                     modifier = Modifier.padding(10.dp),
                     verticalArrangement = Arrangement.SpaceAround
                 ) {
-                    Text("CPU: " + sanpham.MaCPU, fontWeight = FontWeight.Bold)
-                    Text("Card: " + sanpham.MaCardDoHoa, fontWeight = FontWeight.Bold)
-                    Text("RAM: " + sanpham.MaRAM.toString() + " GB", fontWeight = FontWeight.Bold)
-                    Text("ROM: " + sanpham.MaROM.toString() + " GB", fontWeight = FontWeight.Bold)
+                    Text("CPU: " + sanpham.CPU, fontWeight = FontWeight.Bold)
+                    Text("Card: " + sanpham.CardManHinh, fontWeight = FontWeight.Bold)
+                    Text("RAM: " + sanpham.RAM.toString() + " GB", fontWeight = FontWeight.Bold)
+                    Text("ROM: " + sanpham.SSD.toString() + " GB", fontWeight = FontWeight.Bold)
                 }
 
             }

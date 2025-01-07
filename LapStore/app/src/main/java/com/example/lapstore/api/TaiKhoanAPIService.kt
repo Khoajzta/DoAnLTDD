@@ -5,14 +5,18 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 data class TaiKhoanRespose(
-    val hinhanh: List<TaiKhoan>
+    val taikhoan: List<TaiKhoan>
 )
 
-
 interface TaiKhoanAPIService{
-    @GET("HinhAnh/show.php")
-    suspend fun getTaiKhoan(
+    @GET("TaiKhoan/checktaikhoan.php")
+    suspend fun kiemTraTaiKhoan(
         @Query("tentaikhoan") tentaikhoan: String,
         @Query("matkhau") matkhau: String
+    ): TaiKhoan
+
+    @GET("TaiKhoan/show.php")
+    suspend fun getTaiKhoanByTentaikhoan(
+        @Query("tentaikhoan") tentaikhoan: String
     ): TaiKhoan
 }
