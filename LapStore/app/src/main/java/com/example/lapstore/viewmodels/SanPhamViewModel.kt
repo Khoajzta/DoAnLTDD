@@ -74,6 +74,4 @@ class SanPhamViewModel : ViewModel() {
             }
         }
     }
-
-
 }
