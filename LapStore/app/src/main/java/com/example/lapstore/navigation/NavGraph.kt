@@ -4,9 +4,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.lapstore.views.AcccountScreen
-import com.example.lapstore.views.CardScreen
 import com.example.lapstore.views.HomeScreen
 import com.example.lapstore.views.ProductDetail_Screen
+
+import com.example.tapdieuhuong.MainContent
+
 
 sealed class NavRoute(val route: String) {
     object HOME : NavRoute("home_screen")
@@ -25,7 +27,7 @@ fun NavgationGraph(navController: NavHostController,viewmodel:SanPhamViewModel,h
             AcccountScreen()
         }
         composable(NavRoute.CARD.route){
-            CardScreen()
+            MainContent()
         }
         composable(
             route = NavRoute.PRODUCTDETAILSCREEN.route+"?id={id}",
