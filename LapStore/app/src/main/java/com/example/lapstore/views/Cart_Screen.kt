@@ -95,58 +95,11 @@ fun MainContent(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
-        TapDieuHuong()
+        DonHangScreen(modifier = Modifier, sanPhamViewModel = SanPhamViewModel(),
+                 hinhAnhViewModel = HinhAnhViewModel())
     }
 }
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun TapDieuHuong() {
-    var selectedTabIndexItem by remember { mutableStateOf(0) }
-    val tabs = listOf("Đơn hàng", "Chưa Thanh Toán", "Chờ vận chuyển", "Đang vận chuyển", "Đang giao", "Đã giao")
 
-    Scaffold(
-        topBar = {
-            ScrollableTabRow(selectedTabIndexItem,
-                edgePadding = 0.dp,
-                modifier = Modifier
-                , contentColor = Color.Red
-            ) {
-                tabs.forEachIndexed { index, title ->
-
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .padding(vertical = 8.dp, horizontal = 4.dp)
-                            .clip(shape = RectangleShape)
-                            .clickable { selectedTabIndexItem = index }
-
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(8.dp)
-                        ) {
-                            Text(
-                                text = title,
-                                fontSize = 20.sp
-                            )
-                        }
-                    }
-                }
-            }
-        },
-        content = { padding ->
-            when (selectedTabIndexItem) {
-                0 -> DonHangScreen(modifier = Modifier.padding(padding), sanPhamViewModel = SanPhamViewModel(),
-                    hinhAnhViewModel = HinhAnhViewModel())
-                1 -> ChuaThanhToanScreen(modifier = Modifier.padding(padding))
-                2 -> ChoVanChuyenScreen(modifier = Modifier.padding(padding))
-                3 -> DangVanChuyenScreen(modifier = Modifier.padding(padding))
-                4 -> DangGiaoScreen(modifier = Modifier.padding(padding))
-                5 -> DaGiaoScreen(modifier = Modifier.padding(padding))
-            }
-        }
-    )
-}
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -203,31 +156,6 @@ fun DonHangScreen(modifier: Modifier = Modifier,
     }
 }
 
-
-@Composable
-fun DaGiaoScreen(modifier: Modifier=Modifier) {
-    Text(text = "Đây là màn hình Đã giao", modifier = Modifier.fillMaxWidth())
-}
-
-@Composable
-fun DangGiaoScreen(modifier: Modifier=Modifier) {
-    Text(text = "Đây là màn hình Đang giao", modifier = Modifier.fillMaxWidth())
-}
-
-@Composable
-fun DangVanChuyenScreen(modifier: Modifier=Modifier) {
-    Text(text = "Đây là màn hình Đang vận chuyển", modifier = Modifier.fillMaxWidth())
-}
-
-@Composable
-fun ChoVanChuyenScreen(modifier: Modifier=Modifier) {
-    Text(text = "Đây là màn hình Chờ vận chuyển", modifier = Modifier.fillMaxWidth())
-}
-
-@Composable
-fun ChuaThanhToanScreen(modifier: Modifier=Modifier) {
-    Text(text = "Đây là màn hình Chưa Thanh Toán", modifier = Modifier.fillMaxWidth())
-}
 
 @Composable
 fun NutThanhToan(
