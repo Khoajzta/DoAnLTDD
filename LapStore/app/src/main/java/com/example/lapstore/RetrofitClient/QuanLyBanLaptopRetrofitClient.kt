@@ -28,8 +28,12 @@ object QuanLyBanLaptopRetrofitClient {
             .build()
             .create(HinhAnhAPIService::class.java)
     }
+<<<<<<< Updated upstream
 
     val taiKhoanAPIService: TaiKhoanAPIService by lazy {
+=======
+    val khachHangAPIService: KhachHangAPIService by lazy {
+>>>>>>> Stashed changes
         Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
