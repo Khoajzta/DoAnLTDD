@@ -20,6 +20,7 @@
     $mausac_item = array(
         'MaMauSac'=> $mausac->MaMauSac,
         'TenMauSac'=> $mausac->TenMauSac,
+        'MaSanPham'=> $mausac->MaSanPham,
     );
 
     print_r(json_encode($mausac_item,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));

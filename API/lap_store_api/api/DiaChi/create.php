@@ -16,10 +16,7 @@
 
     $data = json_decode(file_get_contents("php://input"));
     $diachi->MaDiaChi = $data->MaDiaChi;
-    $diachi->MaTinh = $data->MaTinh;
-    $diachi->MaHuyen = $data->MaHuyen;
-    $diachi->MaXa = $data->MaXa;
-    $diachi->SoNha = $data->SoNha;
+    $diachi->ThongTinDiaChi = $data->ThongTinDiaChi;
 
 
     if($diachi->AddDiaChi()){

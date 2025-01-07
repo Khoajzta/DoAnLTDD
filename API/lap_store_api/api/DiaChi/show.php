@@ -19,10 +19,7 @@
 
     $diachi_item = array(
         'MaDiaChi'=> $diachi->MaDiaChi,
-        'MaTinh'=> $diachi->MaTinh,
-        'MaHuyen'=> $diachi->MaHuyen,
-        'MaXa'=> $diachi->MaXa,
-        'SoNha'=> $diachi->SoNha
+        'ThongTinDiaChi'=> $diachi->ThongTinDiaChi
     );
 
     print_r(json_encode($diachi_item,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
