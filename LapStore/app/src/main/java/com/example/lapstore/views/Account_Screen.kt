@@ -1,6 +1,8 @@
 package com.example.lapstore.views
 
+import ChangePasswordSection
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,8 +33,11 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,6 +52,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lapstore.models.KhachHang
 import com.example.lapstore.viewmodels.KhachHangViewModel
@@ -105,19 +111,28 @@ fun AccountInfoSection(currentKhachHang: KhachHang?) {
 
         // Hiển thị thông tin tài khoản và cho phép người dùng chỉnh sửa
         Card(
-            shape = RoundedCornerShape(8.dp),
+            shape = RoundedCornerShape(16.dp),
             elevation = CardDefaults.cardElevation(4.dp),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
-                Text("Thông tin tài khoản", fontWeight = FontWeight.Bold)
+                Text("Thông tin tài khoản", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+
+                Spacer(modifier = Modifier.height(8.dp))
 
                 // Họ tên
                 Text("Họ Tên: ", fontWeight = FontWeight.Bold)
                 OutlinedTextField(
                     value = hoTen.value,
                     onValueChange = { hoTen.value = it },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Red,
+                        unfocusedBorderColor = Color.Red,
+                        focusedLabelColor = Color.Red
+                    ),
+                    shape = RoundedCornerShape(17.dp),
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -130,7 +145,11 @@ fun AccountInfoSection(currentKhachHang: KhachHang?) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 RadioButton(
                                     selected = gioiTinh.value == gender,
-                                    onClick = { gioiTinh.value = gender }
+                                    onClick = { gioiTinh.value = gender },
+                                    colors = RadioButtonDefaults.colors(
+                                        selectedColor = Color.Red
+                                    )
+
                                 )
                                 Text(text = gender)
                             }
@@ -144,7 +163,13 @@ fun AccountInfoSection(currentKhachHang: KhachHang?) {
                     value = soDienThoai.value,
                     onValueChange = { soDienThoai.value = it },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Red,
+                        unfocusedBorderColor = Color.Red,
+                        focusedLabelColor = Color.Red
+                    ),
+                    shape = RoundedCornerShape(17.dp),
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -155,7 +180,13 @@ fun AccountInfoSection(currentKhachHang: KhachHang?) {
                     value = email.value,
                     onValueChange = { email.value = it },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Red,
+                        unfocusedBorderColor = Color.Red,
+                        focusedLabelColor = Color.Red
+                    ),
+                    shape = RoundedCornerShape(17.dp),
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -226,7 +257,8 @@ fun DropdownMenuField(
     items: List<String>,
     selectedValue: String,
     onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    borderColor: Color = Color.Red
 ) {
     var isExpanded by remember { mutableStateOf(false) } // Trạng thái menu
 
@@ -244,13 +276,21 @@ fun DropdownMenuField(
                         .padding(8.dp)
                 )
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.Red,
+                unfocusedBorderColor = Color.Red,
+                focusedLabelColor = Color.Red
+            ),
+            shape = RoundedCornerShape(17.dp),
         )
 
         DropdownMenu(
             expanded = isExpanded,
             onDismissRequest = { isExpanded = false },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .heightIn(max = 300.dp)
+                .widthIn(500.dp)
         ) {
             items.forEach { item ->
                 DropdownMenuItem(
@@ -274,7 +314,8 @@ fun AccountOptionsSection(onOptionSelected: (String) -> Unit, currentTab: String
         elevation = CardDefaults.cardElevation(4.dp),
         modifier = Modifier
             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
             AccountOptionItem(
@@ -346,10 +387,7 @@ fun CartManagementSection() {
     Text("Đây là trang Quản lý đơn hàng", fontWeight = FontWeight.Bold)
 }
 
-@Composable
-fun ChangePasswordSection() {
-    Text("Đây là trang đổi mật khẩu", fontWeight = FontWeight.Bold)
-}
+
 
 @Composable
 fun AddressesSection() {
