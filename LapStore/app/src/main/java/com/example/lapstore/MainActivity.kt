@@ -62,7 +62,6 @@ import com.example.lapstore.ui.theme.LapStoreTheme
 import kotlinx.coroutines.launch
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.navigation.NavHostController
-import com.example.lapstore.views.ProductItem
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import androidx.compose.foundation.lazy.items
 import com.example.lapstore.models.SanPham
