@@ -9,6 +9,3 @@ data class KhachHang(
     var SoDienThoai: String,
     var MaDiaChi: Int,
 )
-data class KhachHangResponse(
-    val khachhang:List<KhachHang>
-)
