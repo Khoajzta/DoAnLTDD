@@ -26,7 +26,7 @@ if($num>0){
 
         $taikhoan_item = array(
             'TenTaiKhoan'=> $TenTaiKhoan,
-            'MaNguoiDung'=> $MaNguoiDung,
+            'MaKhachHang'=> $MaKhachHang,
             'MatKhau'=>$MatKhau
         );
         array_push($taikhoan_array['taikhoan'],$taikhoan_item);
