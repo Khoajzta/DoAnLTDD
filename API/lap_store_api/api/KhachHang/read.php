@@ -27,6 +27,8 @@ if($num>0){
         $khachhang_item = array(
             'MaKhachHang'=> $MaKhachHang,
             'HoTen'=> $HoTen,
+            'GioiTinh' => $GioiTinh,
+            'NgaySinh' => $NgaySinh,
             'Email'=> $Email,
             'SoDienThoai'=> $SoDienThoai,
             'MaDiaChi'=> $MaDiaChi

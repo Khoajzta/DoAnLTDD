@@ -16,6 +16,8 @@
 
     $data = json_decode(file_get_contents("php://input"));
     $khachhang->HoTen = $data->HoTen;
+    $khachhang->GioiTinh = $data->GioiTinh;
+    $khachhang->NgaySinh = $data->NgaySinh;
     $khachhang->Email = $data->Email;
     $khachhang->SoDienThoai = $data->SoDienThoai;
     $khachhang->MaDiaChi = $data->MaDiaChi;
