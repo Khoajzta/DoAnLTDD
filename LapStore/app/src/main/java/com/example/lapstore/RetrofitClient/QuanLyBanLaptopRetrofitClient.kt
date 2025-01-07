@@ -27,4 +27,11 @@ object QuanLyBanLaptopRetrofitClient {
             .build()
             .create(HinhAnhAPIService::class.java)
     }
+    val khachHangAPIService: KhachHangAPIService by lazy {
+        Retrofit.Builder()
+            .baseUrl(Constants.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+            .build()
+            .create(KhachHangAPIService::class.java)
+    }
 }
