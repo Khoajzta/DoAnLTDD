@@ -23,6 +23,10 @@ interface SanPhamAPIService{
         @Query("MaLoaiSanPham") maLoaiSanPham: Int
     ): SanPhamResponse
 
+    @GET("SanPham/getproductCardCuaKhachHang.php")
+    suspend fun getSanPhamByGioHang(
+        @Query("MaKhachHang") MaKhachHang: Int
+    ): SanPhamResponse
 
     @GET("SanPham/show.php")
     suspend fun getSanPhamById(

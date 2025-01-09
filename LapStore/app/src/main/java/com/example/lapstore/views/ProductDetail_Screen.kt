@@ -85,12 +85,6 @@ fun ProductDetail_Screen(
 
     var hinhAnhHienTai by remember { mutableStateOf<String?>(null) }
 
-    val systemUiController = rememberSystemUiController()
-    val keyboardController = LocalSoftwareKeyboardController.current
-
-    val scope = rememberCoroutineScope()
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-
     LaunchedEffect(id) {
         if (id.isNotEmpty()) {
             viewModel.getSanPhamById(id)
@@ -124,7 +118,7 @@ fun ProductDetail_Screen(
                 actions = {
                     IconButton(
                         onClick = {
-                            navController.navigate(NavRoute.CARD.route)
+                            navController.navigate(NavRoute.CART.route)
                         }
                     ) {
                         Icon(
@@ -331,11 +325,6 @@ fun ProductDetail_Screen(
             }
         }
     }
-
-
-
-
-
 
 }
 

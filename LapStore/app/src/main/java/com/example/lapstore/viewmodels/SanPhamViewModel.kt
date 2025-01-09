@@ -13,6 +13,7 @@ import com.example.lapstore.api.QuanLyBanLaptopRetrofitClient
 import com.example.lapstore.models.SanPham
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch/**/
+import kotlinx.coroutines.withContext
 
 class SanPhamViewModel : ViewModel() {
     var danhSachAllSanPham by mutableStateOf<List<SanPham>>(emptyList())
@@ -20,6 +21,8 @@ class SanPhamViewModel : ViewModel() {
     var danhSachSanPhamVanPhong by mutableStateOf<List<SanPham>>(emptyList())
         private set
     var danhSachSanPhamGaming by mutableStateOf<List<SanPham>>(emptyList())
+        private set
+    var danhSachSanPhamCuaKhachHang by mutableStateOf<List<SanPham>>(emptyList())
         private set
     var isLoading by mutableStateOf(false)
         private set
@@ -61,6 +64,19 @@ class SanPhamViewModel : ViewModel() {
                 Log.e("SanPhamViewModel", "Error fetching products", e)
             } finally {
                 isLoading = false
+            }
+        }
+    }
+
+    fun getSanPhamTheoGioHang(MaKhachHang: Int) {
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.sanphamAPIService.getSanPhamByGioHang(MaKhachHang)
+                }
+                danhSachSanPhamCuaKhachHang = response.sanpham
+            } catch (e: Exception) {
+                Log.e("SanPham Error", "Lỗi khi lấy sản phẩm: ${e.message}")
             }
         }
     }

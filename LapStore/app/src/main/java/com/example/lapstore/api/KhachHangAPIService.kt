@@ -1,3 +1,4 @@
+
 import com.example.lapstore.models.KhachHang
 import com.example.lapstore.models.SanPham
 import com.google.gson.annotations.SerializedName
@@ -15,11 +16,15 @@ data class KhachHangResponse(
 )
 
 interface KhachHangAPIService {
-
     // Lấy tất cả khách hàng
     @GET("KhachHang/read.php")
     fun getAllKhachHang(): Call<KhachHangResponse>
 
     @PUT("KhachHang/update.php")
     fun updateKhachHang(@Body khachHang: KhachHang): Call<KhachHangResponse>
+
+    @GET("KhachHang/show.php")
+    suspend fun getKhachHangById(
+        @Query("id") id: String
+    ): KhachHang
 }

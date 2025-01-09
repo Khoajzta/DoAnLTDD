@@ -84,7 +84,6 @@ fun HomeScreen(
     viewModel: SanPhamViewModel,
     tentaikhoan:String?,
 ) {
-
     val systemUiController = rememberSystemUiController()
     val keyboardController = LocalSoftwareKeyboardController.current
     val scope = rememberCoroutineScope()
@@ -158,6 +157,7 @@ fun HomeScreen(
         }
     ){
         Scaffold(
+            containerColor = Color.White,
             topBar = {
                 CenterAlignedTopAppBar(
                     navigationIcon = {
@@ -183,7 +183,12 @@ fun HomeScreen(
                     actions = {
                         IconButton(
                             onClick = {
-                                navController.navigate(NavRoute.CARD.route)
+                                if(taikhoan==null){
+                                    navController.navigate(NavRoute.LOGINSCREEN.route)
+                                }
+                                else{
+                                    navController.navigate("${NavRoute.CART.route}?makhachhang=${taikhoan.MaKhachHang}")
+                                }
                             }
                         ) {
                             Icon(
@@ -329,7 +334,7 @@ fun HomeScreen(
                                             navController.navigate(NavRoute.LOGINSCREEN.route)
                                         }
                                         else{
-                                            navController.navigate(NavRoute.ACCOUNT.route)
+                                            navController.navigate("${NavRoute.ACCOUNT.route}?tentaikhoan=$tentaikhoan")
                                         }
                                     }
                                 ) {

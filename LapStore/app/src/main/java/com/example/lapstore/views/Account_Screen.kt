@@ -1,8 +1,8 @@
 package com.example.lapstore.views
 
 import ChangePasswordSection
+import NavRoute
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,27 +19,34 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,78 +61,127 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.lapstore.models.KhachHang
 import com.example.lapstore.viewmodels.KhachHangViewModel
+import com.example.lapstore.viewmodels.TaiKhoanViewModel
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AcccountScreen(khachHangViewModel: KhachHangViewModel = viewModel()) {
-    val khachHangList by khachHangViewModel.allKhachHang.observeAsState(emptyList())
-    val currentKhachHang = if (khachHangList.isNotEmpty()) khachHangList[0] else null
+fun AcccountScreen(
+    navController: NavHostController,
+    tentaikhoan: String
+) {
+    var currentTab by remember { mutableStateOf("accountInfo") }
 
-    var currentTab by remember { mutableStateOf("accountInfo") } // Tab hiện tại
+    Scaffold(
+        containerColor = Color.Red,
+        topBar = {
+            CenterAlignedTopAppBar(
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.Red
+                ),
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            navController.popBackStack()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBackIosNew,
+                            contentDescription = "",
+                            tint = Color.White
+                        )
+                    }
+                },
+                title = {
+                    Text(
+                        "TÀI KHOẢN",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF2F2F2))
+            )
+
+        }
     ) {
-        item {
-            Column(
-                modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-            ) {
-                when (currentTab) {
-                    "accountInfo" -> AccountInfoSection(currentKhachHang)
-                    "cartManagement" -> CartManagementSection()
-                    "changePassword" -> ChangePasswordSection()
-                    "addresses" -> AddressesSection()
+        LazyColumn(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
+                .background(Color(0xFFF2F2F2))
+        ) {
+            item {
+                Column(
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                ) {
+                    when (currentTab) {
+                        "accountInfo" -> AccountInfoSection(tentaikhoan)
+                        "cartManagement" -> CartManagementSection()
+                        "changePassword" -> ChangePasswordSection()
+                        "addresses" -> AddressesSection()
+                    }
                 }
             }
-        }
 
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-        }
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
 
-        // Phần menu danh sách bên dưới
-        item {
-            AccountOptionsSection(onOptionSelected = { selectedTab ->
-                currentTab = selectedTab
-            }, currentTab = currentTab)
+            // Phần menu danh sách bên dưới
+            item {
+                AccountOptionsSection(
+                    onOptionSelected = { selectedTab ->
+                    currentTab = selectedTab
+                }, currentTab = currentTab,
+                    navController
+                )
+            }
         }
     }
+
+
 }
 
 @Composable
-fun AccountInfoSection(currentKhachHang: KhachHang?) {
-    currentKhachHang?.let { khachHang ->
-        // Dùng state để lưu trữ thông tin người dùng nhập
-        val hoTen = remember { mutableStateOf(khachHang.HoTen) }
-        val soDienThoai = remember { mutableStateOf(khachHang.SoDienThoai) }
-        val email = remember { mutableStateOf(khachHang.Email) }
-        val gioiTinh = remember { mutableStateOf(khachHang.GioiTinh) }
-        val selectedDay = remember { mutableStateOf(khachHang.NgaySinh.split("-")[2]) }
-        val selectedMonth = remember { mutableStateOf(khachHang.NgaySinh.split("-")[1]) }
-        val selectedYear = remember { mutableStateOf(khachHang.NgaySinh.split("-")[0]) }
+fun AccountInfoSection(
+    tentaikhoan: String
+) {
 
-        // Hiển thị thông tin tài khoản và cho phép người dùng chỉnh sửa
-        Card(
-            shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(4.dp),
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text("Thông tin tài khoản", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+    var taikhoanviewModel:TaiKhoanViewModel = viewModel()
+    var khachhangviewModel:KhachHangViewModel = viewModel()
 
-                Spacer(modifier = Modifier.height(8.dp))
+    val taikhoan = taikhoanviewModel.taikhoan
+    val khachhang = khachhangviewModel.khachhang
 
-                // Họ tên
+    LaunchedEffect(tentaikhoan) {
+        if (tentaikhoan.isNotEmpty()) {
+            taikhoanviewModel.getSanTaiKhoanByTentaikhoan(tentaikhoan)
+        }
+    }
+
+    if (taikhoan!=null) {
+        khachhangviewModel.getKhachHangById(taikhoan.MaKhachHang.toString())
+    }
+
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text("Thông tin tài khoản", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+
+            Spacer(modifier = Modifier.height(8.dp))
+            if(khachhang!=null){
                 Text("Họ Tên: ", fontWeight = FontWeight.Bold)
                 OutlinedTextField(
-                    value = hoTen.value,
-                    onValueChange = { hoTen.value = it },
+                    value = khachhang.HoTen,
+                    onValueChange = {khachhang.HoTen = it },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color.Red,
@@ -144,8 +200,8 @@ fun AccountInfoSection(currentKhachHang: KhachHang?) {
                         listOf("Nam", "Nữ").forEach { gender ->
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 RadioButton(
-                                    selected = gioiTinh.value == gender,
-                                    onClick = { gioiTinh.value = gender },
+                                    selected = khachhang.GioiTinh == gender,
+                                    onClick = { khachhang.GioiTinh = gender },
                                     colors = RadioButtonDefaults.colors(
                                         selectedColor = Color.Red
                                     )
@@ -160,8 +216,8 @@ fun AccountInfoSection(currentKhachHang: KhachHang?) {
                 // Số điện thoại
                 Text("Số điện thoại: ", fontWeight = FontWeight.Bold)
                 OutlinedTextField(
-                    value = soDienThoai.value,
-                    onValueChange = { soDienThoai.value = it },
+                    value = khachhang.SoDienThoai,
+                    onValueChange = { khachhang.SoDienThoai = it },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone),
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -177,8 +233,8 @@ fun AccountInfoSection(currentKhachHang: KhachHang?) {
                 // Email
                 Text("Email: ", fontWeight = FontWeight.Bold)
                 OutlinedTextField(
-                    value = email.value,
-                    onValueChange = { email.value = it },
+                    value = khachhang.Email,
+                    onValueChange = { khachhang.Email = it },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -193,61 +249,83 @@ fun AccountInfoSection(currentKhachHang: KhachHang?) {
 
                 // Ngày sinh
                 Text("Ngày sinh: ", fontWeight = FontWeight.Bold)
-                Row(
+                OutlinedTextField(
+                    value = khachhang.NgaySinh,
+                    onValueChange = { khachhang.NgaySinh = it },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    DropdownMenuField(
-                        label = "Ngày",
-                        items = (1..31).map { it.toString() },
-                        selectedValue = selectedDay.value,
-                        onValueChange = { selectedDay.value = it },
-                        modifier = Modifier.weight(1.15f).padding(end = 0.5.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Red,
+                        unfocusedBorderColor = Color.Red,
+                        focusedLabelColor = Color.Red
+                    ),
+                    shape = RoundedCornerShape(17.dp),
+                )
 
-                    DropdownMenuField(
-                        label = "Tháng",
-                        items = (1..12).map { it.toString() },
-                        selectedValue = selectedMonth.value,
-                        onValueChange = { selectedMonth.value = it },
-                        modifier = Modifier.weight(1.2f).padding(horizontal = 0.5.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
+//                Row(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    horizontalArrangement = Arrangement.SpaceBetween
+//                ) {
+//                    DropdownMenuField(
+//                        label = "Ngày",
+//                        items = (1..31).map { it.toString() },
+//                        selectedValue = selectedDay.value,
+//                        onValueChange = { selectedDay.value = it },
+//                        modifier = Modifier
+//                            .weight(1.15f)
+//                            .padding(end = 0.5.dp)
+//                    )
+//                    Spacer(modifier = Modifier.width(4.dp))
+//
+//                    DropdownMenuField(
+//                        label = "Tháng",
+//                        items = (1..12).map { it.toString() },
+//                        selectedValue = selectedMonth.value,
+//                        onValueChange = { selectedMonth.value = it },
+//                        modifier = Modifier
+//                            .weight(1.2f)
+//                            .padding(horizontal = 0.5.dp)
+//                    )
+//                    Spacer(modifier = Modifier.width(4.dp))
+//
+//                    DropdownMenuField(
+//                        label = "Năm",
+//                        items = (1900..2025).map { it.toString() }.reversed(),
+//                        selectedValue = selectedYear.value,
+//                        onValueChange = { selectedYear.value = it },
+//                        modifier = Modifier
+//                            .weight(1.4f)
+//                            .padding(start = 0.5.dp)
+//                    )
+//                }
+            }
+            // Họ tên
 
-                    DropdownMenuField(
-                        label = "Năm",
-                        items = (1900..2025).map { it.toString() }.reversed(),
-                        selectedValue = selectedYear.value,
-                        onValueChange = { selectedYear.value = it },
-                        modifier = Modifier.weight(1.4f).padding(start = 0.5.dp)
-                    )
-                }
 
-                Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-                // Nút "Lưu thay đổi"
-                Button(
-                    onClick = {
-                        // Cập nhật thông tin mới vào đối tượng KhachHang
-                        val updatedKhachHang = khachHang.copy(
-                            HoTen = hoTen.value,
-                            SoDienThoai = soDienThoai.value,
-                            Email = email.value,
-                            GioiTinh = gioiTinh.value,
-                            NgaySinh = "${selectedYear.value}-${selectedMonth.value}-${selectedDay.value}"
-                        )
-                        // Sau đó có thể gọi API hoặc thực hiện hành động lưu ở đây
-                        println("Thông tin đã được lưu: $updatedKhachHang")
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("LƯU THAY ĐỔI", color = Color.White)
-                }
+            // Nút "Lưu thay đổi"
+            Button(
+                onClick = {
+//                    // Cập nhật thông tin mới vào đối tượng KhachHang
+//                    val updatedKhachHang = khachHang.copy(
+//                        HoTen = hoTen.value,
+//                        SoDienThoai = soDienThoai.value,
+//                        Email = email.value,
+//                        GioiTinh = gioiTinh.value,
+//                        NgaySinh = "${selectedYear.value}-${selectedMonth.value}-${selectedDay.value}"
+//                    )
+//                    // Sau đó có thể gọi API hoặc thực hiện hành động lưu ở đây
+//                    println("Thông tin đã được lưu: $updatedKhachHang")
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("LƯU THAY ĐỔI", color = Color.White)
             }
         }
     }
+
 }
 
 
@@ -306,9 +384,14 @@ fun DropdownMenuField(
 }
 
 
-
 @Composable
-fun AccountOptionsSection(onOptionSelected: (String) -> Unit, currentTab: String) {
+fun AccountOptionsSection(
+    onOptionSelected: (String) -> Unit,
+    currentTab: String,
+    navController:NavHostController
+) {
+    val openDialog = remember { mutableStateOf(false) }
+
     Card(
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -347,10 +430,38 @@ fun AccountOptionsSection(onOptionSelected: (String) -> Unit, currentTab: String
                 label = "Đăng xuất",
                 isSelected = false, // Không cần trạng thái cho mục đăng xuất
                 onClick = {
-                    // Xử lý đăng xuất tại đây
+                    openDialog.value =true
                 }
             )
         }
+    }
+
+    if (openDialog.value ==true) {
+        AlertDialog(
+            containerColor = Color.White,
+            onDismissRequest = { openDialog.value = false },
+            title = { Text("Đăng xuất") },
+            text = { Text("Đăng xuất tài khoản của bạn?", fontSize = 17.sp) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        openDialog.value = false
+                        navController.navigate(NavRoute.HOME.route)
+                    }
+                ) {
+                    Text("OK", color = Color.Red,fontSize = 14.sp)
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        openDialog.value = false
+                    }
+                ) {
+                    Text("Hủy", color = Color.Black,fontSize = 14.sp)
+                }
+            }
+        )
     }
 }
 
@@ -386,7 +497,6 @@ fun AccountOptionItem(
 fun CartManagementSection() {
     Text("Đây là trang Quản lý đơn hàng", fontWeight = FontWeight.Bold)
 }
-
 
 
 @Composable

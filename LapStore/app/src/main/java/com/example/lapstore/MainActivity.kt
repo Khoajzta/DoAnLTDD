@@ -72,6 +72,7 @@ import com.example.lapstore.viewmodels.TaiKhoanViewModel
 import com.example.lapstore.views.LoginScreen
 import androidx.compose.runtime.*
 import com.example.lapstore.models.TaiKhoan
+import com.example.lapstore.viewmodels.KhachHangViewModel
 
 data class CategoryData(
     val title: String,
@@ -177,11 +178,13 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val viewModel = SanPhamViewModel()
                 val hinhAnhViewModel = HinhAnhViewModel()
+                val KhachHangViewModel = KhachHangViewModel()
 
                 NavgationGraph(
                     navController,
                     viewModel,
                     hinhAnhViewModel,
+                    KhachHangViewModel
                 )
             }
         }

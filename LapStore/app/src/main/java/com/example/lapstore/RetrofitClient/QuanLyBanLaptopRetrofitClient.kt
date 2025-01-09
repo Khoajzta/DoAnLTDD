@@ -1,6 +1,7 @@
 // QuanLyBanLaptopRetrofitClient.kt
 package com.example.lapstore.api
 
+import GioHangAPIService
 import HinhAnhAPIService
 import KhachHangAPIService
 import SanPhamAPIService
@@ -44,5 +45,13 @@ object QuanLyBanLaptopRetrofitClient {
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()
             .create(KhachHangAPIService::class.java)
+    }
+
+    val giohangAPIService: GioHangAPIService by lazy {
+        Retrofit.Builder()
+            .baseUrl(Constants.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+            .build()
+            .create(GioHangAPIService::class.java)
     }
 }
