@@ -104,8 +104,8 @@ fun HomeScreen(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.getSanPhamTheoLoai(maLoaiSanPham = 2, isLoai1 = true)
-        viewModel.getSanPhamTheoLoai(maLoaiSanPham = 1, isLoai1 = false)
+        viewModel.getSanPhamTheoLoai(maLoaiSanPham = 1, isLoai1 = true)
+        viewModel.getSanPhamTheoLoai(maLoaiSanPham = 2, isLoai1 = false)
         viewModel.getAllSanPham()
     }
     ModalNavigationDrawer(
@@ -363,12 +363,37 @@ fun HomeScreen(
                 LazyColumn(modifier = Modifier
                     .fillMaxSize()
                     .padding(it)) {
+
+                    item {
+                        Text(
+                            text = "Tất cả sản phẩm",
+                            modifier = Modifier.padding(10.dp),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    item {
+                        LazyRow(
+                            contentPadding = PaddingValues(horizontal = 8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            items(danhSachSanPham) { sanpham ->
+                                if(taikhoan!=null){
+                                    ProductCard(sanpham,taikhoan.MaKhachHang.toString(), navController)
+                                }
+                                else{
+                                    ProductCard(sanpham,null, navController)
+                                }
+                            }
+                        }
+                    }
+
                     // LazyRow cho Laptop Văn Phòng
                     item {
                         Row {
                             Text(
                                 text = "Laptop Văn Phòng",
-                                modifier = Modifier.padding(8.dp),
+                                modifier = Modifier.padding(10.dp),
                                 fontWeight = FontWeight.Bold,
                             )
 
@@ -380,7 +405,12 @@ fun HomeScreen(
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             items(danhSachSanPhamVanPhong) { sanpham ->
-                                ProductCard(sanpham, navController)
+                                if(taikhoan!=null){
+                                    ProductCard(sanpham,taikhoan.MaKhachHang.toString(), navController)
+                                }
+                                else{
+                                    ProductCard(sanpham,null, navController)
+                                }
                             }
                         }
                     }
@@ -390,7 +420,7 @@ fun HomeScreen(
                     item {
                         Text(
                             text = "Laptop Gaming",
-                            modifier = Modifier.padding(8.dp),
+                            modifier = Modifier.padding(10.dp),
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -400,26 +430,12 @@ fun HomeScreen(
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             items(danhSachSanPhamGaming) { sanpham ->
-                                ProductCard(sanpham, navController)
-                            }
-                        }
-                    }
-
-                    item {
-                        Text(
-                            text = "Tất cả sản phẩm",
-                            modifier = Modifier.padding(8.dp),
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-
-                    item {
-                        LazyRow(
-                            contentPadding = PaddingValues(horizontal = 8.dp),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            items(danhSachSanPham) { sanpham ->
-                                ProductCard(sanpham, navController)
+                                if(taikhoan!=null){
+                                    ProductCard(sanpham,taikhoan.MaKhachHang.toString(), navController)
+                                }
+                                else{
+                                    ProductCard(sanpham,null, navController)
+                                }
                             }
                         }
                     }

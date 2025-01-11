@@ -48,11 +48,10 @@ import com.example.lapstore.viewmodels.GioHangViewModel
 fun SanPhamCard(
     sanPham: SanPham,
     giohang: GioHang,
+    tongtien:Int
 ) {
     var soLuong by remember { mutableStateOf(giohang.SoLuong) }
     var chieucaocard by remember { mutableStateOf(150) }
-
-    var tongtien by remember { mutableStateOf(sanPham.Gia *giohang.SoLuong) }
 
     var gioHangViewModel:GioHangViewModel = viewModel()
 
@@ -114,7 +113,6 @@ fun SanPhamCard(
                             onClick = {
                                 if (soLuong > 1) {
                                     updateCart(soLuong - 1)
-                                    tongtien = sanPham.Gia * soLuong
                                 }
                             }
                         ) {
@@ -127,7 +125,6 @@ fun SanPhamCard(
                             onClick = {
                                 if (soLuong < sanPham.SoLuong) {
                                     updateCart(soLuong + 1)
-                                    tongtien = sanPham.Gia * soLuong
                                 }
                             }
                         ) {

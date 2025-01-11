@@ -35,6 +35,7 @@ import com.example.lapstore.models.SanPham
 @Composable
 fun ProductCard(
     sanpham: SanPham,
+    makhachhang:String?,
     navController: NavHostController
 ) {
     Card(
@@ -45,7 +46,7 @@ fun ProductCard(
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         onClick = {
-            navController.navigate(NavRoute.PRODUCTDETAILSCREEN.route + "?id=${sanpham.MaSanPham}")
+            navController.navigate(NavRoute.PRODUCTDETAILSCREEN.route + "?id=${sanpham.MaSanPham}&makhachhang=${makhachhang}")
         }
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
@@ -75,7 +76,7 @@ fun ProductCard(
                     Text("CPU: " + sanpham.CPU, fontWeight = FontWeight.Bold)
                     Text("Card: " + sanpham.CardManHinh, fontWeight = FontWeight.Bold)
                     Text("RAM: " + sanpham.RAM.toString() + " GB", fontWeight = FontWeight.Bold)
-                    Text("ROM: " + sanpham.SSD.toString() + " GB", fontWeight = FontWeight.Bold)
+                    Text("SSD: " + sanpham.SSD.toString() + " GB", fontWeight = FontWeight.Bold)
                 }
 
             }

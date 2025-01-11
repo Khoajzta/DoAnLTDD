@@ -5,6 +5,7 @@ import NavRoute
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -121,7 +122,7 @@ fun AcccountScreen(
                     when (currentTab) {
                         "accountInfo" -> AccountInfoSection(tentaikhoan)
                         "cartManagement" -> CartManagementSection()
-                        "changePassword" -> ChangePasswordSection()
+                        "changePassword" -> ChangePasswordSection(tentaikhoan)
                         "addresses" -> AddressesSection()
                     }
                 }
@@ -150,7 +151,6 @@ fun AcccountScreen(
 fun AccountInfoSection(
     tentaikhoan: String
 ) {
-
     var taikhoanviewModel:TaiKhoanViewModel = viewModel()
     var khachhangviewModel:KhachHangViewModel = viewModel()
 
@@ -178,6 +178,14 @@ fun AccountInfoSection(
 
             Spacer(modifier = Modifier.height(8.dp))
             if(khachhang!=null){
+                val hoTen = remember { mutableStateOf(khachhang.HoTen) }
+                val soDienThoai = remember { mutableStateOf(khachhang.SoDienThoai) }
+                val email = remember { mutableStateOf(khachhang.Email) }
+                val gioiTinh = remember { mutableStateOf(khachhang.GioiTinh) }
+                val selectedDay = remember { mutableStateOf(khachhang.NgaySinh.split("-")[2]) }
+                val selectedMonth = remember { mutableStateOf(khachhang.NgaySinh.split("-")[1]) }
+                val selectedYear = remember { mutableStateOf(khachhang.NgaySinh.split("-")[0]) }
+
                 Text("Họ Tên: ", fontWeight = FontWeight.Bold)
                 OutlinedTextField(
                     value = khachhang.HoTen,
@@ -200,8 +208,8 @@ fun AccountInfoSection(
                         listOf("Nam", "Nữ").forEach { gender ->
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 RadioButton(
-                                    selected = khachhang.GioiTinh == gender,
-                                    onClick = { khachhang.GioiTinh = gender },
+                                    selected = gioiTinh.value == gender,
+                                    onClick = { gioiTinh.value = gender },
                                     colors = RadioButtonDefaults.colors(
                                         selectedColor = Color.Red
                                     )
@@ -246,59 +254,45 @@ fun AccountInfoSection(
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
-
-                // Ngày sinh
-                Text("Ngày sinh: ", fontWeight = FontWeight.Bold)
-                OutlinedTextField(
-                    value = khachhang.NgaySinh,
-                    onValueChange = { khachhang.NgaySinh = it },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
+                Row(
                     modifier = Modifier.fillMaxWidth(),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color.Red,
-                        unfocusedBorderColor = Color.Red,
-                        focusedLabelColor = Color.Red
-                    ),
-                    shape = RoundedCornerShape(17.dp),
-                )
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    DropdownMenuField(
+                        label = "Ngày",
+                        items = (1..31).map { it.toString() },
+                        selectedValue = selectedDay.value,
+                        onValueChange = { selectedDay.value = it },
+                        modifier = Modifier
+                            .weight(1.15f)
+                            .padding(end = 0.5.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
 
-//                Row(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    horizontalArrangement = Arrangement.SpaceBetween
-//                ) {
-//                    DropdownMenuField(
-//                        label = "Ngày",
-//                        items = (1..31).map { it.toString() },
-//                        selectedValue = selectedDay.value,
-//                        onValueChange = { selectedDay.value = it },
-//                        modifier = Modifier
-//                            .weight(1.15f)
-//                            .padding(end = 0.5.dp)
-//                    )
-//                    Spacer(modifier = Modifier.width(4.dp))
-//
-//                    DropdownMenuField(
-//                        label = "Tháng",
-//                        items = (1..12).map { it.toString() },
-//                        selectedValue = selectedMonth.value,
-//                        onValueChange = { selectedMonth.value = it },
-//                        modifier = Modifier
-//                            .weight(1.2f)
-//                            .padding(horizontal = 0.5.dp)
-//                    )
-//                    Spacer(modifier = Modifier.width(4.dp))
-//
-//                    DropdownMenuField(
-//                        label = "Năm",
-//                        items = (1900..2025).map { it.toString() }.reversed(),
-//                        selectedValue = selectedYear.value,
-//                        onValueChange = { selectedYear.value = it },
-//                        modifier = Modifier
-//                            .weight(1.4f)
-//                            .padding(start = 0.5.dp)
-//                    )
-//                }
+                    DropdownMenuField(
+                        label = "Tháng",
+                        items = (1..12).map { it.toString() },
+                        selectedValue = selectedMonth.value,
+                        onValueChange = { selectedMonth.value = it },
+                        modifier = Modifier
+                            .weight(1.2f)
+                            .padding(horizontal = 0.5.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+
+                    DropdownMenuField(
+                        label = "Năm",
+                        items = (1900..2025).map { it.toString() }.reversed(),
+                        selectedValue = selectedYear.value,
+                        onValueChange = { selectedYear.value = it },
+                        modifier = Modifier
+                            .weight(1.4f)
+                            .padding(start = 0.5.dp)
+                    )
+                }
             }
+
+
             // Họ tên
 
 
@@ -367,8 +361,11 @@ fun DropdownMenuField(
             expanded = isExpanded,
             onDismissRequest = { isExpanded = false },
             modifier = Modifier
-                .heightIn(max = 300.dp)
-                .widthIn(500.dp)
+                .height(400.dp)
+                .widthIn(300.dp)
+                .align(Alignment.CenterHorizontally), // Căn giữa DropdownMenu
+            containerColor = Color.White,
+            shape = RoundedCornerShape(16.dp)
         ) {
             items.forEach { item ->
                 DropdownMenuItem(
@@ -380,6 +377,8 @@ fun DropdownMenuField(
                 )
             }
         }
+
+
     }
 }
 

@@ -12,6 +12,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.lapstore.api.QuanLyBanLaptopRetrofitClient
 import com.example.lapstore.models.SanPham
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch/**/
 import kotlinx.coroutines.withContext
 
@@ -31,6 +34,9 @@ class SanPhamViewModel : ViewModel() {
 
     var sanPham by mutableStateOf<SanPham?>(null)
         private set
+
+    private val _danhsachSanPham = MutableStateFlow<List<SanPham>>(emptyList())
+    val danhsachSanPham: StateFlow<List<SanPham>> get() = _danhsachSanPham
 
     fun getAllSanPham() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -85,6 +91,17 @@ class SanPhamViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 sanPham = QuanLyBanLaptopRetrofitClient.sanphamAPIService.getSanPhamById(id)
+            } catch (e: Exception) {
+                Log.e("SanPhamViewModel", "Error getting SanPham", e)
+            }
+        }
+    }
+
+    fun getSanPhamById2(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val sanPham = QuanLyBanLaptopRetrofitClient.sanphamAPIService.getSanPhamById(id)
+                _danhsachSanPham.update { currentList -> currentList + sanPham }
             } catch (e: Exception) {
                 Log.e("SanPhamViewModel", "Error getting SanPham", e)
             }

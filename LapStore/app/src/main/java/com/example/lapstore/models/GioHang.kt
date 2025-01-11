@@ -6,5 +6,4 @@ data class GioHang(
     var MaSanPham:Int,
     var SoLuong:Int,
     var TrangThai:Int,
-    var isChecked: Boolean = false
 )

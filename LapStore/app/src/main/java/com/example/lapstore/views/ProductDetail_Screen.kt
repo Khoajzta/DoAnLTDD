@@ -47,6 +47,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,9 +66,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.example.lapstore.models.GioHang
 import com.example.lapstore.models.SanPham
+import com.example.lapstore.models.TaiKhoan
+import com.example.lapstore.viewmodels.GioHangViewModel
+import com.example.lapstore.viewmodels.TaiKhoanViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 
@@ -77,13 +83,26 @@ import kotlinx.coroutines.launch
 fun ProductDetail_Screen(
     navController: NavHostController,
     id: String,
+    makhachhang:String?,
     viewModel: SanPhamViewModel,
-    hinhAnhViewModel: HinhAnhViewModel
+    hinhAnhViewModel: HinhAnhViewModel,
 ) {
+    val systemUiController = rememberSystemUiController()
+    var gioHangViewModel:GioHangViewModel = viewModel()
+
     val danhSachHinhAnh = hinhAnhViewModel.danhsachhinhanhtheosanpham
+    val danhsachgiohang = gioHangViewModel.listGioHang
+
     val sanPham = viewModel.sanPham
 
     var hinhAnhHienTai by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(makhachhang) {
+        if(makhachhang!=null){
+            gioHangViewModel.getGioHangByKhachHang(makhachhang.toInt())
+        }
+    }
+
 
     LaunchedEffect(id) {
         if (id.isNotEmpty()) {
@@ -91,6 +110,10 @@ fun ProductDetail_Screen(
             hinhAnhViewModel.getHinhAnhTheoSanPham(id)
         }
     }
+    SideEffect {
+        systemUiController.setStatusBarColor(color = Color.Red, darkIcons = false)
+    }
+
 
     LaunchedEffect(danhSachHinhAnh) {
         if (danhSachHinhAnh.isNotEmpty()) {
@@ -118,7 +141,12 @@ fun ProductDetail_Screen(
                 actions = {
                     IconButton(
                         onClick = {
-                            navController.navigate(NavRoute.CART.route)
+                            if(makhachhang==null){
+                                navController.navigate(NavRoute.LOGINSCREEN.route)
+                            }
+                            else{
+                                navController.navigate("${NavRoute.CART.route}?makhachhang=${makhachhang}")
+                            }
                         }
                     ) {
                         Icon(
@@ -257,7 +285,32 @@ fun ProductDetail_Screen(
                 // Nút thêm vào giỏ hàng
                 item {
                     Button(
-                        onClick = { /* TODO: Xử lý thêm vào giỏ hàng */ },
+                        onClick = {
+                            if (makhachhang == null) {
+                                navController.navigate(NavRoute.LOGINSCREEN.route)
+                            } else {
+                                var giohangnew: GioHang? = null
+                                var isProductFound = false
+
+                                for (giohang in danhsachgiohang) {
+                                    if (sanPham.MaSanPham == giohang.MaSanPham) {
+                                        giohang.SoLuong += 1
+                                        gioHangViewModel.updateGioHang(giohang)
+                                        isProductFound = true
+                                        break
+                                    }
+                                }
+
+                                // Nếu sản phẩm không tìm thấy trong giỏ hàng thì thêm mới
+                                if (!isProductFound) {
+                                    giohangnew = GioHang(0, makhachhang.toInt(), sanPham.MaSanPham, 1, 1)
+                                    gioHangViewModel.addToCart(giohangnew)
+                                }
+
+                                // Làm mới danh sách giỏ hàng
+                                gioHangViewModel.getGioHangByKhachHang(makhachhang.toInt())
+                            }
+                        },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(10.dp),
                         colors = ButtonDefaults.buttonColors(

@@ -1,6 +1,7 @@
 package com.example.lapstore.views
 
 import NavRoute
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -47,16 +48,18 @@ fun LoginScreen(
 ) {
     val systemUiController = rememberSystemUiController()
 
-    var tendangnhap by remember { mutableStateOf("") }
-    var matkhau by remember { mutableStateOf("") }
+    var tendangnhap by remember { mutableStateOf("nguyenvana") }
+    var matkhau by remember { mutableStateOf("123456") }
 
     val taiKhoanViewModel: TaiKhoanViewModel = viewModel()
 
     // Gán null nếu không tìm thấy tài khoản
-    var taikhoan by remember { mutableStateOf<TaiKhoan?>(null) }
+    var taikhoan:TaiKhoan? = taiKhoanViewModel.taikhoan
 
     val openDialog = remember { mutableStateOf(false) }
     val openDialognull = remember { mutableStateOf(false) }
+
+    var show = remember { mutableStateOf(false) }
 
     Scaffold(
         containerColor = Color.White,
@@ -144,20 +147,16 @@ fun LoginScreen(
                     if (tendangnhap.isEmpty() || matkhau.isEmpty()) {
                         openDialognull.value = true
                     } else {
-                        // Kiểm tra tài khoản
                         taiKhoanViewModel.KiemTraDangNhap(tendangnhap, matkhau)
-
-                        // Kiểm tra xem tài khoản có tồn tại không
-                        taikhoan = taiKhoanViewModel.taikhoan
 
                         if (taikhoan != null) {
                             // Nếu tài khoản hợp lệ, chuyển sang màn hình Home
                             navController.navigate(NavRoute.HOME.route + "?tentaikhoan=${tendangnhap}")
                         }
-//                        } else {
-//                            // Nếu tài khoản không hợp lệ, hiển thị dialog lỗi
-//                            openDialog.value = true
-//                        }
+                        else{
+                            taiKhoanViewModel.KiemTraDangNhap(tendangnhap, matkhau)
+                        }
+
                     }
                 }
             ) {
@@ -193,15 +192,15 @@ fun LoginScreen(
             }
 
             // Hiển thị dialog nếu thông tin đăng nhập sai
-            if (openDialog.value) {
+            if (show.value) {
                 AlertDialog(
-                    onDismissRequest = { openDialog.value = false }, // Đóng khi nhấn ngoài dialog
+                    onDismissRequest = { show.value = false }, // Đóng khi nhấn ngoài dialog
                     title = { Text("Tiêu đề Dialog") },
                     text = { Text("Tên đăng nhập hoặc mật khẩu không chính xác.") },
                     confirmButton = {
                         Button(
                             onClick = {
-                                openDialog.value = false
+                                show.value = false
                                 tendangnhap = ""
                                 matkhau = ""
                             }
