@@ -1,0 +1,44 @@
+package com.example.lapstore.viewmodels
+
+import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
+import com.example.lapstore.api.QuanLyBanLaptopRetrofitClient
+import com.example.lapstore.models.KhachHang
+import com.example.lapstore.models.SanPham
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+class KhachHangViewModel: ViewModel() {
+
+    var khachhang by mutableStateOf<KhachHang?>(null)
+        private set
+
+    val allKhachHang = liveData(Dispatchers.IO) {
+        try {
+            // Gọi API lấy danh sách khách hàng
+            val response = QuanLyBanLaptopRetrofitClient.khachHangAPIService.getAllKhachHang().execute()
+            if (response.isSuccessful) {
+                emit(response.body()?.khachhang ?: emptyList())  // Trả dữ liệu vào LiveData
+            } else {
+                emit(emptyList())  // Trả danh sách trống nếu phản hồi không thành công
+            }
+        } catch (e: Exception) {
+            emit(emptyList())  // Trả danh sách trống nếu có lỗi
+        }
+    }
+
+    fun getKhachHangById(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                khachhang = QuanLyBanLaptopRetrofitClient.khachHangAPIService.getKhachHangById(id)
+            } catch (e: Exception) {
+                Log.e("KhachHangViewModel", "Error getting khachhang", e)
+            }
+        }
+    }
+}
