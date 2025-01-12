@@ -17,7 +17,6 @@
     $data = json_decode(file_get_contents("php://input"));
     $mausac->MaMauSac = $data->MaMauSac;
     $mausac->TenMauSac = $data->TenMauSac;
-    $mausac->MaSanPham = $data->MaSanPham;
 
 
     if($mausac->AddMauSac()){

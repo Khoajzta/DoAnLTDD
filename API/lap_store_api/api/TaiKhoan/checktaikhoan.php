@@ -9,7 +9,7 @@ include_once('../../model/taikhoan.php');
 $database = new database();
 $conn = $database->Connect(); // Lấy kết nối PDO
 
-// Khởi tạo lớp Khachhang với kết nối PDO
+// Khởi tạo lớp TaiKhoan với kết nối PDO
 $taikhoan = new TaiKhoan($conn);
 
 if (isset($_GET['tentaikhoan']) && isset($_GET['matkhau'])) {
@@ -20,25 +20,22 @@ if (isset($_GET['tentaikhoan']) && isset($_GET['matkhau'])) {
     if ($taikhoan->KiemTraDangNhap()) {
         // Đăng nhập thành công
         echo json_encode(
-            array(
-                'TenTaiKhoan' => $taikhoan->TenTaiKhoan,
-                'MaKhachHang' => $taikhoan->MaKhachHang,
-                'MatKhau' =>$taikhoan->MatKhau
-            ),
+            array('result' => true),
             JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT
         );
     } else {
         // Đăng nhập thất bại
         echo json_encode(
-            array('message' => 'Tên tài khoản hoặc mật khẩu không đúng!'),
-            JSON_UNESCAPED_UNICODE
+            array('result' => false),
+            JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT
         );
     }
     
 } else {
     // Thiếu thông tin đăng nhập
     echo json_encode(
-        array('message' => 'Vui lòng cung cấp TenTaiKhoan và MatKhau.'),
-        JSON_UNESCAPED_UNICODE
+        array('result' => false, 'message' => 'Vui lòng cung cấp TenTaiKhoan và MatKhau.'),
+        JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT
     );
 }
+?>

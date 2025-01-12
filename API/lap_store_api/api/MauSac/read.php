@@ -26,8 +26,7 @@ if($num>0){
 
         $mausac_item = array(
             'MaTMaMauSacinh'=> $MaMauSac,
-            'TenMauSac'=> $TenMauSac,
-            'MaSanPham'=> $MaSanPham
+            'TenMauSac'=> $TenMauSac
         );
         array_push($mausac_array['mausac'],$mausac_item);
     }

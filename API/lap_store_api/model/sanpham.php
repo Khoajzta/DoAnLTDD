@@ -19,6 +19,10 @@ class SanPham
     public $HinhAnh;
     public $TrangThai;
 
+    public $MaKhachHang;
+
+    public$SoLuongTrongGioHang;
+
     //connect db
 
     public function __construct($database)
@@ -29,13 +33,13 @@ class SanPham
     //Doc dữ liệu
 
     public function GetAllSanPham()
-{
-    $query = "SELECT * FROM SanPham sp 
+    {
+        $query = "SELECT * FROM SanPham sp 
               join hinhanh ha on sp.HinhAnh = ha.MaHinhAnh";
-    $stmt = $this->conn->prepare($query);
-    $stmt->execute();
-    return $stmt; // Trả về PDOStatement
-}
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt; // Trả về PDOStatement
+    }
 
     public function GetSanPhamById()
     {
@@ -66,8 +70,8 @@ class SanPham
     }
 
     public function GetSanPhamBySearch($searchTerm)
-{
-    $query = "SELECT * , ro.DungLuong as DungLuongROM ,  r.DungLuong as DungLuongRAM
+    {
+        $query = "SELECT * , ro.DungLuong as DungLuongROM ,  r.DungLuong as DungLuongRAM
               FROM SanPham sp
               JOIN HinhAnh ha ON sp.HinhAnh = ha.MaHinhAnh
               JOIN CPU cpu ON sp.MaCPU = cpu.MaCPU
@@ -76,13 +80,13 @@ class SanPham
               JOIN CardDoHoa cdh ON sp.MaCardDoHoa = cdh.MaCardDoHoa
               JOIN ManHinh mh ON sp.MaManHinh = mh.MaManHinh
               WHERE sp.TenSanPham LIKE ? OR sp.MoTa LIKE ?";
-    $stmt = $this->conn->prepare($query);
-    $searchTerm = "%".$searchTerm."%"; // Thêm dấu '%' để tìm kiếm theo kiểu "like"
-    $stmt->bindParam(1, $searchTerm);
-    $stmt->bindParam(2, $searchTerm);
-    $stmt->execute();
-    return $stmt; 
-}
+        $stmt = $this->conn->prepare($query);
+        $searchTerm = "%" . $searchTerm . "%"; // Thêm dấu '%' để tìm kiếm theo kiểu "like"
+        $stmt->bindParam(1, $searchTerm);
+        $stmt->bindParam(2, $searchTerm);
+        $stmt->execute();
+        return $stmt;
+    }
 
 
     public function GetSanPhamByLoai()
@@ -90,13 +94,27 @@ class SanPham
         $query = "SELECT * 
                   FROM SanPham sp 
                   join hinhanh ha on sp.HinhAnh = ha.MaHinhAnh
-                  WHERE sp.MaLoaiSanPham = ?";
+                  WHERE sp.MaLoaiSanPham = ?
+                  ";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->MaLoaiSanPham);
         $stmt->execute();
-        return $stmt; 
+        return $stmt;
     }
-    
+
+    public function GetSanPhamByGioHang()
+    {
+        $query = "SELECT sp.*, ha.DuongDan
+                FROM sanpham sp 
+                JOIN giohang gh on sp.MaSanPham = gh.MaSanPham
+                JOIN hinhanh ha on sp.MaSanPham = ha.MaHinhAnh
+                WHERE gh.MaKhachHang = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->MaKhachHang);
+        $stmt->execute();
+        return $stmt;
+    }
+
     public function AddSanPham()
     {
         $query = "INSERT INTO SanPham 

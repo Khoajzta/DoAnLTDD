@@ -18,7 +18,6 @@
 
     $mausac->MaMauSac = $data->MaMauSac;
     $mausac->TenMauSac = $data->TenMauSac;
-    $mausac->MaSanPham = $data->MaSanPham;
 
     if($mausac->UpdateMauSac()){
         echo json_encode(array('message','MauSac Updated'));

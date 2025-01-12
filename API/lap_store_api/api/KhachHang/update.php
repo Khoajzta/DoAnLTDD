@@ -1,33 +1,36 @@
 <?php
-    header('Access-Control-Allow-Origin:*');
-    header('Content-Type: application/json');
-    header('Access-Control-Allow-Methods: PUT');
-    header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type,Access-Control-Allow-Methods,Authorization,X-Requested-With');
-    
-    include_once('../../config/database.php');
-    include_once('../../model/khachhang.php');
+header('Access-Control-Allow-Origin: *');
+header('Content-Type: application/json');
+header('Access-Control-Allow-Methods: PUT');
+header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
+header('Access-Control-Allow-Credentials: true');
 
-    // Tạo đối tượng database và kết nối
-    $database = new database();
-    $conn = $database->Connect(); // Lấy kết nối PDO
+include_once('../../config/database.php');
+include_once('../../model/khachhang.php');
 
-    // Khởi tạo lớp Khachhang với kết nối PDO
-    $khachhang = new Khachhang($conn);
+// Tạo đối tượng database và kết nối
+$database = new database();
+$conn = $database->Connect();
 
-    $data = json_decode(file_get_contents("php://input"));
+// Khởi tạo lớp Khachhang với kết nối PDO
+$khachhang = new Khachhang($conn);
 
-    $khachhang->MaKhachHang = $data->MaKhachHang;
-    $khachhang->HoTen = $data->HoTen;
-    $khachhang->Email = $data->Email;
-    $khachhang->SoDienThoai = $data->SoDienThoai;
-    $khachhang->MaDiaChi = $data->MaDiaChi;
+$data = json_decode(file_get_contents("php://input"));
 
+if (!$data) {
+    echo json_encode(array('message' => 'Invalid input data'));
+    exit;
+}
 
-    if($khachhang->UpdateKhachHang()){
-        echo json_encode(array('message','Khach Hang Updated'));
-    }
-    else{
-        echo json_encode(array('message','Khach Hang Not Updated'));
-    }
+$khachhang->MaKhachHang = $data->MaKhachHang;
+$khachhang->HoTen = $data->HoTen;
+$khachhang->GioiTinh = $data->GioiTinh;
+$khachhang->NgaySinh = $data->NgaySinh;
+$khachhang->SoDienThoai = $data->SoDienThoai;
 
+if ($khachhang->UpdateKhachHang()) {
+    echo json_encode(array('message' => 'Khach Hang Updated'));
+} else {
+    echo json_encode(array('message' => 'Khach Hang Not Updated'));
+}
 ?>

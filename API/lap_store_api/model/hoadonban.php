@@ -28,6 +28,24 @@ class HoaDonBan {
         }
     }
 
+    public function getAllHoaDonBanByKhachHang() {
+        try {
+            $query = "SELECT * FROM hoadonban WHERE MaKhachHang = ? AND TrangThai = ? ORDER BY MaHoaDonBan DESC";
+            $stmt = $this->conn->prepare($query);
+    
+            // Gắn giá trị cho từng tham số với đúng vị trí
+            $stmt->bindParam(1, $this->MaKhachHang, PDO::PARAM_INT);
+            $stmt->bindParam(2, $this->TrangThai, PDO::PARAM_INT); // Đổi vị trí thành 2
+    
+            $stmt->execute();
+            return $stmt;
+        } catch (PDOException $e) {
+            echo "Lỗi: " . $e->getMessage();
+            return null;
+        }
+    }
+    
+
     // Phương thức lấy hóa đơn bán theo ID
     public function getHoaDonBanById() {
         try {
@@ -50,6 +68,7 @@ class HoaDonBan {
         }
     }
 
+    
     // Phương thức thêm hóa đơn bán
     public function addHoaDonBan() {
         try {

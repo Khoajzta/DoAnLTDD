@@ -5,7 +5,6 @@ class mausac{
     //Thuoc tinh
     public $MaMauSac;
     public $TenMauSac;
-    public $MaSanPham;
     //connect db
 
     public function __construct($database){
@@ -29,22 +28,19 @@ class mausac{
 
         $this->MaMauSac = $row['MaMauSac'];
         $this->TenMauSac = $row['TenMauSac'];
-        $this->MaSanPham = $row['MaSanPham'];
     } 
 
     public function AddMauSac(){
-        $query = "INSERT INTO mausac SET TenMauSac =:TenMauSac ,  MaMauSac =:MaMauSac, MaSanPham=:MaSanPham";
+        $query = "INSERT INTO mausac SET TenMauSac =:TenMauSac ,  MaMauSac =:MaMauSac";
 
         $stmt = $this->conn->prepare($query);
 
         $this->MaMauSac = htmlspecialchars(strip_tags($this->MaMauSac));
         $this->TenMauSac = htmlspecialchars(strip_tags($this->TenMauSac));
-        $this->MaSanPham = htmlspecialchars(strip_tags($this->MaSanPham));
 
 
         $stmt->bindParam(':MaMauSac',$this->MaMauSac);
         $stmt->bindParam(':TenMauSac',$this->TenMauSac);
-        $stmt->bindParam(':MaSanPham',$this->MaSanPham);
         
         if($stmt->execute()){
             return true;
@@ -54,17 +50,15 @@ class mausac{
     }
 
     public function UpdateMauSac(){
-        $query = "UPDATE mausac SET TenMauSac =:TenMauSac, MaSanPham=:MaSanPham  WHERE MaMauSac=:MaMauSac";
+        $query = "UPDATE mausac SET TenMauSac =:TenMauSac  WHERE MaMauSac=:MaMauSac";
 
         $stmt = $this->conn->prepare($query);
 
         $this->MaMauSac = htmlspecialchars(strip_tags($this->MaMauSac));
         $this->TenMauSac = htmlspecialchars(strip_tags($this->TenMauSac));
-        $this->MaSanPham = htmlspecialchars(strip_tags($this->MaSanPham));
 
         $stmt->bindParam(':MaMauSac',$this->MaMauSac);
         $stmt->bindParam(':TenMauSac',$this->TenMauSac);
-        $stmt->bindParam(':MaSanPham',$this->MaSanPham);
 
         if($stmt->execute()){
             return true;

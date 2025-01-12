@@ -19,7 +19,8 @@
 
     $taikhoan_item = array(
         'TenTaiKhoan'=> $taikhoan->TenTaiKhoan,
-        'MaNguoiDung'=> $taikhoan->MaKhachHang,
+        'MaKhachHang'=> $taikhoan->MaKhachHang,
+        'MatKhau'=> $taikhoan->MatKhau,
     );
 
     print_r(json_encode($taikhoan_item,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));

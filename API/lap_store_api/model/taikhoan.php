@@ -44,16 +44,14 @@ class TaiKhoan{
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
     
         if ($row) {
-            // Tìm thấy tài khoản, gán thông tin
-            $this->TenTaiKhoan = $row['TenTaiKhoan'];
-            $this->MaKhachHang = $row['MaKhachHang'];
-            $this->MatKhau = $row['MatKhau'];
-            return true; // Đăng nhập thành công
+            // Nếu tài khoản và mật khẩu đúng, trả về true
+            return true;
         } else {
-            // Không tìm thấy tài khoản
-            return false; // Đăng nhập thất bại
+            // Nếu không tìm thấy tài khoản hoặc mật khẩu sai, trả về false
+            return false;
         }
     }
+    
     
 
     public function AddTaiKhoan(){

@@ -20,11 +20,10 @@
     $taikhoan->MaKhachHang = $data->MaKhachHang;
     $taikhoan->MatKhau = $data->MatKhau;
 
-    if($taikhoan->UpdateTaiKhoan()){
-        echo json_encode(array('message','Tai Khoan Updated'));
-    }
-    else{
-        echo json_encode(array('message','Tai Khoan Not Updated'));
+    if ($taikhoan->UpdateTaiKhoan()) {
+        echo json_encode(array('message' => 'Tai Khoan Updated'));
+    } else {
+        echo json_encode(array('message' => 'Tai Khoan Not Updated'));
     }
 
 ?>

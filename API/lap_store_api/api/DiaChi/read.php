@@ -27,6 +27,10 @@ if($num>0){
         $diachi_item = array(
             'MaDiaChi'=> $MaDiaChi,
             'ThongTinDiaChi'=> $ThongTinDiaChi,
+            'MaKhachHang'=> $MaKhachHang,
+            'TenNguoiNhan'=> $TenNguoiNhan,
+            'SoDienThoai'=> $SoDienThoai,
+            'MacDinh'=> $MacDinh,
         );
         array_push($diachi_array['diachi'],$diachi_item);
     }
