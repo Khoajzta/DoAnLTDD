@@ -45,7 +45,7 @@ fun ChangePasswordSection(
 
     var taikhoan = taiKhoanViewModel.taikhoan
 
-    taiKhoanViewModel.getSanTaiKhoanByTentaikhoan(tentaikhoan)
+    taiKhoanViewModel.getTaiKhoanByTentaikhoan(tentaikhoan)
 
     Card(
         shape = RoundedCornerShape(16.dp),

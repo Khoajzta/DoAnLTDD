@@ -19,14 +19,18 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,46 +44,45 @@ import androidx.navigation.NavHostController
 import com.example.lapstore.models.TaiKhoan
 import com.example.lapstore.viewmodels.TaiKhoanViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     navController: NavHostController,
+    taiKhoanViewModel: TaiKhoanViewModel
 ) {
+
+    var snackbarHostState = remember {
+        SnackbarHostState()
+    }
+
+    var scope = rememberCoroutineScope()
+
     val systemUiController = rememberSystemUiController()
 
     var tendangnhap by remember { mutableStateOf("nguyenvana") }
-    var matkhau by remember { mutableStateOf("123456") }
+    var matkhau by remember { mutableStateOf("12345678") }
 
-    val taiKhoanViewModel: TaiKhoanViewModel = viewModel()
+    val loginResult = taiKhoanViewModel.loginResult.value
 
-    // Gán null nếu không tìm thấy tài khoản
-    var taikhoan:TaiKhoan? = taiKhoanViewModel.taikhoan
+    var openDialog by remember { mutableStateOf(false) }
 
-    val openDialog = remember { mutableStateOf(false) }
-    val openDialognull = remember { mutableStateOf(false) }
-
-    var show = remember { mutableStateOf(false) }
+    taiKhoanViewModel.kiemTraDangNhap(tendangnhap, matkhau)
 
     Scaffold(
         containerColor = Color.White,
-
         topBar = {
             CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.White
-                ),
-                title = {
-
-                }
-
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White),
+                title = {}
             )
-
         }
     ) {
         SideEffect {
             systemUiController.setStatusBarColor(color = Color.White, darkIcons = false)
         }
+
         Column(
             modifier = Modifier
                 .padding(it)
@@ -99,76 +102,70 @@ fun LoginScreen(
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = tendangnhap,
-                label = {
-                    Text(
-                        "Tên đăng nhập"
-                    )
-                },
+                label = { Text("Tên đăng nhập") },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Red,
                     unfocusedBorderColor = Color.Red,
                     focusedLabelColor = Color.Red
                 ),
                 shape = RoundedCornerShape(17.dp),
-                onValueChange = {
-                    tendangnhap = it
-                }
+                onValueChange = { tendangnhap = it }
             )
+
             Spacer(modifier = Modifier.height(20.dp))
+
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = matkhau,
-                label = {
-                    Text(
-                        "Mật khẩu"
-                    )
-                },
+                label = { Text("Mật khẩu") },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Red,
                     unfocusedBorderColor = Color.Red,
                     focusedLabelColor = Color.Red
                 ),
                 shape = RoundedCornerShape(17.dp),
-                onValueChange = {
-                    matkhau = it
-                }
+                onValueChange = { matkhau = it }
             )
+
             Spacer(modifier = Modifier.height(20.dp))
+
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(55.dp)
                     .shadow(10.dp),
                 shape = RoundedCornerShape(17.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Red
-                ),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
                 onClick = {
-                    if (tendangnhap.isEmpty() || matkhau.isEmpty()) {
-                        openDialognull.value = true
-                    } else {
-                        taiKhoanViewModel.KiemTraDangNhap(tendangnhap, matkhau)
-
-                        if (taikhoan != null) {
-                            // Nếu tài khoản hợp lệ, chuyển sang màn hình Home
-                            navController.navigate(NavRoute.HOME.route + "?tentaikhoan=${tendangnhap}")
+                    if(tendangnhap == "" || matkhau ==""){
+                        openDialog = true
+                    }
+                    taiKhoanViewModel.kiemTraDangNhap(tendangnhap, matkhau)
+                    if(loginResult!=null){
+                        if(loginResult.result == true){
+                            navController.navigate("${NavRoute.HOME.route}?tentaikhoan=${tendangnhap}"){
+                                popUpTo(0) { inclusive = true }
+                            }
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "Đăng nhập thành công"
+                                )
+                            }
                         }
                         else{
-                            taiKhoanViewModel.KiemTraDangNhap(tendangnhap, matkhau)
+                            openDialog = true
                         }
-
                     }
-                }
+                },
             ) {
                 Text(
-                    "ĐĂNG NHẬP",
+                    text = "ĐĂNG NHẬP",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
 
             Spacer(modifier = Modifier.height(50.dp))
-
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -178,9 +175,7 @@ fun LoginScreen(
                     fontWeight = FontWeight.Bold
                 )
                 TextButton(
-                    onClick = {
-
-                    }
+                    onClick = {}
                 ) {
                     Text(
                         "Đăng ký ngay!",
@@ -191,38 +186,28 @@ fun LoginScreen(
                 }
             }
 
-            // Hiển thị dialog nếu thông tin đăng nhập sai
-            if (show.value) {
+            SnackbarHost(
+                modifier = Modifier.padding(30.dp),
+                hostState = snackbarHostState
+            )
+
+            if (openDialog == true) {
                 AlertDialog(
-                    onDismissRequest = { show.value = false }, // Đóng khi nhấn ngoài dialog
-                    title = { Text("Tiêu đề Dialog") },
-                    text = { Text("Tên đăng nhập hoặc mật khẩu không chính xác.") },
-                    confirmButton = {
-                        Button(
-                            onClick = {
-                                show.value = false
-                                tendangnhap = ""
-                                matkhau = ""
+                    onDismissRequest = { openDialog = false }, // Đóng khi nhấn ngoài dialog
+                    text = {
+                        if(loginResult!=null){
+                            if(tendangnhap == "" || matkhau ==""){
+                                Text("Vui lòng nhập đầy đủ thông tin")
                             }
-                        ) {
-                            Text("OK")
+                            else if(loginResult.result == false){
+                                Text("Tài khoản hoặc mật khẩu không chính xác")
+                            }
                         }
                     },
-                )
-            }
-
-            // Hiển thị dialog nếu thông tin chưa đầy đủ
-            if (openDialognull.value) {
-                AlertDialog(
-                    onDismissRequest = { openDialognull.value = false }, // Đóng khi nhấn ngoài dialog
-                    title = { Text("Tiêu đề Dialog") },
-                    text = { Text("Vui lòng nhập đầy đủ thông tin.") },
                     confirmButton = {
                         Button(
                             onClick = {
-                                openDialognull.value = false
-                                tendangnhap = ""
-                                matkhau = ""
+                                openDialog = false
                             }
                         ) {
                             Text("OK")
@@ -233,6 +218,9 @@ fun LoginScreen(
         }
     }
 }
+
+
+
 
 
 

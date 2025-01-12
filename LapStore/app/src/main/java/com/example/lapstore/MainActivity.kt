@@ -179,12 +179,14 @@ class MainActivity : ComponentActivity() {
                 val viewModel = SanPhamViewModel()
                 val hinhAnhViewModel = HinhAnhViewModel()
                 val KhachHangViewModel = KhachHangViewModel()
+                val taiKhoanViewModel = TaiKhoanViewModel()
 
                 NavgationGraph(
                     navController,
                     viewModel,
                     hinhAnhViewModel,
-                    KhachHangViewModel
+                    KhachHangViewModel,
+                    taiKhoanViewModel
                 )
             }
         }

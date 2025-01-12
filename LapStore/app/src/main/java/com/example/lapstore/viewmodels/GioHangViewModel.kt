@@ -64,7 +64,6 @@ class GioHangViewModel : ViewModel() {
                         Log.e("GioHang Error", "Cập nhật thất bại cho sản phẩm: ${giohang.MaSanPham}")
                     }
                 }
-                // Sau khi cập nhật tất cả giỏ hàng thành công, bạn có thể cập nhật lại giỏ hàng hoặc làm gì đó khác
                 giohangUpdateResult = "Cập nhật giỏ hàng thành công"
             } catch (e: Exception) {
                 giohangUpdateResult = "Lỗi khi cập nhật toàn bộ giỏ hàng: ${e.message}"

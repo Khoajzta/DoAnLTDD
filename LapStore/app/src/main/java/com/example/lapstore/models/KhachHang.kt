@@ -7,5 +7,4 @@ data class KhachHang(
     var NgaySinh: String,
     var Email: String,
     var SoDienThoai: String,
-    var MaDiaChi: Int,
 )

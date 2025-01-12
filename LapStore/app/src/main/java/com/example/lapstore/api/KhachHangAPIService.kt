@@ -21,7 +21,9 @@ interface KhachHangAPIService {
     fun getAllKhachHang(): Call<KhachHangResponse>
 
     @PUT("KhachHang/update.php")
-    fun updateKhachHang(@Body khachHang: KhachHang): Call<KhachHangResponse>
+    suspend fun updateKhachHang(
+        @Body khachHang: KhachHang
+    ): UpdateResponse
 
     @GET("KhachHang/show.php")
     suspend fun getKhachHangById(

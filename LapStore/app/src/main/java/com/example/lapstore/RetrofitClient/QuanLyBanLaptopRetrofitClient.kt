@@ -3,6 +3,7 @@ package com.example.lapstore.api
 
 import GioHangAPIService
 import HinhAnhAPIService
+import HoaDonBanAPIService
 import KhachHangAPIService
 import SanPhamAPIService
 import TaiKhoanAPIService
@@ -53,5 +54,13 @@ object QuanLyBanLaptopRetrofitClient {
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()
             .create(GioHangAPIService::class.java)
+    }
+
+    val hoaDonBanAPIService: HoaDonBanAPIService by lazy {
+        Retrofit.Builder()
+            .baseUrl(Constants.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+            .build()
+            .create(HoaDonBanAPIService::class.java)
     }
 }

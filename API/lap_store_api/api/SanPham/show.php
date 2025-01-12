@@ -21,12 +21,11 @@
         'MaSanPham' => $sanpham->MaSanPham,
         'TenSanPham' => $sanpham->TenSanPham,
         'MaLoaiSanPham' => $sanpham->MaLoaiSanPham,
-        'MaHangSanXuat' => $sanpham->MaHangSanXuat,
-        'MaCPU' => $sanpham->MaCPU,
-        'MaRAM' => $sanpham->MaRAM,
-        'MaCardManHinh' => $sanpham->MaCardManHinh,
-        'MaROM' => $sanpham->MaROM,
-        'MaManHinh' => $sanpham->MaManHinh,
+        'CPU' => $sanpham->CPU,
+        'RAM' => $sanpham->RAM,
+        'CardManHinh' => $sanpham->CardManHinh,
+        'SSD' => $sanpham->SSD,
+        'ManHinh' => $sanpham->ManHinh,
         'MaMauSac' => $sanpham->MaMauSac,
         'Gia' => $sanpham->Gia,
         'SoLuong' => $sanpham->SoLuong,
@@ -34,8 +33,6 @@
         'HinhAnh' => $sanpham->HinhAnh,
         'TrangThai' => $sanpham->TrangThai
     );
-    
-
     print_r(json_encode($sanpham_item, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 
 

@@ -84,6 +84,7 @@ fun ProductDetail_Screen(
     navController: NavHostController,
     id: String,
     makhachhang:String?,
+    tentaikhoan:String?,
     viewModel: SanPhamViewModel,
     hinhAnhViewModel: HinhAnhViewModel,
 ) {
@@ -102,7 +103,6 @@ fun ProductDetail_Screen(
             gioHangViewModel.getGioHangByKhachHang(makhachhang.toInt())
         }
     }
-
 
     LaunchedEffect(id) {
         if (id.isNotEmpty()) {
@@ -141,11 +141,11 @@ fun ProductDetail_Screen(
                 actions = {
                     IconButton(
                         onClick = {
-                            if(makhachhang==null){
+                            if(makhachhang == null && tentaikhoan == null){
                                 navController.navigate(NavRoute.LOGINSCREEN.route)
                             }
                             else{
-                                navController.navigate("${NavRoute.CART.route}?makhachhang=${makhachhang}")
+                                navController.navigate("${NavRoute.CART.route}?makhachhang=${makhachhang}&tentaikhoan=${tentaikhoan}")
                             }
                         }
                     ) {

@@ -12,10 +12,14 @@ import com.example.lapstore.models.KhachHang
 import com.example.lapstore.models.SanPham
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class KhachHangViewModel: ViewModel() {
 
     var khachhang by mutableStateOf<KhachHang?>(null)
+        private set
+
+    var khachhangUpdateResult by mutableStateOf("")
         private set
 
     val allKhachHang = liveData(Dispatchers.IO) {
@@ -38,6 +42,24 @@ class KhachHangViewModel: ViewModel() {
                 khachhang = QuanLyBanLaptopRetrofitClient.khachHangAPIService.getKhachHangById(id)
             } catch (e: Exception) {
                 Log.e("KhachHangViewModel", "Error getting khachhang", e)
+            }
+        }
+    }
+
+    fun updateKhachHang(khachHang: KhachHang) {
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.khachHangAPIService.updateKhachHang(khachHang)
+                }
+                khachhangUpdateResult = if (response.success) {
+                    "Cập nhật thành công: ${response.message}"
+                } else {
+                    "Cập nhật thất bại: ${response.message}"
+                }
+            } catch (e: Exception) {
+                khachhangUpdateResult = "Lỗi khi cập nhật thông tin cá nhân: ${e.message}"
+                Log.e("KhachHang Error", "Lỗi khi cập nhật thông tin cá nhaan: ${e.message}")
             }
         }
     }

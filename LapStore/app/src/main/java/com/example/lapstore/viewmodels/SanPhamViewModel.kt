@@ -47,7 +47,6 @@ class SanPhamViewModel : ViewModel() {
                 danhSachAllSanPham = response.sanpham
             } catch (e: Exception) {
                 errorMessage = e.message
-                Log.e("SanPhamViewModel", "Error fetching all products", e)
             } finally {
                 isLoading = false
             }

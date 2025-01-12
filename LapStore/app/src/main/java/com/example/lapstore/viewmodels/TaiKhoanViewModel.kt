@@ -1,6 +1,8 @@
 package com.example.lapstore.viewmodels
 
+import KiemTraTaiKhoanResponse
 import android.util.Log
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,28 +25,32 @@ class TaiKhoanViewModel:ViewModel() {
     var taikhoan: TaiKhoan? by mutableStateOf(null)
         private set
 
+    private val _loginResult = mutableStateOf<KiemTraTaiKhoanResponse?>(null)
+    val loginResult: State<KiemTraTaiKhoanResponse?> = _loginResult
+
     var taikhoanUpdateResult by mutableStateOf("")
 
-    fun KiemTraDangNhap(tentaikhoan: String, matkhau: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+    var tentaikhoan: String? = null
+
+    fun kiemTraDangNhap(tenTaiKhoan: String, matKhau: String) {
+        viewModelScope.launch {
             try {
-                Log.d("TaiKhoanViewModel", "Gửi yêu cầu đến API với tên tài khoản: $tentaikhoan")
-                val result = QuanLyBanLaptopRetrofitClient.taiKhoanAPIService.kiemTraTaiKhoan(tentaikhoan, matkhau)
-                withContext(Dispatchers.Main) {
-                    taikhoan = result
+                // Thực hiện yêu cầu API
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.taiKhoanAPIService.kiemTraDangNhap(tenTaiKhoan, matKhau)
                 }
-                Log.d("TaiKhoanViewModel", "Dữ liệu trả về: $taikhoan")
+                // Cập nhật kết quả API vào state
+                _loginResult.value = response
             } catch (e: Exception) {
-                Log.e("TaiKhoanViewModel", "Lỗi khi lấy dữ liệu từ API", e)
-                withContext(Dispatchers.Main) {
-                    taikhoan = null // Xử lý lỗi bằng cách gán giá trị null
-                }
+                // Xử lý lỗi nếu có
+                Log.e("TaiKhoanViewModel", "Đã xảy ra lỗi: ${e.message}")
+                _loginResult.value = KiemTraTaiKhoanResponse(result = false, message = e.message)
             }
         }
     }
 
-
-    fun getSanTaiKhoanByTentaikhoan(tentaikhoan: String) {
+    fun getTaiKhoanByTentaikhoan(tentaikhoan: String) {
+        this.tentaikhoan = tentaikhoan
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 taikhoan = QuanLyBanLaptopRetrofitClient.taiKhoanAPIService.getTaiKhoanByTentaikhoan(tentaikhoan)

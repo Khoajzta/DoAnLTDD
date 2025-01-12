@@ -56,7 +56,13 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CartScreen(navController: NavHostController, makhachhang: String) {
+fun CartScreen(
+    navController: NavHostController,
+    makhachhang: String,
+    tentaikhoan:String
+) {
+
+
     val gioHangViewModel: GioHangViewModel = viewModel()
     val sanPhamViewModel: SanPhamViewModel = viewModel()
 
@@ -73,7 +79,7 @@ fun CartScreen(navController: NavHostController, makhachhang: String) {
     // Biến lưu trạng thái checkbox của từng sản phẩm
     val selectedItems = remember { mutableStateMapOf<Int, Boolean>() }
 
-    val selectedProducts = remember { mutableListOf<Pair<Int, Int>>() }
+    val selectedProducts = remember { mutableListOf<Triple<Int, Int, Int>>() }
 
     var showDialog by remember { mutableStateOf(false) }
     // Hàm tính tổng tiền
@@ -132,13 +138,14 @@ fun CartScreen(navController: NavHostController, makhachhang: String) {
                         color = Color.Red,
                         fontSize = 20.sp
                     )
-                    val selectedProductsString = selectedProducts.joinToString(",") { "${it.first}:${it.second}" }
+                    val selectedProductsString = selectedProducts.joinToString(",") { "${it.first}:${it.second}:${it.third}" }
+
                     Button(
                         onClick = {
                             if (selectedProducts.isEmpty()) {
                                 showDialog = true // Hiển thị dialog nếu không có sản phẩm nào được chọn
                             } else {
-                                navController.navigate("${NavRoute.PAYSCREEN.route}?selectedProducts=${selectedProductsString}&tongtien=${totalPrice}")
+                                navController.navigate("${NavRoute.PAYSCREEN.route}?selectedProducts=${selectedProductsString}&tongtien=${totalPrice}&tentaikhoan=${tentaikhoan}")
                             }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
@@ -202,14 +209,17 @@ fun CartScreen(navController: NavHostController, makhachhang: String) {
                                     selectedItems[giohang.MaGioHang] = isChecked
 
                                     if (isChecked) {
-                                        selectedProducts.add(Pair(giohang.MaSanPham, giohang.SoLuong))
+                                        // Thêm sản phẩm vào danh sách selectedProducts cùng với MaGioHang
+                                        selectedProducts.add(Triple(giohang.MaSanPham, giohang.SoLuong, giohang.MaGioHang))
                                     } else {
+                                        // Loại bỏ sản phẩm khỏi danh sách
                                         selectedProducts.removeAll { it.first == giohang.MaSanPham }
                                     }
                                     // Tính lại tổng tiền sau khi thay đổi trạng thái checkbox
                                     calculateTotalPrice()
                                 },
                             )
+
                             AsyncImage(
                                 model = sanPham.HinhAnh,
                                 contentDescription = null,
@@ -250,7 +260,7 @@ fun CartScreen(navController: NavHostController, makhachhang: String) {
                                                     // Cập nhật lại số lượng trong selectedProducts
                                                     val index = selectedProducts.indexOfFirst { it.first == giohang.MaSanPham }
                                                     if (index != -1) {
-                                                        selectedProducts[index] = Pair(giohang.MaSanPham, soLuong)
+                                                        selectedProducts[index] = Triple(giohang.MaSanPham, soLuong, giohang.MaGioHang)
                                                     }
 
                                                     calculateTotalPrice() // Tính lại tổng tiền
@@ -269,7 +279,7 @@ fun CartScreen(navController: NavHostController, makhachhang: String) {
                                                     // Cập nhật lại số lượng trong selectedProducts
                                                     val index = selectedProducts.indexOfFirst { it.first == giohang.MaSanPham }
                                                     if (index != -1) {
-                                                        selectedProducts[index] = Pair(giohang.MaSanPham, soLuong)
+                                                        selectedProducts[index] = Triple(giohang.MaSanPham, soLuong, giohang.MaGioHang)
                                                     }
 
                                                     calculateTotalPrice() // Tính lại tổng tiền

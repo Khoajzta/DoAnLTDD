@@ -17,7 +17,6 @@ interface SanPhamAPIService{
     @GET("SanPham/read.php")
     suspend fun getAllSanPham(): SanPhamResponse
 
-
     @GET("SanPham/readByLoaiSanPham.php")
     suspend fun getSanPhamByLoai(
         @Query("MaLoaiSanPham") maLoaiSanPham: Int

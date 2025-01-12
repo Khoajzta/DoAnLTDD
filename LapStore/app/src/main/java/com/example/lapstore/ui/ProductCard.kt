@@ -36,6 +36,7 @@ import com.example.lapstore.models.SanPham
 fun ProductCard(
     sanpham: SanPham,
     makhachhang:String?,
+    tentaikhoan:String?,
     navController: NavHostController
 ) {
     Card(
@@ -46,7 +47,10 @@ fun ProductCard(
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         onClick = {
-            navController.navigate(NavRoute.PRODUCTDETAILSCREEN.route + "?id=${sanpham.MaSanPham}&makhachhang=${makhachhang}")
+            if(tentaikhoan != null)
+                navController.navigate(NavRoute.PRODUCTDETAILSCREEN.route + "?id=${sanpham.MaSanPham}&makhachhang=${makhachhang}&tentaikhoan=${tentaikhoan}")
+            else
+                navController.navigate(NavRoute.PRODUCTDETAILSCREEN.route + "?id=${sanpham.MaSanPham}&makhachhang=${makhachhang}")
         }
     ) {
         Column(modifier = Modifier.padding(10.dp)) {

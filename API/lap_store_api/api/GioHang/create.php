@@ -15,7 +15,6 @@
     $giohang = new giohang($conn);
 
     $data = json_decode(file_get_contents("php://input"));
-    $giohang->MaGioHang = $data->MaGioHang;
     $giohang->MaKhachHang = $data->MaKhachHang;
     $giohang->MaSanPham = $data->MaSanPham;
     $giohang->SoLuong = $data->SoLuong;

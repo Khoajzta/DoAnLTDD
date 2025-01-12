@@ -17,12 +17,17 @@ data class taikhoanUpdateResponse(
     val message: String
 )
 
+data class KiemTraTaiKhoanResponse(
+    val result: Boolean,
+    val message: String? = null
+)
+
 interface TaiKhoanAPIService{
     @GET("TaiKhoan/checktaikhoan.php")
-    suspend fun kiemTraTaiKhoan(
-        @Query("tentaikhoan") tentaikhoan: String,
-        @Query("matkhau") matkhau: String
-    ): TaiKhoan
+    suspend fun kiemTraDangNhap(
+        @Query("tentaikhoan") tenTaiKhoan: String,
+        @Query("matkhau") matKhau: String
+    ): KiemTraTaiKhoanResponse
 
     @GET("TaiKhoan/show.php")
     suspend fun getTaiKhoanByTentaikhoan(

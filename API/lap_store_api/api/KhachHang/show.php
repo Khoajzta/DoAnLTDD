@@ -20,9 +20,10 @@
     $khachhang_item = array(
         'MaKhachHang'=> $khachhang->MaKhachHang,
         'HoTen'=> $khachhang->HoTen,
+        'GioiTinh'=> $khachhang->GioiTinh,
+        'NgaySinh'=> $khachhang->NgaySinh,
         'Email'=> $khachhang->Email,
         'SoDienThoai'=> $khachhang->SoDienThoai,
-        'MaDiaChi'=> $khachhang->MaDiaChi
     );
 
     print_r(json_encode($khachhang_item,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));

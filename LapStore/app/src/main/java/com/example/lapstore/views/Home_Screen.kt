@@ -100,9 +100,11 @@ fun HomeScreen(
     val taikhoan = taiKhoanViewModel.taikhoan
 
     if(tentaikhoan != null){
-        taiKhoanViewModel.getSanTaiKhoanByTentaikhoan(tentaikhoan)
+        taiKhoanViewModel.getTaiKhoanByTentaikhoan(tentaikhoan)
     }
-
+    SideEffect {
+        systemUiController.setStatusBarColor(color = Color.Red, darkIcons = false)
+    }
     LaunchedEffect(Unit) {
         viewModel.getSanPhamTheoLoai(maLoaiSanPham = 1, isLoai1 = true)
         viewModel.getSanPhamTheoLoai(maLoaiSanPham = 2, isLoai1 = false)
@@ -117,9 +119,6 @@ fun HomeScreen(
                 drawerContainerColor = Color.White,
                 modifier = Modifier.fillMaxHeight().background(Color.White)
             ) {
-                SideEffect {
-                    systemUiController.setStatusBarColor(color = Color.Red, darkIcons = false)
-                }
                 Row(
                     modifier = Modifier.fillMaxWidth().background(color = Color.Red),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -187,7 +186,7 @@ fun HomeScreen(
                                     navController.navigate(NavRoute.LOGINSCREEN.route)
                                 }
                                 else{
-                                    navController.navigate("${NavRoute.CART.route}?makhachhang=${taikhoan.MaKhachHang}")
+                                    navController.navigate("${NavRoute.CART.route}?makhachhang=${taikhoan.MaKhachHang}&tentaikhoan=${taikhoan.TenTaiKhoan}")
                                 }
                             }
                         ) {
@@ -330,11 +329,11 @@ fun HomeScreen(
                                 IconButton(
                                     modifier = Modifier.size(45.dp),
                                     onClick = {
-                                        if(taikhoan==null){
+                                        if (tentaikhoan != null) {
+                                            navController.navigate("${NavRoute.ACCOUNT.route}?tentaikhoan=${taiKhoanViewModel.tentaikhoan}")
+
+                                        } else {
                                             navController.navigate(NavRoute.LOGINSCREEN.route)
-                                        }
-                                        else{
-                                            navController.navigate("${NavRoute.ACCOUNT.route}?tentaikhoan=$tentaikhoan")
                                         }
                                     }
                                 ) {
@@ -344,11 +343,8 @@ fun HomeScreen(
                                         tint = Color.Red
                                     )
                                 }
-                                Text(
-                                    text = "Tài khoản",
-                                )
+                                Text(text = "Tài khoản")
                             }
-
                         }
                     }
                 }
@@ -379,10 +375,10 @@ fun HomeScreen(
                         ) {
                             items(danhSachSanPham) { sanpham ->
                                 if(taikhoan!=null){
-                                    ProductCard(sanpham,taikhoan.MaKhachHang.toString(), navController)
+                                    ProductCard(sanpham,taikhoan.MaKhachHang.toString(), taikhoan.TenTaiKhoan, navController)
                                 }
                                 else{
-                                    ProductCard(sanpham,null, navController)
+                                    ProductCard(sanpham,null,tentaikhoan, navController)
                                 }
                             }
                         }
@@ -404,12 +400,12 @@ fun HomeScreen(
                             contentPadding = PaddingValues(horizontal = 8.dp),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            items(danhSachSanPhamVanPhong) { sanpham ->
+                            items(danhSachSanPhamVanPhong) { sanphamvp ->
                                 if(taikhoan!=null){
-                                    ProductCard(sanpham,taikhoan.MaKhachHang.toString(), navController)
+                                    ProductCard(sanphamvp,taikhoan.MaKhachHang.toString(),taikhoan.TenTaiKhoan, navController)
                                 }
                                 else{
-                                    ProductCard(sanpham,null, navController)
+                                    ProductCard(sanphamvp,null,tentaikhoan, navController)
                                 }
                             }
                         }
@@ -429,12 +425,12 @@ fun HomeScreen(
                             contentPadding = PaddingValues(horizontal = 8.dp),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            items(danhSachSanPhamGaming) { sanpham ->
+                            items(danhSachSanPhamGaming) { sanphamgm ->
                                 if(taikhoan!=null){
-                                    ProductCard(sanpham,taikhoan.MaKhachHang.toString(), navController)
+                                    ProductCard(sanphamgm,taikhoan.MaKhachHang.toString(),tentaikhoan, navController)
                                 }
                                 else{
-                                    ProductCard(sanpham,null, navController)
+                                    ProductCard(sanphamgm,null,null, navController)
                                 }
                             }
                         }
