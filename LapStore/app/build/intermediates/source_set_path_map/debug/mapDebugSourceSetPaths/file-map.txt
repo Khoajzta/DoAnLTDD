@@ -1,0 +1,68 @@
+com.example.lapstore.app-animation-core-release-0 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\0468b048c8dcfd7da385f8fe4b975b52\transformed\animation-core-release\res
+com.example.lapstore.app-ui-tooling-data-release-1 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\07a20c126f5c270d85f5f22836c513a1\transformed\ui-tooling-data-release\res
+com.example.lapstore.app-navigation-runtime-ktx-2.8.5-2 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\09552c4a66b6ad392ddea33716118417\transformed\navigation-runtime-ktx-2.8.5\res
+com.example.lapstore.app-datastore-release-3 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\0f2af66b0f4b61f739adc4d4551421c4\transformed\datastore-release\res
+com.example.lapstore.app-navigation-common-2.8.5-4 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\10b3cc2c9ef5a31b34ae4932b1eba292\transformed\navigation-common-2.8.5\res
+com.example.lapstore.app-lifecycle-runtime-compose-release-5 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\1e4a8e0b9ffb08ca0c891485ff3a736c\transformed\lifecycle-runtime-compose-release\res
+com.example.lapstore.app-lifecycle-livedata-core-ktx-2.8.7-6 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\25134d0bf8b6f8ad8fca6e2d929b8ed1\transformed\lifecycle-livedata-core-ktx-2.8.7\res
+com.example.lapstore.app-datastore-core-release-7 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\2a288fe381115df4b733152ae397292e\transformed\datastore-core-release\res
+com.example.lapstore.app-foundation-layout-release-8 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\2d9d905d74174e5d0aec9a4c01e119ea\transformed\foundation-layout-release\res
+com.example.lapstore.app-lifecycle-viewmodel-release-9 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\2dbe0d2ca1cd6776388bcc83b7ddfaf8\transformed\lifecycle-viewmodel-release\res
+com.example.lapstore.app-activity-ktx-1.9.3-10 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\37bc2388ca57e1117023257e699d2fb3\transformed\activity-ktx-1.9.3\res
+com.example.lapstore.app-core-runtime-2.2.0-11 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\3888f3ff7a16066e698e3d8a9bca2b2e\transformed\core-runtime-2.2.0\res
+com.example.lapstore.app-core-ktx-1.15.0-12 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\40be484f535727f0065c1098e17bc992\transformed\core-ktx-1.15.0\res
+com.example.lapstore.app-ui-tooling-release-13 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\4bc9c4d77a3b744427dc35bff28ce93a\transformed\ui-tooling-release\res
+com.example.lapstore.app-startup-runtime-1.1.1-14 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\55e0c8e1d20226a36e9680546f7502e5\transformed\startup-runtime-1.1.1\res
+com.example.lapstore.app-material-ripple-release-15 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\5668336661866bc718df2c4586c714de\transformed\material-ripple-release\res
+com.example.lapstore.app-hilt-lifecycle-viewmodel-1.0.0-alpha03-16 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\6100f145aae831c60384a9f6a32185bf\transformed\hilt-lifecycle-viewmodel-1.0.0-alpha03\res
+com.example.lapstore.app-foundation-release-17 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\635cc6778e31314392752e0841f70174\transformed\foundation-release\res
+com.example.lapstore.app-lifecycle-livedata-core-2.8.7-18 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\683fbe224855b845b2a326217a512482\transformed\lifecycle-livedata-core-2.8.7\res
+com.example.lapstore.app-material-icons-core-release-19 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\68b54ebc88ab477cfcac1829c7a90ce2\transformed\material-icons-core-release\res
+com.example.lapstore.app-material-release-20 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\727820e0d0b76b22a5936340fd89c6f8\transformed\material-release\res
+com.example.lapstore.app-datastore-preferences-release-21 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\745694400ed28ceb9d8fed3d94728089\transformed\datastore-preferences-release\res
+com.example.lapstore.app-runtime-livedata-1.7.6-22 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\74face5eb0e8b396fd8c9d1240f9a654\transformed\runtime-livedata-1.7.6\res
+com.example.lapstore.app-graphics-path-1.0.1-23 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\7a993fc7257cc5f744f9464df496e169\transformed\graphics-path-1.0.1\res
+com.example.lapstore.app-navigation-compose-2.8.5-24 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\88dfc240ac27bcc4faad514cc8551d9d\transformed\navigation-compose-2.8.5\res
+com.example.lapstore.app-runtime-saveable-release-25 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\8dbcf7b77a39f3c3f379581163cb5ac3\transformed\runtime-saveable-release\res
+com.example.lapstore.app-customview-poolingcontainer-1.0.0-26 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\8e64a7154cc5b0b033582d8612f1c166\transformed\customview-poolingcontainer-1.0.0\res
+com.example.lapstore.app-ui-unit-release-27 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\90c47bdf12f24eb3e7896dc893df51ed\transformed\ui-unit-release\res
+com.example.lapstore.app-material-icons-extended-release-28 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\921cf87c05dc0143aff4ae4ac56db694\transformed\material-icons-extended-release\res
+com.example.lapstore.app-lifecycle-livedata-2.8.7-29 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\942f15b75d338924d48bd02c361c43ba\transformed\lifecycle-livedata-2.8.7\res
+com.example.lapstore.app-annotation-experimental-1.4.1-30 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\9d30949f837697c8064832ffb0ac3ea3\transformed\annotation-experimental-1.4.1\res
+com.example.lapstore.app-lifecycle-viewmodel-compose-release-31 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\9d9f081d5a2a933ee1aa803699bc7a03\transformed\lifecycle-viewmodel-compose-release\res
+com.example.lapstore.app-material3-release-32 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\9e5dce9e1a4fdad993041b5d2d454eed\transformed\material3-release\res
+com.example.lapstore.app-fragment-1.2.5-33 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\a08e8ac613c69fd1095450b7d7052727\transformed\fragment-1.2.5\res
+com.example.lapstore.app-lifecycle-viewmodel-savedstate-2.8.7-34 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\a092df97c526185836944e4a993dd285\transformed\lifecycle-viewmodel-savedstate-2.8.7\res
+com.example.lapstore.app-ui-test-manifest-1.7.2-35 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\a2ea800282fe06c282358e8cb783f39b\transformed\ui-test-manifest-1.7.2\res
+com.example.lapstore.app-activity-compose-1.9.3-36 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\a62b22be3eef9451d553148542f32d72\transformed\activity-compose-1.9.3\res
+com.example.lapstore.app-core-1.15.0-37 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\a7c697bc3c303e0beeb73fd5f5974c93\transformed\core-1.15.0\res
+com.example.lapstore.app-lifecycle-viewmodel-ktx-2.8.7-38 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\a806016b7db9e7d99b5a56a9d3d68819\transformed\lifecycle-viewmodel-ktx-2.8.7\res
+com.example.lapstore.app-ui-tooling-preview-release-39 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\a9d112d6d64b58aafc371ba2bb17d8d7\transformed\ui-tooling-preview-release\res
+com.example.lapstore.app-savedstate-1.2.1-40 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\bbdcf324df06a2b7cafeeb9f6c685526\transformed\savedstate-1.2.1\res
+com.example.lapstore.app-navigation-common-ktx-2.8.5-41 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\bc8e2a4b8649adb89c6180b75f91f7d6\transformed\navigation-common-ktx-2.8.5\res
+com.example.lapstore.app-ui-geometry-release-42 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\c0b7eebf728849ef1c8a3558a7de8234\transformed\ui-geometry-release\res
+com.example.lapstore.app-ui-release-43 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\c151ee3a8ba09aa4ce5882bcbe9eb914\transformed\ui-release\res
+com.example.lapstore.app-appcompat-resources-1.6.1-44 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\c17f81b3eb05ee0d5b87f0b8d30a9731\transformed\appcompat-resources-1.6.1\res
+com.example.lapstore.app-profileinstaller-1.3.1-45 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\c4d48b76f2e8ce0fa9b0b268d966b64b\transformed\profileinstaller-1.3.1\res
+com.example.lapstore.app-navigation-runtime-2.8.5-46 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\c5690dac47138654de6dd804904f69e0\transformed\navigation-runtime-2.8.5\res
+com.example.lapstore.app-animation-release-47 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\c8de7bef6f4be2ae9808e0c8b1607625\transformed\animation-release\res
+com.example.lapstore.app-emoji2-1.3.0-48 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\c93e2e36835d8602d91a845a73fa2caf\transformed\emoji2-1.3.0\res
+com.example.lapstore.app-activity-1.9.3-49 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\ca33dda5e87ebb49b1d2c07b4ee9ee40\transformed\activity-1.9.3\res
+com.example.lapstore.app-ui-util-release-50 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\cec68d33eba8c44f7a1c8b9b68e52edc\transformed\ui-util-release\res
+com.example.lapstore.app-lifecycle-runtime-ktx-release-51 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\d21db1b278af9caefa0af55ac62d7d44\transformed\lifecycle-runtime-ktx-release\res
+com.example.lapstore.app-runtime-release-52 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\dd8867661fe3678a9921bf66d92fbeca\transformed\runtime-release\res
+com.example.lapstore.app-tracing-1.2.0-53 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\dff20db4b22050dc739c9522fc68098f\transformed\tracing-1.2.0\res
+com.example.lapstore.app-ui-graphics-release-54 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\e545788183b3c05c207c9d5698870d3c\transformed\ui-graphics-release\res
+com.example.lapstore.app-lifecycle-runtime-release-55 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\ec527e34e75627becb0c1e9455bddce9\transformed\lifecycle-runtime-release\res
+com.example.lapstore.app-lifecycle-livedata-ktx-2.8.7-56 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\f3afbb2b8bd07e6380c35d220ea3a60b\transformed\lifecycle-livedata-ktx-2.8.7\res
+com.example.lapstore.app-savedstate-ktx-1.2.1-57 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\f47de7560f08e4125e78582b357e6854\transformed\savedstate-ktx-1.2.1\res
+com.example.lapstore.app-lifecycle-process-2.8.7-58 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\f49cecf86f3c6cef52ed24deb911abcf\transformed\lifecycle-process-2.8.7\res
+com.example.lapstore.app-ui-text-release-59 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\f5f6bbfcb9fad3a896492535c694326f\transformed\ui-text-release\res
+com.example.lapstore.app-coil-base-2.7.0-60 C:\Users\KHOA COI\.gradle\caches\8.9\transforms\fb68ab12c84c2e6afeab984be1f4890f\transformed\coil-base-2.7.0\res
+com.example.lapstore.app-pngs-61 D:\LapStore\app\build\generated\res\pngs\debug
+com.example.lapstore.app-resValues-62 D:\LapStore\app\build\generated\res\resValues\debug
+com.example.lapstore.app-packageDebugResources-63 D:\LapStore\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.example.lapstore.app-packageDebugResources-64 D:\LapStore\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.example.lapstore.app-debug-65 D:\LapStore\app\build\intermediates\merged_res\debug\mergeDebugResources
+com.example.lapstore.app-debug-66 D:\LapStore\app\src\debug\res
+com.example.lapstore.app-main-67 D:\LapStore\app\src\main\res
