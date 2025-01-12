@@ -9,28 +9,42 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cafea917-e898-4e4e-975e-adb129528813" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/RetrofitClient/QuanLyBanLaptopRetrofitClient.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/api/GioHangAPIService.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/api/HinhAnhAPIService.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/api/KhachHangAPIService.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/api/SanPhamAPIService.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/api/TaiKhoanAPIService.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/models/GioHang.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/models/HinhAnh.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/models/KhachHang.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/models/SanPham.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/models/TaiKhoan.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/ui/ProductCart_Card.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/ui/TaiKhoanStore.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/viewmodels/GioHangViewModel.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/viewmodels/HinhAnhViewModel.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/viewmodels/KhachHangViewModel.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/viewmodels/SanPhamViewModel.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/viewmodels/TaiKhoanViewModel.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/views/Account_Screen.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/java/com/example/lapstore/views/ChangePassword_Screen.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LapStore/app/src/main/res/xml/network_security_config.xml" afterDir="false" />
+    <list default="true" id="9f1e03c8-dd35-4f0b-aea0-2db12a533398" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/RetrofitClient/QuanLyBanLaptopRetrofitClient.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/api/DiaChiAPIService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/api/GioHangAPIService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/api/HinhAnhAPIService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/api/HoaDonBanAPIService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/api/KhachHangAPIService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/api/SanPhamAPIService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/api/TaiKhoanAPIService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/models/DiaChi.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/models/GioHang.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/models/HinhAnh.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/models/HoaDonBan.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/models/KhachHang.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/models/SanPham.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/models/TaiKhoan.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/ui/CardDonHang.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/ui/DiaChiCard.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/ui/ProductCart_Card.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/ui/theme/Utilities.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/viewmodels/DiaChiViewmodel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/viewmodels/GioHangViewModel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/viewmodels/HinhAnhViewModel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/viewmodels/HoaDonBanVỉewModel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/viewmodels/KhachHangViewModel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/viewmodels/SanPhamViewModel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/viewmodels/TaiKhoanViewModel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/views/Account_Screen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/views/Address_Screen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/views/CartManage_Screen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/views/ChangePassword_Screen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/views/PaySuccess_Screen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/views/Pay_Screen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/checksuccess.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/qr.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/xml/network_security_config.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +54,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\admin\.android\avd\Pixel_7_API_35.avd)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\KHOA COI\.android\avd\Pixel_9_Pro_XL_API_35_1.avd)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -49,51 +63,72 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Kotlin Enum" />
         <option value="Kotlin File" />
+        <option value="Kotlin Data Class" />
         <option value="Kotlin Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
-    <option name="ROOT_SYNC" value="DONT_SYNC" />
-  </component>
-  <component name="ProblemsViewState">
-    <option name="showPreview" value="true" />
+    <excluded-from-favorite>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="master" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </excluded-from-favorite>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 5
+  &quot;associatedIndex&quot;: 8
 }</component>
-  <component name="ProjectId" id="2r8nzAEJKJ0iQ5YiuFZfAv7IhJG" />
+  <component name="ProjectId" id="2opVEfhH4EyTzYdf5SBN6uBzWoM" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Android App.app.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "E:/DoAnLTDD/LapStore",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.17",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
-    "show.migrate.to.gradle.popup": "false"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Android App.app.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/LapStore/app/src/main/res/drawable&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\LapStore\app\src\main\res\drawable" />
+      <recent name="D:\LapStore\app\src\main\java\com\example\lapstore\views" />
+      <recent name="D:\LapStore\app\src\main\java\com\example\lapstore\viewmodels" />
+      <recent name="D:\LapStore\app\src\main\java\com\example\lapstore\models" />
+      <recent name="D:\LapStore\app\src\main\java\com\example\lapstore\api" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="E:\DoAnLTDD\LapStore\app\src\main\java\com\example\lapstore\views" />
-      <recent name="E:\DoAnLTDD\LapStore\app\src\main\java\com\example\lapstore\models" />
-      <recent name="E:\DoAnLTDD\LapStore\app\src\main\java\com\example\lapstore\viewmodels" />
-      <recent name="E:\DoAnLTDD\LapStore\app\src\main\java\com\example\lapstore\api" />
+      <recent name="D:\LapStore\app\src\main\java\com\example\lapstore\ui" />
+      <recent name="C:\Users\KHOA COI\Desktop\DoAnLTDD\LapStore\app\src\main\java\com\example\lapstore" />
+      <recent name="C:\Users\KHOA COI\Desktop\DoAnLTDD\LapStore\app\src\main\java\com\example\lapstore\views" />
+      <recent name="C:\Users\KHOA COI\Desktop\DoAnLTDD\LapStore\app\src\main\java\com\example\lapstore\viewmodels" />
+      <recent name="D:\HOC KY 5\LT Di Dong\App\LapStore\app\src\main\java\com\example\lapstore\screen" />
+    </key>
+    <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="com.example.lapstore.viewmodels" />
     </key>
   </component>
   <component name="RunManager">
@@ -165,27 +200,39 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="cafea917-e898-4e4e-975e-adb129528813" name="Changes" comment="" />
-      <created>1735949831772</created>
+      <changelist id="9f1e03c8-dd35-4f0b-aea0-2db12a533398" name="Changes" comment="" />
+      <created>1731566394126</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1735949831772</updated>
+      <updated>1731566394126</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
