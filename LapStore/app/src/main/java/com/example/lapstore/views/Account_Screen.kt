@@ -143,7 +143,7 @@ fun AcccountScreen(
                         "accountInfo" -> AccountInfoSection(tentaikhoan)
                         "cartManagement" -> navController.navigate("${NavRoute.QUANLYDONHANG.route}?makhachhang=${taikhoan.MaKhachHang}")
                         "changePassword" -> ChangePasswordSection(tentaikhoan)
-                        "addresses" -> AddressManagementScreen(diaChiViewModel = diaChiViewModel)
+                        "addresses" -> navController.navigate("${NavRoute.DIACHISCREEN.route}?makhachhang=${taikhoan.MaKhachHang}")
                     }
                 }
             }

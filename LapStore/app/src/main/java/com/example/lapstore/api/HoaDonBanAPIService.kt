@@ -15,6 +15,9 @@ data class HoaDonBanResponse(
     val hoadonban: List<HoaDonBan>? // Có thể API trả về null nếu không có dữ liệu
 )
 
+data class MaHoaDonBanResponse(
+    val MaHoaDonBan: Int
+)
 
 
 interface HoaDonBanAPIService{
@@ -28,5 +31,8 @@ interface HoaDonBanAPIService{
         @Query("MaKhachHang") MaKhachHang: Int,
         @Query("TrangThai") TrangThai: Int
     ): HoaDonBanResponse
+
+    @GET("path/to/laymahoadonbanlonnhat.php")
+    suspend fun getMaxMaHoaDonBan(): MaHoaDonBanResponse
 
 }

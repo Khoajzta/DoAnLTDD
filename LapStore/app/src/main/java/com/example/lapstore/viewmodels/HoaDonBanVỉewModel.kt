@@ -5,6 +5,8 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lapstore.api.QuanLyBanLaptopRetrofitClient
@@ -19,6 +21,9 @@ class HoaDonBanVỉewModel:ViewModel() {
 
     var danhSachHoaDonCuaKhachHang by mutableStateOf<List<HoaDonBan>>(emptyList())
         private set
+
+    var maHoaDonBan by mutableStateOf(0)
+
 
     fun getHoaDonTheoKhachHang(MaKhachHang: Int, TrangThai: Int) {
         viewModelScope.launch {
@@ -47,6 +52,18 @@ class HoaDonBanVỉewModel:ViewModel() {
                 }
             } catch (e: Exception) {
                 Log.e("AddToCart", "Lỗi kết nối: ${e.message}")
+            }
+        }
+    }
+
+    fun getMaxMaHoaDonBan() {
+        viewModelScope.launch {
+            try {
+                val response = QuanLyBanLaptopRetrofitClient.hoaDonBanAPIService.getMaxMaHoaDonBan()
+                Log.d("HoaDonBanViewModel", "API response: $response")  // In giá trị trả về
+                maHoaDonBan = response.MaHoaDonBan
+            } catch (e: Exception) {
+                Log.e("HoaDonBanViewModel", "Error: ${e.message}")
             }
         }
     }

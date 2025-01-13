@@ -16,6 +16,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.ArrowForwardIos
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -29,6 +31,7 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -51,9 +54,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.lapstore.R
+import com.example.lapstore.models.ChiTietHoaDonBan
+import com.example.lapstore.models.HoaDonBan
 import com.example.lapstore.models.SanPham
+import com.example.lapstore.viewmodels.ChiTietHoaDonBanViewmodel
+import com.example.lapstore.viewmodels.DiaChiViewmodel
 import com.example.lapstore.viewmodels.GioHangViewModel
+import com.example.lapstore.viewmodels.HoaDonBanVỉewModel
+import com.example.lapstore.viewmodels.TaiKhoanViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,20 +75,38 @@ fun PayScreen(
     tongtien: Int,
     tentaikhoan:String
 ) {
+    val ngayhientai = LocalDate.now() // Lấy ngày hiện tại
+    val formattedDate = ngayhientai.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
+
+
     val sanPhamViewModel: SanPhamViewModel = viewModel()
     val gioHangViewModel: GioHangViewModel = viewModel()
+    val taiKhoanViewModel:TaiKhoanViewModel = viewModel()
+    val diaChiViewmodel:DiaChiViewmodel = viewModel()
+    val hoaDonBanVỉewModel:HoaDonBanVỉewModel = viewModel()
+    val chiTietHoaDonBanViewmodel:ChiTietHoaDonBanViewmodel = viewModel()
 
-    // State để lưu danh sách sản phẩm đã lấy thông tin
     val danhsachsanpham by sanPhamViewModel.danhsachSanPham.collectAsState(initial = emptyList())
-
     val systemUiController = rememberSystemUiController()
 
-    // State để lưu trữ lựa chọn phương thức thanh toán
-    var selectedPaymentMethod by remember { mutableStateOf("Tiền mặt") }
-
+    var selectedPaymentMethod by remember { mutableStateOf("Thanh toán khi nhận hàng") }
     var showQR by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(false) } // Biến trạng thái để hiển thị vòng tròn xoay
 
-    // Lấy thông tin sản phẩm khi màn hình được tạo
+    val diachimacdinh = diaChiViewmodel.diachi
+    val taikhoan = taiKhoanViewModel.taikhoan
+
+
+    LaunchedEffect(tentaikhoan) {
+        taiKhoanViewModel.getTaiKhoanByTentaikhoan(tentaikhoan)
+    }
+
+    if (taikhoan != null) {
+        LaunchedEffect(taikhoan) {
+            diaChiViewmodel.getDiaChiMacDinh(taikhoan.MaKhachHang, 1)
+        }
+    }
+
     LaunchedEffect(selectedProducts) {
         selectedProducts.forEach { triple ->
             sanPhamViewModel.getSanPhamById2(triple.first.toString())
@@ -127,19 +157,72 @@ fun PayScreen(
                         color = Color.Red,
                         fontSize = 20.sp
                     )
+
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(50.dp),
+                            color = Color.Red
+                        )
+                    }
                     Spacer(modifier = Modifier.width(10.dp))
                     Button(
                         onClick = {
+                            // Xóa các sản phẩm khỏi giỏ hàng
                             selectedProducts.forEach { triple ->
                                 gioHangViewModel.deleteGioHang(triple.third)
-                                navController.navigate("${NavRoute.PAYSUCCESS.route}?tentaikhoan=${tentaikhoan}")
                             }
+
+                            if (taikhoan != null && diachimacdinh != null) {
+                                // Lấy mã khách hàng và địa chỉ
+                                val maKhachHang = taikhoan.MaKhachHang ?: 0
+                                val maDiaChi = diachimacdinh.MaDiaChi
+
+                                // Tạo đối tượng HoaDonBan
+                                val hoaDonBan = HoaDonBan(
+                                    0, // MaHoaDonBan sẽ được tự động tạo khi insert vào DB
+                                    maKhachHang,
+                                    formattedDate,
+                                    maDiaChi,
+                                    tongtien + 30000, // Tổng tiền + phí vận chuyển
+                                    selectedPaymentMethod,
+                                    1 // Trạng thái thanh toán
+                                )
+
+                                // Thêm HoaDonBan trước
+                                hoaDonBanVỉewModel.addHoaDon(hoaDonBan)
+
+
+                                // Sau khi HoaDonBan đã được thêm, tiếp tục thêm ChiTietHoaDonBan
+                                selectedProducts.forEach { triple ->
+                                    danhsachsanpham.forEach { sanpham ->
+                                        if (sanpham.MaSanPham == triple.first) {
+                                            // Tạo đối tượng ChiTietHoaDonBan
+                                            val chitiethoadon = ChiTietHoaDonBan(
+                                                0, // MaChiTietHoaDonBan sẽ được tự động tạo khi insert vào DB
+                                                0, // MaHoaDonBan cần phải lấy từ bảng HoaDonBan sau khi insert
+                                                sanpham.MaSanPham,
+                                                triple.second, // Số lượng sản phẩm
+                                                sanpham.Gia, // Thanh toán
+                                                sanpham.Gia + 30000, // Tổng thanh toán (bao gồm phí vận chuyển)
+                                                0 // Trạng thái
+                                            )
+
+                                            // Thêm ChiTietHoaDonBan
+                                            chiTietHoaDonBanViewmodel.addHoaDon(chitiethoadon)
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Chuyển sang màn hình thành công
+                            navController.navigate("${NavRoute.PAYSUCCESS.route}?tentaikhoan=${tentaikhoan}")
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Text("Đặt hàng")
                     }
+
                 }
             }
         }
@@ -149,6 +232,65 @@ fun PayScreen(
                 .padding(it)
                 .padding(10.dp)
         ) {
+            item {
+                if(diachimacdinh!=null){
+                    Card(
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .fillMaxWidth(),
+                        elevation = CardDefaults.cardElevation(1.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(10.dp).fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.Top
+                        ) {
+                            Column (
+                                modifier = Modifier.fillMaxHeight().padding(10.dp),
+                                verticalArrangement = Arrangement.Top
+                            ){
+                                Icon(
+                                    imageVector = Icons.Filled.LocationOn, contentDescription = "",
+                                    tint = Color.Red
+                                )
+                            }
+                            Column {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        diachimacdinh.TenNguoiNhan,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    TextButton(
+                                        onClick = {
+
+                                        }
+                                    ) {
+                                        Text(
+                                            "Thay đổi",
+                                            color = Color.Red
+                                        )
+                                    }
+                                }
+
+                                Text(
+                                    diachimacdinh.SoDienThoai
+                                )
+
+                                Text(
+                                    diachimacdinh.ThongTinDiaChi
+                                )
+                            }
+                        }
+                    }
+                }
+
+            }
+
             items(danhsachsanpham) { sanpham ->
                 selectedProducts.forEach { triple ->
                     if (sanpham.MaSanPham == triple.first)
@@ -185,10 +327,10 @@ fun PayScreen(
                                 modifier = Modifier.padding(start = 25.dp)
                             )
                             RadioButton(
-                                selected = selectedPaymentMethod == "Tiền mặt",
+                                selected = selectedPaymentMethod == "Thanh toán khi nhận hàng",
                                 onClick = {
-                                    selectedPaymentMethod = "Tiền mặt"
-                                    showQR = false // Ẩn QR khi chọn "Tiền mặt"
+                                    selectedPaymentMethod = "Thanh toán khi nhận hàng"
+                                    showQR = false
                                 },
                                 colors = RadioButtonDefaults.colors(
                                     unselectedColor = Color.Red,
@@ -210,7 +352,7 @@ fun PayScreen(
                                 selected = selectedPaymentMethod == "Chuyển khoản ngân hàng",
                                 onClick = {
                                     selectedPaymentMethod = "Chuyển khoản ngân hàng"
-                                    showQR = true // Hiển thị QR khi chọn "Chuyển khoản ngân hàng"
+                                    showQR = true
                                 },
                                 colors = RadioButtonDefaults.colors(
                                     unselectedColor = Color.Red,

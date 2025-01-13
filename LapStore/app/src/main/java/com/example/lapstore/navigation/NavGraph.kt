@@ -9,6 +9,8 @@ import com.example.lapstore.models.TaiKhoan
 import com.example.lapstore.viewmodels.KhachHangViewModel
 import com.example.lapstore.viewmodels.TaiKhoanViewModel
 import com.example.lapstore.views.AcccountScreen
+import com.example.lapstore.views.AddDiaChiScreen
+import com.example.lapstore.views.AddressManagementScreen
 import com.example.lapstore.views.CartManagementSection
 import com.example.lapstore.views.HomeScreen
 import com.example.lapstore.views.LoginScreen
@@ -23,6 +25,8 @@ sealed class NavRoute(val route: String) {
     object PAYSCREEN : NavRoute("pay_screen")
     object PAYSUCCESS : NavRoute("paysuccess_screen")
     object QUANLYDONHANG : NavRoute("quanlydonhang_screen")
+    object DIACHISCREEN : NavRoute("diachi_screen")
+    object ADDDIACHI : NavRoute("adddiachi_screen")
 }
 
 
@@ -161,6 +165,25 @@ fun NavgationGraph(
             CartManagementSection(navController,makhachhang)
         }
 
+
+        composable(
+            route = "${NavRoute.DIACHISCREEN.route}?makhachhang={makhachhang}",
+            arguments = listOf(navArgument("makhachhang") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val makhachhang = backStackEntry.arguments?.getInt("makhachhang") ?: 0
+            AddressManagementScreen(navController,makhachhang)
+        }
+
+        composable(
+            route = "${NavRoute.ADDDIACHI.route}?makhachhang={makhachhang}",
+            arguments = listOf(navArgument("makhachhang") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val makhachhang = backStackEntry.arguments?.getInt("makhachhang") ?: 0
+            AddDiaChiScreen(navController, makhachhang)
+        }
+
     }
 }
+
+
 

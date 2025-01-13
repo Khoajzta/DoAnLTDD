@@ -18,6 +18,6 @@ data class HinhAnhResponse(
 interface HinhAnhAPIService{
     @GET("HinhAnh/readhinhanhbymasanpham.php")
     suspend fun getHinhAnhBySanPham(
-        @Query("MaSanPham") MaSanPham: String
+        @Query("MaSanPham") MaSanPham: Int
     ): HinhAnhResponse
 }

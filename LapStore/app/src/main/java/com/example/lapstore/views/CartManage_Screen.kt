@@ -52,93 +52,85 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CartManagementSection(navController: NavHostController,makhachhang: Int?) {
+fun CartManagementSection(navController: NavHostController, makhachhang: Int?) {
     var selectedTabIndexItem by remember { mutableStateOf(0) }
     val tabs = listOf("Chờ xác nhận", "Chờ lấy hàng", "Chờ giao hàng", "Đã giao")
-
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(4.dp),
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
-    ) {
-        Scaffold(
-            containerColor = Color.White,
-            topBar = {
-                TopAppBar(
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.White
-                    ),
-                    title = {
-                        Text("Quản lý đơn hàng")
-                    },
-                    navigationIcon = {
-                        IconButton(
-                            onClick = {
-                                navController.popBackStack()
-                            }
-                        ) {
-                            Icon(imageVector = Icons.Filled.ArrowBackIosNew, contentDescription = "")
+    Scaffold(
+        containerColor = Color.White,
+        topBar = {
+            TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.White
+                ),
+                title = {
+                    Text("Quản lý đơn hàng")
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            navController.popBackStack()
                         }
+                    ) {
+                        Icon(imageVector = Icons.Filled.ArrowBackIosNew, contentDescription = "")
                     }
-                )
-            }
+                }
+            )
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .padding(3.dp),
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(it)
-                    .padding(3.dp),
+            ScrollableTabRow(
+                selectedTabIndex = selectedTabIndexItem,
+                edgePadding = 0.dp,
+                modifier = Modifier.fillMaxWidth(),
+                contentColor = Color.Red,
+                containerColor = Color.White,
+                indicator = { tabPositions ->
+                    TabRowDefaults.Indicator(
+                        modifier = Modifier
+                            .tabIndicatorOffset(tabPositions[selectedTabIndexItem]),
+                        color = Color.Red // Đặt màu đỏ cho thanh di chuyển
+                    )
+                }
             ) {
-                ScrollableTabRow(
-                    selectedTabIndex = selectedTabIndexItem,
-                    edgePadding = 0.dp,
-                    modifier = Modifier.fillMaxWidth(),
-                    contentColor = Color.Red,
-                    containerColor = Color.White,
-                    indicator = { tabPositions ->
-                        TabRowDefaults.Indicator(
-                            modifier = Modifier
-                                .tabIndicatorOffset(tabPositions[selectedTabIndexItem]),
-                            color = Color.Red // Đặt màu đỏ cho thanh di chuyển
-                        )
-                    }
-                ) {
-                    tabs.forEachIndexed { index, title ->
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .padding(vertical = 8.dp, horizontal = 4.dp)
-                                .clip(shape = RectangleShape)
-                                .clickable { selectedTabIndexItem = index }
+                tabs.forEachIndexed { index, title ->
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .padding(vertical = 8.dp, horizontal = 4.dp)
+                            .clip(shape = RectangleShape)
+                            .clickable { selectedTabIndexItem = index }
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(8.dp)
                         ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding(8.dp)
-                            ) {
-                                Text(
-                                    text = title,
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
+                            Text(
+                                text = title,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold
+                            )
                         }
                     }
                 }
+            }
 
 
-                // Content
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    when (selectedTabIndexItem) {
-                        0 -> ChoXacNhanScreen(makhachhang)
+            // Content
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                when (selectedTabIndexItem) {
+                    0 -> ChoXacNhanScreen(makhachhang)
                     1 -> ChoLayHangScreen(makhachhang)
 //                    2 -> ChoVanChuyenScreen(modifier = Modifier.fillMaxSize())
 //                    3 -> DangVanChuyenScreen(modifier = Modifier.fillMaxSize())
 //                    4 -> DangGiaoScreen(modifier = Modifier.fillMaxSize())
 //                    5 -> DaGiaoScreen(modifier = Modifier.fillMaxSize())
-                    }
                 }
             }
         }
@@ -163,7 +155,10 @@ fun ChoLayHangScreen(makhachhang: Int?) {
             isLoading.value = true // Bắt đầu tải dữ liệu
             errorMessage.value = null
             try {
-                hoaDonBanViewModel.getHoaDonTheoKhachHang(makhachhang, 2) // 1 là trạng thái "Chờ xác nhận"
+                hoaDonBanViewModel.getHoaDonTheoKhachHang(
+                    makhachhang,
+                    2
+                ) // 1 là trạng thái "Chờ xác nhận"
             } catch (e: Exception) {
                 errorMessage.value = "Lỗi khi tải dữ liệu: ${e.message}"
             } finally {
@@ -206,10 +201,12 @@ fun ChoLayHangScreen(makhachhang: Int?) {
 
             else -> {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize().padding(4.dp)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(4.dp)
                 ) {
                     items(danhSachHoaDonBan) { hoadon ->
-                        CardDonHang(hoadon)
+                        CardDonHang(hoadon, false)
                     }
                 }
             }
@@ -235,7 +232,10 @@ fun ChoXacNhanScreen(makhachhang: Int?) {
             isLoading.value = true // Bắt đầu tải dữ liệu
             errorMessage.value = null
             try {
-                hoaDonBanViewModel.getHoaDonTheoKhachHang(makhachhang, 1) // 1 là trạng thái "Chờ xác nhận"
+                hoaDonBanViewModel.getHoaDonTheoKhachHang(
+                    makhachhang,
+                    1
+                ) // 1 là trạng thái "Chờ xác nhận"
             } catch (e: Exception) {
                 errorMessage.value = "Lỗi khi tải dữ liệu: ${e.message}"
             } finally {
@@ -278,10 +278,12 @@ fun ChoXacNhanScreen(makhachhang: Int?) {
 
             else -> {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize().padding(4.dp)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(4.dp)
                 ) {
                     items(danhSachHoaDonBan) { hoadon ->
-                        CardDonHang(hoadon)
+                        CardDonHang(hoadon, true)
                     }
                 }
             }

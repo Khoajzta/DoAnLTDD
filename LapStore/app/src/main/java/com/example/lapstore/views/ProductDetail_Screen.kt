@@ -107,7 +107,7 @@ fun ProductDetail_Screen(
     LaunchedEffect(id) {
         if (id.isNotEmpty()) {
             viewModel.getSanPhamById(id)
-            hinhAnhViewModel.getHinhAnhTheoSanPham(id)
+            hinhAnhViewModel.getHinhAnhTheoSanPham(id.toInt())
         }
     }
     SideEffect {

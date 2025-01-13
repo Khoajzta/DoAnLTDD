@@ -78,7 +78,7 @@ fun CartScreen(
 
     // Biến lưu trạng thái checkbox của từng sản phẩm
     val selectedItems = remember { mutableStateMapOf<Int, Boolean>() }
-
+    //MaSanPham, Soluong, MaGioHang
     val selectedProducts = remember { mutableListOf<Triple<Int, Int, Int>>() }
 
     var showDialog by remember { mutableStateOf(false) }
@@ -263,7 +263,8 @@ fun CartScreen(
                                                         selectedProducts[index] = Triple(giohang.MaSanPham, soLuong, giohang.MaGioHang)
                                                     }
 
-                                                    calculateTotalPrice() // Tính lại tổng tiền
+                                                    calculateTotalPrice()
+                                                    gioHangViewModel.updateAllGioHang()// Tính lại tổng tiền
                                                 }
                                             }
                                         ) {
@@ -282,7 +283,8 @@ fun CartScreen(
                                                         selectedProducts[index] = Triple(giohang.MaSanPham, soLuong, giohang.MaGioHang)
                                                     }
 
-                                                    calculateTotalPrice() // Tính lại tổng tiền
+                                                    calculateTotalPrice()
+                                                    gioHangViewModel.updateAllGioHang()// Tính lại tổng tiền
                                                 }
                                             }
                                         ) {
