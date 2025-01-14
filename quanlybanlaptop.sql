@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th1 14, 2025 lúc 06:48 AM
+-- Thời gian đã tạo: Th1 14, 2025 lúc 11:44 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -61,7 +61,25 @@ CREATE TABLE `chitiethoadonban` (
 INSERT INTO `chitiethoadonban` (`MaChiTietHoaDonBan`, `MaHoaDonBan`, `MaSanPham`, `SoLuong`, `DonGia`, `GiamGia`) VALUES
 (2, 1, 1, 2, 18000000, 0),
 (3, 1, 2, 6, 8990000, 0),
-(4, 2, 1, 1, 18000000, 0);
+(4, 2, 1, 1, 18000000, 0),
+(5, 3, 1, 2, 18000000, 0),
+(6, 4, 3, 3, 17290000, 0),
+(7, 4, 3, 1, 17290000, 0),
+(8, 4, 3, 3, 17290000, 0),
+(9, 4, 3, 1, 17290000, 0),
+(10, 5, 1, 1, 18000000, 0),
+(11, 5, 2, 5, 8990000, 0),
+(12, 6, 2, 1, 8990000, 0),
+(13, 6, 1, 1, 18000000, 0),
+(14, 7, 1, 1, 18000000, 0),
+(15, 8, 1, 1, 18000000, 0),
+(16, 8, 2, 1, 8990000, 0),
+(17, 9, 1, 3, 18000000, 0),
+(18, 10, 1, 1, 18000000, 0),
+(19, 11, 1, 1, 18000000, 0),
+(20, 12, 2, 1, 8990000, 0),
+(21, 12, 3, 1, 17290000, 0),
+(22, 12, 1, 2, 18000000, 0);
 
 -- --------------------------------------------------------
 
@@ -83,8 +101,8 @@ CREATE TABLE `diachi` (
 --
 
 INSERT INTO `diachi` (`MaDiaChi`, `ThongTinDiaChi`, `TenNguoiNhan`, `SoDienThoai`, `MaKhachHang`, `MacDinh`) VALUES
-(1, 'Số 102 ấp Đông B', 'Anh A', '0901234545', 1, 1),
-(2, 'Số 102 ấp Đông A', '', '', 1, 0);
+(1, 'Số 102 ấp Đông B', 'Anh B', '0901234545', 1, 1),
+(2, '1266 huỳnh tấn phát', 'huỳnh nhựt khoa', '0383184941', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -148,8 +166,8 @@ CREATE TABLE `hoadonban` (
 --
 
 INSERT INTO `hoadonban` (`MaHoaDonBan`, `MaKhachHang`, `NgayDatHang`, `MaDiaChi`, `TongTien`, `PhuongThucThanhToan`, `TrangThai`) VALUES
-(1, 1, '2025-01-14 00:00:00', 1, 89970000, 'Thanh toán khi nhận hàng', '1'),
-(2, 1, '2025-01-14 00:00:00', 1, 18030000, 'Thanh toán khi nhận hàng', '1');
+(11, 1, '2025-01-14 00:00:00', 2, 18030000, 'Thanh toán khi nhận hàng', '2'),
+(12, 1, '2025-01-14 00:00:00', 1, 62310000, 'Thanh toán khi nhận hàng', '5');
 
 -- --------------------------------------------------------
 
@@ -171,7 +189,8 @@ CREATE TABLE `khachhang` (
 --
 
 INSERT INTO `khachhang` (`MaKhachHang`, `HoTen`, `GioiTinh`, `NgaySinh`, `Email`, `SoDienThoai`) VALUES
-(1, 'hahaha', 'Nam', '1990-05-11', 'a.@.gmail.com', '0901234545');
+(1, 'hahaha', 'Nam', '1990-05-11', 'a.@.gmail.com', '0901234545'),
+(3, '', '', '0000-00-00', '', '');
 
 -- --------------------------------------------------------
 
@@ -263,7 +282,7 @@ CREATE TABLE `taikhoan` (
 --
 
 INSERT INTO `taikhoan` (`TenTaiKhoan`, `MaKhachHang`, `MatKhau`, `TrangThai`) VALUES
-('nguyenvana', 1, '123', 1);
+('nguyenvana', 1, '12345678', 1);
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -364,19 +383,19 @@ ALTER TABLE `binhluandanhgia`
 -- AUTO_INCREMENT cho bảng `chitiethoadonban`
 --
 ALTER TABLE `chitiethoadonban`
-  MODIFY `MaChiTietHoaDonBan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `MaChiTietHoaDonBan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT cho bảng `diachi`
 --
 ALTER TABLE `diachi`
-  MODIFY `MaDiaChi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `MaDiaChi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT cho bảng `giohang`
 --
 ALTER TABLE `giohang`
-  MODIFY `MaGioHang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `MaGioHang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT cho bảng `hinhanh`
@@ -388,13 +407,13 @@ ALTER TABLE `hinhanh`
 -- AUTO_INCREMENT cho bảng `hoadonban`
 --
 ALTER TABLE `hoadonban`
-  MODIFY `MaHoaDonBan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `MaHoaDonBan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT cho bảng `khachhang`
 --
 ALTER TABLE `khachhang`
-  MODIFY `MaKhachHang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `MaKhachHang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT cho bảng `loaisanpham`
