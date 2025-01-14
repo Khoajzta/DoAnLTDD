@@ -15,6 +15,7 @@ import com.example.lapstore.views.CartManagementSection
 import com.example.lapstore.views.HomeScreen
 import com.example.lapstore.views.LoginScreen
 import com.example.lapstore.views.ProductDetail_Screen
+import com.example.lapstore.views.UpdateDiaChiScreen
 
 sealed class NavRoute(val route: String) {
     object HOME : NavRoute("home_screen")
@@ -27,6 +28,8 @@ sealed class NavRoute(val route: String) {
     object QUANLYDONHANG : NavRoute("quanlydonhang_screen")
     object DIACHISCREEN : NavRoute("diachi_screen")
     object ADDDIACHI : NavRoute("adddiachi_screen")
+    object UPDATEDIACHI : NavRoute("updatediachi_screen")
+    object SEARCHSCREEN : NavRoute("searchscreen_screen")
 }
 
 
@@ -180,6 +183,22 @@ fun NavgationGraph(
         ) { backStackEntry ->
             val makhachhang = backStackEntry.arguments?.getInt("makhachhang") ?: 0
             AddDiaChiScreen(navController, makhachhang)
+        }
+
+        composable(
+            route = "${NavRoute.UPDATEDIACHI.route}?makhachhang={makhachhang}&madiachi={madiachi}",
+            arguments = listOf(
+                navArgument("makhachhang") { type = NavType.IntType },
+                navArgument("madiachi") { type = NavType.IntType }
+            )
+        ) { backStackEntry ->
+            val makhachhang = backStackEntry.arguments?.getInt("makhachhang") ?: 0
+            val madiachi = backStackEntry.arguments?.getInt("madiachi") ?: 0
+            UpdateDiaChiScreen(navController,makhachhang,madiachi)
+        }
+
+        composable(NavRoute.SEARCHSCREEN.route) {
+            SearchScreen(navController)
         }
 
     }

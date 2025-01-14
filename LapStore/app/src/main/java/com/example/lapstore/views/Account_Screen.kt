@@ -75,6 +75,11 @@ fun AcccountScreen(
     navController: NavHostController,
     tentaikhoan: String
 ) {
+    val systemUiController = rememberSystemUiController()
+    SideEffect {
+        systemUiController.setStatusBarColor(color = Color.Red, darkIcons = false)
+    }
+
     // Lấy ViewModel
     val taiKhoanViewModel: TaiKhoanViewModel = viewModel()
 
@@ -335,16 +340,15 @@ fun AccountInfoSection(
                             snackbarMessage.value = "Email không được để trống!"
                             showSnackbar.value = true
                         } else {
-                            khachhangviewModel.updateKhachHang(
-                                KhachHang(
-                                    MaKhachHang = khachhang.MaKhachHang,
-                                    HoTen = hoTen.value,
-                                    GioiTinh = gioiTinh.value,
-                                    NgaySinh = "${selectedYear.value}-${selectedMonth.value}-${selectedDay.value}",
-                                    Email = email.value,
-                                    SoDienThoai = soDienThoai.value
-                                )
+                            var khachHang = KhachHang(
+                                MaKhachHang = khachhang.MaKhachHang,
+                                HoTen = hoTen.value,
+                                GioiTinh = gioiTinh.value,
+                                NgaySinh = "${selectedYear.value}-${selectedMonth.value}-${selectedDay.value}",
+                                Email = email.value,
+                                SoDienThoai = soDienThoai.value
                             )
+                            khachhangviewModel.updateKhachHang(khachHang)
                             snackbarMessage.value = "Cập nhật thành công!"
                             showSnackbar.value = true
                         }

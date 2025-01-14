@@ -1,4 +1,5 @@
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -147,6 +148,7 @@ fun CartScreen(
                             } else {
                                 navController.navigate("${NavRoute.PAYSCREEN.route}?selectedProducts=${selectedProductsString}&tongtien=${totalPrice}&tentaikhoan=${tentaikhoan}")
                             }
+                            Log.d("fdf",selectedProductsString)
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
                         shape = RoundedCornerShape(12.dp)

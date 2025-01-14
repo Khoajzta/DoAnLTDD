@@ -17,11 +17,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.lapstore.models.DiaChi
 import com.example.lapstore.models.KhachHang
 
 @Composable
-fun DiaChiCard(diachi:DiaChi){
+fun DiaChiCard(
+    diachi:DiaChi,
+    navController: NavHostController
+){
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,7 +53,7 @@ fun DiaChiCard(diachi:DiaChi){
                 TextButton(
                     shape = RoundedCornerShape(10.dp),
                     onClick = {
-
+                        navController.navigate("${NavRoute.UPDATEDIACHI.route}?makhachhang=${diachi.MaKhachHang}&madiachi=${diachi.MaDiaChi}")
                     }
                 ) {
                     Text(
@@ -74,8 +78,8 @@ fun DiaChiCard(diachi:DiaChi){
             if(diachi.MacDinh==1){
                 Text(
                     "Mặc đinh",
-                    fontSize = 15.sp,
-                    modifier = Modifier.border(1.dp, Color.Red)
+                    fontSize = 13.sp,
+                    modifier = Modifier.border(1.dp, Color.Red, shape = RoundedCornerShape(10.dp))
                         .padding(2.dp),
                     color = Color.Red
                 )

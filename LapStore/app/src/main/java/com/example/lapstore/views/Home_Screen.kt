@@ -4,6 +4,7 @@ import NavRoute
 import ProductCard
 import SanPhamViewModel
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -210,7 +211,11 @@ fun HomeScreen(
                                 },
                                 modifier = Modifier
                                     .height(50.dp)
-                                    .fillMaxWidth(),
+                                    .fillMaxWidth().clickable(
+                                        onClick = {
+                                            navController.navigate(NavRoute.SEARCHSCREEN.route)
+                                        }
+                                    ),
                                 textStyle = TextStyle(
                                     color = Color.Black,
                                     fontSize = 16.sp

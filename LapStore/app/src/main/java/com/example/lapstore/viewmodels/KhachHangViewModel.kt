@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.lapstore.api.QuanLyBanLaptopRetrofitClient
+import com.example.lapstore.models.DiaChi
 import com.example.lapstore.models.KhachHang
 import com.example.lapstore.models.SanPham
 import kotlinx.coroutines.Dispatchers
@@ -46,11 +47,11 @@ class KhachHangViewModel: ViewModel() {
         }
     }
 
-    fun updateKhachHang(khachHang: KhachHang) {
+    fun updateKhachHang(khachhang: KhachHang) {
         viewModelScope.launch {
             try {
                 val response = withContext(Dispatchers.IO) {
-                    QuanLyBanLaptopRetrofitClient.khachHangAPIService.updateKhachHang(khachHang)
+                    QuanLyBanLaptopRetrofitClient.khachHangAPIService.updateKhachHang(khachhang)
                 }
                 khachhangUpdateResult = if (response.success) {
                     "Cập nhật thành công: ${response.message}"
@@ -58,8 +59,8 @@ class KhachHangViewModel: ViewModel() {
                     "Cập nhật thất bại: ${response.message}"
                 }
             } catch (e: Exception) {
-                khachhangUpdateResult = "Lỗi khi cập nhật thông tin cá nhân: ${e.message}"
-                Log.e("KhachHang Error", "Lỗi khi cập nhật thông tin cá nhaan: ${e.message}")
+                khachhangUpdateResult = "Lỗi khi cập nhật khách hàng: ${e.message}"
+                Log.e("GioHang Error", "Lỗi khi cập nhật khách hàng: ${e.message}")
             }
         }
     }

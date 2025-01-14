@@ -35,6 +35,8 @@ class SanPhamViewModel : ViewModel() {
     var sanPham by mutableStateOf<SanPham?>(null)
         private set
 
+    var danhSachSearch by mutableStateOf<List<SanPham>>(emptyList())
+
     private val _danhsachSanPham = MutableStateFlow<List<SanPham>>(emptyList())
     val danhsachSanPham: StateFlow<List<SanPham>> get() = _danhsachSanPham
 
@@ -103,6 +105,23 @@ class SanPhamViewModel : ViewModel() {
                 _danhsachSanPham.update { currentList -> currentList + sanPham }
             } catch (e: Exception) {
                 Log.e("SanPhamViewModel", "Error getting SanPham", e)
+            }
+        }
+    }
+
+    fun getSanPhamTheoSearch(search:String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            isLoading = true
+            errorMessage = null
+            try {
+                val response = QuanLyBanLaptopRetrofitClient.sanphamAPIService.searchSanPham(search)
+                danhSachSearch = response.sanpham
+
+            } catch (e: Exception) {
+                errorMessage = e.message
+                Log.e("SanPhamViewModel", "Error fetching products", e)
+            } finally {
+                isLoading = false
             }
         }
     }

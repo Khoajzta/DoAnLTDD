@@ -31,4 +31,7 @@ interface SanPhamAPIService{
     suspend fun getSanPhamById(
         @Query("MaSanPham") MaSanPham: String
     ): SanPham
+
+    @GET("SanPham/searchTenSanPham.php")
+    suspend fun searchSanPham(@Query("search") search: String): SanPhamResponse
 }

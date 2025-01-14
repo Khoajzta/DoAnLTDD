@@ -1,6 +1,7 @@
 import com.example.lapstore.models.DiaChi
 import com.example.lapstore.models.GioHang
 import com.example.lapstore.models.SanPham
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -14,6 +15,10 @@ data class DiaChiResponse(
 data class addDiaChiResponse(
     val success: Boolean,
     val message: String
+)
+
+data class DeleteDiaChiRequest(
+    val MaDiaChi: Int
 )
 
 interface DiaChiAPIService{
@@ -38,8 +43,18 @@ interface DiaChiAPIService{
         @Body diachi: DiaChi
     ): addDiaChiResponse
 
-    @PUT("GioHang/update.php")
-    suspend fun updateGioHang(
-        @Body gioHang: GioHang
+    @PUT("DiaChi/update.php")
+    suspend fun updateDiaChi(
+        @Body diachi: DiaChi
     ): addDiaChiResponse
+
+    @PUT("DiaChi/updatediachimacdinh.php")
+    suspend fun updateDiaChiMacDinh(
+        @Body makhachhang: Int
+    ): addDiaChiResponse
+
+    @POST("DiaChi/delete.php")
+    suspend fun deleteDiaChi(
+        @Body MaDiaChi: DeleteDiaChiRequest
+    ): Response<ApiResponse>
 }
