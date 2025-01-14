@@ -12,6 +12,10 @@ import retrofit2.http.Query
 data class SanPhamResponse(
     val sanpham: List<SanPham>
 )
+data class SeachSanphamResponse(
+    val status: String,
+    val data: List<SanPham>
+)
 
 
 interface SanPhamAPIService{
@@ -27,4 +31,15 @@ interface SanPhamAPIService{
     @GET("SanPhamapi/searchSanPham.php")
     fun searchSanPham(@Query("search") search: String): Call<SanPhamResponse>
 
+<<<<<<< Updated upstream
+=======
+    @GET("SanPham/show.php")
+    suspend fun getSanPhamById(
+        @Query("id") id: String
+    ): SanPham
+
+    @GET("SanPham/searchTenSanPham.php")
+    suspend fun searchTenSanPham(@Query("query") query: String): SeachSanphamResponse
+
+>>>>>>> Stashed changes
 }
