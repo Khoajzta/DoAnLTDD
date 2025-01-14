@@ -29,6 +29,7 @@ $hoadon->MaKhachHang = $data->MaKhachHang;
 $hoadon->NgayDatHang = $data->NgayDatHang;
 $hoadon->MaDiaChi = $data->MaDiaChi;
 $hoadon->TongTien = $data->TongTien;
+$hoadon->PhuongThucThanhToan = $data->PhuongThucThanhToan;
 $hoadon->TrangThai = $data->TrangThai;
 
 // Cập nhật hóa đơn bán

@@ -8,11 +8,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lapstore.api.QuanLyBanLaptopRetrofitClient
 import com.example.lapstore.models.ChiTietHoaDonBan
+import com.example.lapstore.models.HinhAnh
 import com.example.lapstore.models.HoaDonBan
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ChiTietHoaDonBanViewmodel:ViewModel() {
     var chitiethoadonAddResult by mutableStateOf("")
+
+    var danhsachchitethoadon by mutableStateOf<List<ChiTietHoaDonBan>>(emptyList())
 
     fun addHoaDon(chitiethoadonban: ChiTietHoaDonBan) {
         viewModelScope.launch {
@@ -26,6 +33,20 @@ class ChiTietHoaDonBanViewmodel:ViewModel() {
                 }
             } catch (e: Exception) {
                 Log.e("AddToCart", "Lỗi kết nối: ${e.message}")
+            }
+        }
+    }
+
+    fun getChiTietHoaDonTheoMaHoaDon(mahoadon: Int) {
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.chiTietHoaDonBanAPIService.getChiTietHoaDoByMaHoaDon(mahoadon)
+                }
+                danhsachchitethoadon = response.chitiethoadonban
+            } catch (e: Exception) {
+                // Xử lý lỗi nếu có
+                Log.e("HinhAnhError", "Lỗi khi lấy hình ảnh: ${e.message}")
             }
         }
     }

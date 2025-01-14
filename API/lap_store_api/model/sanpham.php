@@ -34,7 +34,7 @@ class SanPham
 
     public function GetAllSanPham()
     {
-        $query = "SELECT * FROM SanPham sp 
+        $query = "SELECT sp.*,ha.DuongDan FROM SanPham sp 
               join hinhanh ha on sp.HinhAnh = ha.MaHinhAnh";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
@@ -42,19 +42,20 @@ class SanPham
     }
 
     public function GetSanPhamById()
-    {
-        $query = "SELECT * 
-                  FROM SanPham sp 
-                  join hinhanh ha on sp.HinhAnh = ha.MaHinhAnh
-                  WHERE sp.MaSanPham = ? LIMIT 1";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(1, $this->MaSanPham);
-        $stmt->execute();
-        // Lấy kết quả
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+{
+    $query = "SELECT sp.*, ha.DuongDan FROM SanPham sp 
+              JOIN hinhanh ha ON sp.HinhAnh = ha.MaHinhAnh
+              WHERE sp.MaSanPham = ? LIMIT 1";
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(1, $this->MaSanPham);
+    $stmt->execute();
 
+    // Lấy kết quả
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($row) {
         // Gán giá trị từ kết quả vào các thuộc tính của đối tượng
-        $this->TenSanPham = $row['TenSanPham'] ?? null;  // Sử dụng giá trị mặc định nếu không có giá trị
+        $this->TenSanPham = $row['TenSanPham'] ?? null;
         $this->MaLoaiSanPham = $row['MaLoaiSanPham'] ?? null;
         $this->CPU = $row['CPU'] ?? null;
         $this->RAM = $row['RAM'] ?? null;
@@ -67,7 +68,15 @@ class SanPham
         $this->MoTa = $row['MoTa'] ?? null;
         $this->HinhAnh = $row['DuongDan'] ?? null;
         $this->TrangThai = $row['TrangThai'] ?? null;
+    } else {
+        // Không tìm thấy sản phẩm, có thể thông báo lỗi
+        echo "Sản phẩm không tồn tại.";
+        return false;
     }
+
+    // Giải phóng bộ nhớ
+    unset($row);
+}
 
     public function GetSanPhamBySearch($searchTerm)
     {

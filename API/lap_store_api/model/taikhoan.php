@@ -52,8 +52,6 @@ class TaiKhoan{
         }
     }
     
-    
-
     public function AddTaiKhoan(){
         $query = "INSERT INTO taikhoan SET TenTaiKhoan =:TenTaiKhoan ,  MaKhachHang =:MaKhachHang, MatKhau =:MatKhau";
 

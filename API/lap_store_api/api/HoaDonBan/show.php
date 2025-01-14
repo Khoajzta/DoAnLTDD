@@ -27,6 +27,7 @@ if ($hoadon->MaHoaDonBan) {
         'NgayDatHang' => $hoadon->NgayDatHang,
         'MaDiaChi' => $hoadon->MaDiaChi,
         'TongTien' => $hoadon->TongTien,
+        'PhuongThucThanhToan' => $hoadon->PhuongThucThanhToan,
         'TrangThai' => $hoadon->TrangThai
     );
 

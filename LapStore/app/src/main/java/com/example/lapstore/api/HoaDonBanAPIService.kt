@@ -1,9 +1,11 @@
 
+import com.example.lapstore.models.DiaChi
 import com.example.lapstore.models.HoaDonBan
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Query
 
 data class addHoaDonBanResponse(
@@ -16,6 +18,10 @@ data class HoaDonBanResponse(
 )
 
 data class MaHoaDonBanResponse(
+    val MaHoaDonBan: Int
+)
+
+data class HoaDonDeleteRequest(
     val MaHoaDonBan: Int
 )
 
@@ -32,7 +38,13 @@ interface HoaDonBanAPIService{
         @Query("TrangThai") TrangThai: Int
     ): HoaDonBanResponse
 
-    @GET("path/to/laymahoadonbanlonnhat.php")
-    suspend fun getMaxMaHoaDonBan(): MaHoaDonBanResponse
+    @POST("HoaDonBan/delete.php")
+    suspend fun deleteHoaDon(
+        @Body deleteRequest: HoaDonDeleteRequest
+    ): Response<ApiResponse>
 
+    @PUT("HoaDonBan/update.php")
+    suspend fun updateHoaDon(
+        @Body hoadon: HoaDonBan
+    ): addHoaDonBanResponse
 }

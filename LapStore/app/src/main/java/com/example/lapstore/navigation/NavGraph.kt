@@ -30,6 +30,7 @@ sealed class NavRoute(val route: String) {
     object ADDDIACHI : NavRoute("adddiachi_screen")
     object UPDATEDIACHI : NavRoute("updatediachi_screen")
     object SEARCHSCREEN : NavRoute("searchscreen_screen")
+    object HOADONDETAILSCREEN : NavRoute("hoadondetailscreen_screen")
 }
 
 
@@ -199,6 +200,14 @@ fun NavgationGraph(
 
         composable(NavRoute.SEARCHSCREEN.route) {
             SearchScreen(navController)
+        }
+
+        composable(
+            route = "${NavRoute.HOADONDETAILSCREEN.route}?madonhang={madonhang}",
+            arguments = listOf(navArgument("madonhang") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val madonhang = backStackEntry.arguments?.getInt("madonhang") ?: 0
+            DonHangDetailScreen(navController, madonhang)
         }
 
     }

@@ -14,7 +14,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object Constants {
-    const val BASE_URL = "https://f2aa-2402-800-6315-ddaf-14a4-6c86-de1c-4a20.ngrok-free.app/lap_store_api/api/"
+    const val BASE_URL = "http://10.0.2.2/lap_store_api/api/"
 }
 
 object QuanLyBanLaptopRetrofitClient {

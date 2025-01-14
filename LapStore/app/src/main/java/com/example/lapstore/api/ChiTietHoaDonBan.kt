@@ -10,16 +10,18 @@ data class addChiTietHoaDonBanResponse(
     val success: Boolean,
     val message: String
 )
+data class ChiTietHoaDonBanResponse(
+    val chitiethoadonban: List<ChiTietHoaDonBan>
+)
+
 interface ChiTietHoaDonBanAPIService{
     @POST("ChiTietHoaDonBan/create.php")
     suspend fun addChiTietHoaDonBan(
         @Body chitiethoadonban: ChiTietHoaDonBan
     ): addChiTietHoaDonBanResponse
 
-    @GET("HoaDonBan/getHoaDonBanByKhachHang.php")
-    suspend fun getHoaDoByKhachHang(
-        @Query("MaKhachHang") MaKhachHang: Int,
-        @Query("TrangThai") TrangThai: Int
-    ): HoaDonBanResponse
-
+    @GET("ChiTietHoaDonBan/laychitiethoadontheomahoadon.php")
+    suspend fun getChiTietHoaDoByMaHoaDon(
+        @Query("MaHoaDonBan") MaHoaDonBan: Int,
+    ): ChiTietHoaDonBanResponse
 }

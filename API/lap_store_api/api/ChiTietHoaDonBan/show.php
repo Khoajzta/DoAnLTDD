@@ -1,50 +1,34 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-header('Content-Type: application/json');
+    header('Access-Control-Allow-Origin:*');
+    header('Content-Type: application/json');
 
-// Kết nối đến database và model
-include_once('../../config/database.php');
-include_once('../../model/chitiethoadonban.php');  // Sử dụng lớp ChiTietHoaDonBan
+    include_once('../../config/database.php');
+    include_once('../../model/chitiethoadonban.php');
 
-// Tạo đối tượng database và kết nối
-$database = new Database();
-$conn = $database->Connect(); // Lấy kết nối PDO
+    // Tạo đối tượng database và kết nối
+    $database = new database();
+    $conn = $database->Connect(); // Lấy kết nối PDO
 
-// Khởi tạo lớp ChiTietHoaDonBan với kết nối PDO
-$chitiet = new ChiTietHoaDonBan($conn);
+    // Khởi tạo lớp ChiTietHoaDonBan với kết nối PDO
+    $chitiethoadonban = new ChiTietHoaDonBan($conn);
 
-// Lấy MaHoaDonBan từ URL (phương thức GET)
-$chitiet->MaHoaDonBan = isset($_GET['id']) ? $_GET['id'] : die(json_encode(array('message' => 'Mã hóa đơn không tồn tại.')));
+    // Kiểm tra và ép kiểu MaChiTietHoaDonBan về int
+    $chitiethoadonban->MaChiTietHoaDonBan = isset($_GET['MaChiTietHoaDonBan']) ? (int) $_GET['MaChiTietHoaDonBan'] : die();
 
-// Lấy thông tin chi tiết hóa đơn bán
-$getAllDetails = $chitiet->getDetailById(); // Phương thức lấy chi tiết hóa đơn
+    // Lấy chi tiết theo MaChiTietHoaDonBan
+    $chitiethoadonban->getDetailById();
 
-// Kiểm tra nếu có dữ liệu
-$num = $getAllDetailById->rowCount();
-if ($num > 0) {
-    $chitiet_array = [];
-    $chitiet_array['chitiethoadonban'] = [];
+    // Chuyển kết quả thành mảng và encode JSON
+    $chitiethoadonban_item = array(
+        'MaChiTietHoaDonBan' => $chitiethoadonban->MaChiTietHoaDonBan,
+        'MaHoaDonBan' => $chitiethoadonban->MaHoaDonBan,
+        'MaSanPham' => $chitiethoadonban->MaSanPham,
+        'SoLuong' => $chitiethoadonban->SoLuong,
+        'DonGia' => $chitiethoadonban->DonGia,
+        'ThanhTien' => $chitiethoadonban->ThanhTien,
+        'GiamGia' => $chitiethoadonban->GiamGia
+    );
 
-    while ($row = $getAllDetailById->fetch(PDO::FETCH_ASSOC)) {
-        extract($row);
-
-        $chitiet_item = array(
-            'MaChiTietHoaDonBan' => $MaChiTietHoaDonBan,
-            'MaHoaDonBan' => $MaHoaDonBan,
-            'MaSanPham' => $MaSanPham,
-            'SoLuong' => $SoLuong,
-            'DonGia' => $DonGia,
-            'ThanhTien' => $ThanhTien,
-            'GiamGia' => $GiamGia
-        );
-
-        array_push($chitiet_array['chitiethoadonban'], $chitiet_item);
-    }
-
-    // Xuất dữ liệu dạng JSON
-    echo json_encode($chitiet_array, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-} else {
-    // Nếu không có chi tiết hóa đơn bán
-    echo json_encode(array('message' => 'Không có chi tiết hóa đơn bán cho hóa đơn này.'));
-}
+    // Trả về kết quả dưới dạng JSON
+    echo json_encode($chitiethoadonban_item, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 ?>

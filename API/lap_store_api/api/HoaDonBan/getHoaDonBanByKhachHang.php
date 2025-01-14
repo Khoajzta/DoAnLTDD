@@ -38,6 +38,7 @@ if ($numHoaDonByKhachHang > 0) {
             'NgayDatHang'=> $NgayDatHang,
             'MaDiaChi'=> $MaDiaChi,
             'TongTien'=> $TongTien,
+            'PhuongThucThanhToan'=> $PhuongThucThanhToan,
             'TrangThai'=> $TrangThai, // Đảm bảo TrangThai là kiểu Int
         );
         array_push($hoadonbykhachhang_array['hoadonban'], $hoadon_item);

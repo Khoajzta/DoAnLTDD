@@ -4,9 +4,11 @@ import CardDonHang
 import android.icu.text.SimpleDateFormat
 import android.util.Log
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,6 +17,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -31,6 +35,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.lapstore.models.HoaDonBan
 import com.example.lapstore.viewmodels.HoaDonBanVỉewModel
 import java.util.Locale
 
@@ -54,7 +61,7 @@ import java.util.Locale
 @Composable
 fun CartManagementSection(navController: NavHostController, makhachhang: Int?) {
     var selectedTabIndexItem by remember { mutableStateOf(0) }
-    val tabs = listOf("Chờ xác nhận", "Chờ lấy hàng", "Chờ giao hàng", "Đã giao")
+    val tabs = listOf("Chờ xác nhận", "Chờ lấy hàng", "Chờ giao hàng", "Đã giao", "Đã hủy")
     Scaffold(
         containerColor = Color.White,
         topBar = {
@@ -118,57 +125,53 @@ fun CartManagementSection(navController: NavHostController, makhachhang: Int?) {
                 }
             }
 
-
             // Content
             Box(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
                 when (selectedTabIndexItem) {
-                    0 -> ChoXacNhanScreen(makhachhang)
-                    1 -> ChoLayHangScreen(makhachhang)
-//                    2 -> ChoVanChuyenScreen(modifier = Modifier.fillMaxSize())
-//                    3 -> DangVanChuyenScreen(modifier = Modifier.fillMaxSize())
-//                    4 -> DangGiaoScreen(modifier = Modifier.fillMaxSize())
-//                    5 -> DaGiaoScreen(modifier = Modifier.fillMaxSize())
+                    0 -> ChoXacNhanScreen(navController,makhachhang)
+                    1 -> ChoLayHangScreen(navController,makhachhang)
+                    4 -> HuyDonHangScreen(navController,makhachhang)
                 }
             }
         }
     }
 }
 
+
 @Composable
-fun ChoLayHangScreen(makhachhang: Int?) {
+fun HuyDonHangScreen(navController: NavHostController,makhachhang: Int?) {
     // Lấy ViewModel
     val hoaDonBanViewModel: HoaDonBanVỉewModel = viewModel()
 
+    // Quan sát danh sách hóa đơn thông qua StateFlow
+    val danhSachHoaDonBan by hoaDonBanViewModel.danhSachHoaDonCuaKhachHang.collectAsState()
+
     // Trạng thái đang tải
     val isLoading = remember { mutableStateOf(false) }
+
     // Trạng thái lỗi (nếu có)
     val errorMessage = remember { mutableStateOf<String?>(null) }
 
-    Log.d("MaKhachHang", makhachhang.toString())
+    // Hàm gọi API để lấy danh sách hóa đơn
 
-    // Gọi API nếu mã khách hàng không null
     if (makhachhang != null) {
-        LaunchedEffect(makhachhang) {
-            isLoading.value = true // Bắt đầu tải dữ liệu
-            errorMessage.value = null
-            try {
-                hoaDonBanViewModel.getHoaDonTheoKhachHang(
-                    makhachhang,
-                    2
-                ) // 1 là trạng thái "Chờ xác nhận"
-            } catch (e: Exception) {
-                errorMessage.value = "Lỗi khi tải dữ liệu: ${e.message}"
-            } finally {
-                isLoading.value = false // Kết thúc tải dữ liệu
-            }
+        isLoading.value = true // Bắt đầu tải dữ liệu
+        errorMessage.value = null
+        try {
+            hoaDonBanViewModel.getHoaDonTheoKhachHang(
+                makhachhang,
+                5
+            )
+        } catch (e: Exception) {
+            errorMessage.value = "Lỗi khi tải dữ liệu: ${e.message}"
+        } finally {
+            isLoading.value = false // Kết thúc tải dữ liệu
         }
     }
 
-    // Lấy danh sách hóa đơn của khách hàng
-    val danhSachHoaDonBan = hoaDonBanViewModel.danhSachHoaDonCuaKhachHang ?: emptyList()
 
     Box(
         modifier = Modifier
@@ -206,7 +209,7 @@ fun ChoLayHangScreen(makhachhang: Int?) {
                         .padding(4.dp)
                 ) {
                     items(danhSachHoaDonBan) { hoadon ->
-                        CardDonHang(hoadon, false)
+                        CardDonHang(navController,hoadon, false)
                     }
                 }
             }
@@ -214,38 +217,37 @@ fun ChoLayHangScreen(makhachhang: Int?) {
     }
 }
 
+
 @Composable
-fun ChoXacNhanScreen(makhachhang: Int?) {
-    // Lấy ViewModel
+fun ChoLayHangScreen(navController: NavHostController,makhachhang: Int?) {
     val hoaDonBanViewModel: HoaDonBanVỉewModel = viewModel()
+
+    // Quan sát danh sách hóa đơn thông qua StateFlow
+    val danhSachHoaDonBan by hoaDonBanViewModel.danhSachHoaDonCuaKhachHang.collectAsState()
 
     // Trạng thái đang tải
     val isLoading = remember { mutableStateOf(false) }
+
     // Trạng thái lỗi (nếu có)
     val errorMessage = remember { mutableStateOf<String?>(null) }
 
-    Log.d("MaKhachHang", makhachhang.toString())
+    // Hàm gọi API để lấy danh sách hóa đơn
 
-    // Gọi API nếu mã khách hàng không null
     if (makhachhang != null) {
-        LaunchedEffect(makhachhang) {
-            isLoading.value = true // Bắt đầu tải dữ liệu
-            errorMessage.value = null
-            try {
-                hoaDonBanViewModel.getHoaDonTheoKhachHang(
-                    makhachhang,
-                    1
-                ) // 1 là trạng thái "Chờ xác nhận"
-            } catch (e: Exception) {
-                errorMessage.value = "Lỗi khi tải dữ liệu: ${e.message}"
-            } finally {
-                isLoading.value = false // Kết thúc tải dữ liệu
-            }
+        isLoading.value = true // Bắt đầu tải dữ liệu
+        errorMessage.value = null
+        try {
+            hoaDonBanViewModel.getHoaDonTheoKhachHang(
+                makhachhang,
+                2
+            )
+        } catch (e: Exception) {
+            errorMessage.value = "Lỗi khi tải dữ liệu: ${e.message}"
+        } finally {
+            isLoading.value = false // Kết thúc tải dữ liệu
         }
     }
 
-    // Lấy danh sách hóa đơn của khách hàng
-    val danhSachHoaDonBan = hoaDonBanViewModel.danhSachHoaDonCuaKhachHang ?: emptyList()
 
     Box(
         modifier = Modifier
@@ -283,13 +285,89 @@ fun ChoXacNhanScreen(makhachhang: Int?) {
                         .padding(4.dp)
                 ) {
                     items(danhSachHoaDonBan) { hoadon ->
-                        CardDonHang(hoadon, true)
+                        CardDonHang(navController,hoadon, false)
                     }
                 }
             }
         }
     }
 }
+
+@Composable
+fun ChoXacNhanScreen(navController: NavHostController,makhachhang: Int?) {
+    // Lấy ViewModel
+    val hoaDonBanViewModel: HoaDonBanVỉewModel = viewModel()
+
+    // Quan sát danh sách hóa đơn thông qua StateFlow
+    val danhSachHoaDonChoXacNhan by hoaDonBanViewModel.danhSachHoaDonCuaKhachHang.collectAsState()
+
+    // Trạng thái đang tải
+    val isLoading = remember { mutableStateOf(false) }
+
+    // Trạng thái lỗi (nếu có)
+    val errorMessage = remember { mutableStateOf<String?>(null) }
+
+    // Hàm gọi API để lấy danh sách hóa đơn
+
+    if (makhachhang != null) {
+        isLoading.value = true // Bắt đầu tải dữ liệu
+        errorMessage.value = null
+        try {
+            hoaDonBanViewModel.getHoaDonTheoKhachHang(
+                makhachhang,
+                1 // Trạng thái "Chờ xác nhận"
+            )
+        } catch (e: Exception) {
+            errorMessage.value = "Lỗi khi tải dữ liệu: ${e.message}"
+        } finally {
+            isLoading.value = false // Kết thúc tải dữ liệu
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(4.dp)
+    ) {
+        when {
+            isLoading.value -> {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+
+            errorMessage.value != null -> {
+                Text(
+                    text = errorMessage.value ?: "Đã xảy ra lỗi",
+                    color = Color.Red,
+                    modifier = Modifier.align(Alignment.Center),
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            danhSachHoaDonChoXacNhan.isEmpty() -> {
+                Text(
+                    text = "Không có hóa đơn nào đang chờ xác nhận.",
+                    modifier = Modifier.align(Alignment.Center),
+                    textAlign = TextAlign.Center,
+                )
+            }
+
+            else -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(4.dp)
+                ) {
+                    items(danhSachHoaDonChoXacNhan) { hoadon ->
+                        CardDonHang(navController,hoadon, true)
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 @Composable
 fun formatDate(inputDate: String): String {

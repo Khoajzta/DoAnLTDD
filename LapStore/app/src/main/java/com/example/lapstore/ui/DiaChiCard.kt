@@ -24,7 +24,7 @@ import com.example.lapstore.models.KhachHang
 @Composable
 fun DiaChiCard(
     diachi:DiaChi,
-    navController: NavHostController
+    navController: NavHostController,
 ){
     Card(
         modifier = Modifier
@@ -34,6 +34,9 @@ fun DiaChiCard(
             containerColor = Color.White
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        onClick = {
+
+        }
     ) {
         Column (
             modifier = Modifier.padding(5.dp).padding(7.dp),

@@ -20,10 +20,12 @@ $hoadon = new HoaDonBan($conn);
 $data = json_decode(file_get_contents("php://input"));
 
 // Gán dữ liệu cho các thuộc tính của đối tượng
+$hoadon->MaHoaDonBan = $data->MaHoaDonBan;
 $hoadon->MaKhachHang = $data->MaKhachHang;
 $hoadon->NgayDatHang = $data->NgayDatHang;
 $hoadon->MaDiaChi = $data->MaDiaChi;
 $hoadon->TongTien = $data->TongTien;
+$hoadon->PhuongThucThanhToan = $data->PhuongThucThanhToan;
 $hoadon->TrangThai = $data->TrangThai;
 
 // Gọi hàm thêm mới hóa đơn bán

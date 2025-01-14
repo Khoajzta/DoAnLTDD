@@ -17,11 +17,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.lapstore.models.HoaDonBan
+import com.example.lapstore.viewmodels.DiaChiViewmodel
+import com.example.lapstore.viewmodels.HoaDonBanVỉewModel
 import com.example.lapstore.views.formatDate
 
 @Composable
-fun CardDonHang(hoaDonBan: HoaDonBan,ishuy:Boolean){
+fun CardDonHang(
+    navController: NavHostController,
+    hoaDonBan: HoaDonBan,
+    ishuy:Boolean,
+){
+    var hoaDonBanVỉewModel:HoaDonBanVỉewModel = viewModel()
+
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color.White
@@ -29,7 +39,10 @@ fun CardDonHang(hoaDonBan: HoaDonBan,ishuy:Boolean){
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
+        elevation = CardDefaults.cardElevation(4.dp),
+        onClick = {
+            navController.navigate("${NavRoute.HOADONDETAILSCREEN.route}?madonhang=${hoaDonBan.MaHoaDonBan}")
+        }
     ) {
         Row(
             modifier = Modifier
@@ -62,8 +75,9 @@ fun CardDonHang(hoaDonBan: HoaDonBan,ishuy:Boolean){
                             containerColor = Color.Red
                         ),
                         shape = RoundedCornerShape(10.dp),
-                        onClick = {
-                            // Hành động khi bấm nút Hủy
+                        onClick =  {
+                            var hoadonbannew = HoaDonBan(hoaDonBan.MaHoaDonBan,hoaDonBan.MaKhachHang,hoaDonBan.NgayDatHang,hoaDonBan.MaDiaChi,hoaDonBan.TongTien,hoaDonBan.PhuongThucThanhToan,5)
+                            hoaDonBanVỉewModel.updateHoaDonBan(hoadonbannew)
                         }
                     ) {
                         Text("Hủy")
@@ -72,6 +86,4 @@ fun CardDonHang(hoaDonBan: HoaDonBan,ishuy:Boolean){
             }
         }
     }
-
-
 }
