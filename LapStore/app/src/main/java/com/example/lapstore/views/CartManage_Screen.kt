@@ -35,6 +35,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -54,14 +55,21 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.lapstore.models.HoaDonBan
 import com.example.lapstore.viewmodels.HoaDonBanVỉewModel
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import java.util.Locale
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartManagementSection(navController: NavHostController, makhachhang: Int?) {
+    val systemUiController = rememberSystemUiController()
+
+    SideEffect {
+        systemUiController.setStatusBarColor(color = Color.White, darkIcons = false)
+    }
+
     var selectedTabIndexItem by remember { mutableStateOf(0) }
-    val tabs = listOf("Chờ xác nhận", "Chờ lấy hàng", "Chờ giao hàng", "Đã giao", "Đã hủy")
+    val tabs = listOf("Chờ xác nhận", "Chờ lấy hàng", "Chờ giao hàng", "Đã giao", "Chờ xác nhận hủy","Đã hủy")
     Scaffold(
         containerColor = Color.White,
         topBar = {
@@ -78,7 +86,7 @@ fun CartManagementSection(navController: NavHostController, makhachhang: Int?) {
                             navController.popBackStack()
                         }
                     ) {
-                        Icon(imageVector = Icons.Filled.ArrowBackIosNew, contentDescription = "")
+                        Icon(imageVector = Icons.Filled.ArrowBackIosNew, contentDescription = "", tint = Color.Red)
                     }
                 }
             )
@@ -133,16 +141,170 @@ fun CartManagementSection(navController: NavHostController, makhachhang: Int?) {
                 when (selectedTabIndexItem) {
                     0 -> ChoXacNhanScreen(navController,makhachhang)
                     1 -> ChoLayHangScreen(navController,makhachhang)
-                    4 -> HuyDonHangScreen(navController,makhachhang)
+                    2 -> ChoGiaoHangScreen(navController,makhachhang)
+                    3 -> DaGiaoHangScreen(navController,makhachhang)
+                    4 -> ChoXacNhanHuy(navController,makhachhang)
+                    5 -> HuyDonHangScreen(navController,makhachhang)
                 }
             }
         }
     }
 }
 
+@Composable
+fun DaGiaoHangScreen(navController: NavHostController, makhachhang: Int?) {
+    // Lấy ViewModel
+    val hoaDonBanViewModel: HoaDonBanVỉewModel = viewModel()
+
+    // Quan sát danh sách hóa đơn thông qua StateFlow
+    val danhSachHoaDonBan by hoaDonBanViewModel.danhSachHoaDonCuaKhachHang.collectAsState()
+
+    // Trạng thái đang tải
+    val isLoading = remember { mutableStateOf(false) }
+
+    // Trạng thái lỗi (nếu có)
+    val errorMessage = remember { mutableStateOf<String?>(null) }
+
+    // Hàm gọi API để lấy danh sách hóa đơn
+
+    if (makhachhang != null) {
+        isLoading.value = true // Bắt đầu tải dữ liệu
+        errorMessage.value = null
+        try {
+            hoaDonBanViewModel.getHoaDonTheoKhachHang(
+                makhachhang,
+                4
+            )
+        } catch (e: Exception) {
+            errorMessage.value = "Lỗi khi tải dữ liệu: ${e.message}"
+        } finally {
+            isLoading.value = false // Kết thúc tải dữ liệu
+        }
+    }
+
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(4.dp)
+    ) {
+        when {
+            isLoading.value -> {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+
+            errorMessage.value != null -> {
+                Text(
+                    text = errorMessage.value ?: "Đã xảy ra lỗi",
+                    color = Color.Red,
+                    modifier = Modifier.align(Alignment.Center),
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            danhSachHoaDonBan.isEmpty() -> {
+                Text(
+                    text = "Không có hóa đơn nào đã giao.",
+                    modifier = Modifier.align(Alignment.Center),
+                    textAlign = TextAlign.Center,
+                )
+            }
+
+            else -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(4.dp)
+                ) {
+                    items(danhSachHoaDonBan) { hoadon ->
+                        CardDonHang(navController,hoadon, false)
+                    }
+                }
+            }
+        }
+    }
+}
 
 @Composable
-fun HuyDonHangScreen(navController: NavHostController,makhachhang: Int?) {
+fun ChoGiaoHangScreen(navController: NavHostController, makhachhang: Int?) {
+    // Lấy ViewModel
+    val hoaDonBanViewModel: HoaDonBanVỉewModel = viewModel()
+
+    // Quan sát danh sách hóa đơn thông qua StateFlow
+    val danhSachHoaDonBan by hoaDonBanViewModel.danhSachHoaDonCuaKhachHang.collectAsState()
+
+    // Trạng thái đang tải
+    val isLoading = remember { mutableStateOf(false) }
+
+    // Trạng thái lỗi (nếu có)
+    val errorMessage = remember { mutableStateOf<String?>(null) }
+
+    // Hàm gọi API để lấy danh sách hóa đơn
+
+    if (makhachhang != null) {
+        isLoading.value = true // Bắt đầu tải dữ liệu
+        errorMessage.value = null
+        try {
+            hoaDonBanViewModel.getHoaDonTheoKhachHang(
+                makhachhang,
+                3
+            )
+        } catch (e: Exception) {
+            errorMessage.value = "Lỗi khi tải dữ liệu: ${e.message}"
+        } finally {
+            isLoading.value = false // Kết thúc tải dữ liệu
+        }
+    }
+
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(4.dp)
+    ) {
+        when {
+            isLoading.value -> {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+
+            errorMessage.value != null -> {
+                Text(
+                    text = errorMessage.value ?: "Đã xảy ra lỗi",
+                    color = Color.Red,
+                    modifier = Modifier.align(Alignment.Center),
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            danhSachHoaDonBan.isEmpty() -> {
+                Text(
+                    text = "Không có hóa đơn nào đang chờ giao.",
+                    modifier = Modifier.align(Alignment.Center),
+                    textAlign = TextAlign.Center,
+                )
+            }
+
+            else -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(4.dp)
+                ) {
+                    items(danhSachHoaDonBan) { hoadon ->
+                        CardDonHang(navController,hoadon, false)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ChoXacNhanHuy(navController: NavHostController, makhachhang: Int?) {
     // Lấy ViewModel
     val hoaDonBanViewModel: HoaDonBanVỉewModel = viewModel()
 
@@ -196,7 +358,85 @@ fun HuyDonHangScreen(navController: NavHostController,makhachhang: Int?) {
 
             danhSachHoaDonBan.isEmpty() -> {
                 Text(
-                    text = "Không có hóa đơn nào đang chờ xác nhận.",
+                    text = "Không có hóa đơn nào đang chờ xác nhận hủy.",
+                    modifier = Modifier.align(Alignment.Center),
+                    textAlign = TextAlign.Center,
+                )
+            }
+
+            else -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(4.dp)
+                ) {
+                    items(danhSachHoaDonBan) { hoadon ->
+                        CardDonHang(navController,hoadon, false)
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+
+@Composable
+fun HuyDonHangScreen(navController: NavHostController,makhachhang: Int?) {
+    // Lấy ViewModel
+    val hoaDonBanViewModel: HoaDonBanVỉewModel = viewModel()
+
+    // Quan sát danh sách hóa đơn thông qua StateFlow
+    val danhSachHoaDonBan by hoaDonBanViewModel.danhSachHoaDonCuaKhachHang.collectAsState()
+
+    // Trạng thái đang tải
+    val isLoading = remember { mutableStateOf(false) }
+
+    // Trạng thái lỗi (nếu có)
+    val errorMessage = remember { mutableStateOf<String?>(null) }
+
+    // Hàm gọi API để lấy danh sách hóa đơn
+
+    if (makhachhang != null) {
+        isLoading.value = true // Bắt đầu tải dữ liệu
+        errorMessage.value = null
+        try {
+            hoaDonBanViewModel.getHoaDonTheoKhachHang(
+                makhachhang,
+                6
+            )
+        } catch (e: Exception) {
+            errorMessage.value = "Lỗi khi tải dữ liệu: ${e.message}"
+        } finally {
+            isLoading.value = false // Kết thúc tải dữ liệu
+        }
+    }
+
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(4.dp)
+    ) {
+        when {
+            isLoading.value -> {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+
+            errorMessage.value != null -> {
+                Text(
+                    text = errorMessage.value ?: "Đã xảy ra lỗi",
+                    color = Color.Red,
+                    modifier = Modifier.align(Alignment.Center),
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            danhSachHoaDonBan.isEmpty() -> {
+                Text(
+                    text = "Không có hóa đơn nào đã hủy.",
                     modifier = Modifier.align(Alignment.Center),
                     textAlign = TextAlign.Center,
                 )
@@ -272,7 +512,7 @@ fun ChoLayHangScreen(navController: NavHostController,makhachhang: Int?) {
 
             danhSachHoaDonBan.isEmpty() -> {
                 Text(
-                    text = "Không có hóa đơn nào đang chờ xác nhận.",
+                    text = "Không có hóa đơn nào đang chờ lấy hàng.",
                     modifier = Modifier.align(Alignment.Center),
                     textAlign = TextAlign.Center,
                 )

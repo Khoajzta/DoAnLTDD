@@ -6,6 +6,6 @@ data class ChiTietHoaDonBan(
     var MaSanPham:Int,
     var SoLuong:Int,
     var DonGia:Int,
-    var ThanhTiren:Int,
+    var ThanhTien:Int,
     var GiamGia:Int
 )

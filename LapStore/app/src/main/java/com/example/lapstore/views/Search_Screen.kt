@@ -1,8 +1,9 @@
-
-
 import NavRoute
 import SanPhamViewModel
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,13 +17,23 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.SupportAgent
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -30,19 +41,29 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.findFirstRoot
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,6 +72,7 @@ import androidx.navigation.NavHostController
 import coil.EventListener
 import coil.compose.AsyncImage
 import com.example.lapstore.models.SanPham
+import com.example.lapstore.viewmodels.TaiKhoanViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 
@@ -58,19 +80,41 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchScreen(
     navController: NavHostController,
-){
+    tentaikhoan: String?
+) {
+    val systemUiController = rememberSystemUiController()
+    SideEffect {
+        systemUiController.setStatusBarColor(color = Color.Red, darkIcons = false)
+    }
+
+    var sanPhamViewModel:SanPhamViewModel = viewModel()
+    var taiKhoanViewModel:TaiKhoanViewModel = viewModel()
+
+    var taiKhoan = taiKhoanViewModel.taikhoan
+
+    taiKhoanViewModel.getTaiKhoanByTentaikhoan(tentaikhoan.toString())
+
+    val danhSachSanPham = sanPhamViewModel.danhSach
+
+    var timkiem by remember { mutableStateOf("") }
+
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
 
     Scaffold(
-        containerColor = Color.Red,
+        containerColor = Color.White,
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-
+                            navController.popBackStack()
                         }) {
                         Icon(
-                            imageVector = Icons.Filled.Menu,
+                            imageVector = Icons.Filled.ArrowBackIosNew,
                             contentDescription = "",
                             tint = Color.White
                         )
@@ -97,15 +141,20 @@ fun SearchScreen(
                     Row(
                         modifier = Modifier.fillMaxWidth()
                     ) {
-
                         OutlinedTextField(
-                            value = "",
+                            value = timkiem,
                             onValueChange = {
-
+                                timkiem = it
+                                if (timkiem.isBlank()) {
+                                    sanPhamViewModel.clearSanPhamSearch() // Hàm này cần được thêm vào ViewModel để làm rỗng danh sách
+                                } else {
+                                    sanPhamViewModel.getSanPhamSearch(timkiem)
+                                }
                             },
                             modifier = Modifier
                                 .height(50.dp)
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                .focusRequester(focusRequester),
                             textStyle = TextStyle(
                                 color = Color.Black,
                                 fontSize = 16.sp
@@ -139,59 +188,63 @@ fun SearchScreen(
 
             )
 
-        }
+        },
     ) {
-        Column(
+        LazyColumn(
             modifier = Modifier.padding(it)
-        ) {  }
-    }
-
-    val sanPhamViewModel:SanPhamViewModel= viewModel()
-    var sanphamlist by remember { mutableStateOf<List<SanPham>>(emptyList()) }
-    val systemUiController = rememberSystemUiController()
-    SideEffect {
-        systemUiController.setStatusBarColor(color = Color.Red, darkIcons = false)
-    }
-
- LazyColumn (){
-     items(sanphamlist){
-         SanPhamSearhCard(sanPham = it, onClick = {
-             navController.navigate(NavRoute.PRODUCTDETAILSCREEN.route)
-         })
-     }
- }
-
-
-}
-@Composable
-fun SanPhamSearhCard(sanPham: SanPham,onClick:()->Unit){
-
-    Card (modifier = Modifier
-        .padding(8.dp)
-        .fillMaxWidth()
-        , colors = CardDefaults.cardColors(
-            containerColor = Color.White,
-            contentColor = Color.Black
-        ),
-        onClick = onClick,
-        shape = RectangleShape,
-        elevation = CardDefaults.cardElevation(2.dp)){
-        Column (
-            modifier = Modifier.padding(10.dp)
-        ){
-            AsyncImage(model = sanPham.HinhAnh,
-                contentDescription = null,
-                modifier = Modifier.padding(8.dp).size(100.dp),
-                contentScale = ContentScale.Fit)
-            Row (modifier = Modifier.padding(5.dp)){
-                Text(sanPham.TenSanPham)
-                Spacer(modifier = Modifier.padding(5.dp))
-                Text(sanPham.MoTa, color = Color.LightGray, fontSize = 15.sp)
-                Spacer(modifier = Modifier.padding(5.dp))
-                Text("Giá : ${sanPham.Gia}", color =Color.Red, fontSize = 20.sp )
+        ) {
+            items(danhSachSanPham){sanpham->
+                if(taiKhoan!=null)
+                    SanPhamSearchCard(sanpham,taiKhoan.MaKhachHang,tentaikhoan,navController)
+                else
+                    SanPhamSearchCard(sanpham,null,tentaikhoan,navController)
             }
         }
 
+    }
+}
 
+@Composable
+fun SanPhamSearchCard(
+    sanpham: SanPham,
+    makhachhang:Int?,
+    tentaikhoan:String?,
+    navController: NavHostController
+) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White,
+            contentColor = Color.Black
+        ),
+        onClick = {
+            if(tentaikhoan != null)
+                navController.navigate(NavRoute.PRODUCTDETAILSCREEN.route + "?id=${sanpham.MaSanPham}&makhachhang=${makhachhang}&tentaikhoan=${tentaikhoan}")
+            else
+                navController.navigate(NavRoute.PRODUCTDETAILSCREEN.route + "?id=${sanpham.MaSanPham}&makhachhang=${makhachhang}")
+        },
+        shape = RoundedCornerShape(8.dp),
+        elevation = CardDefaults.cardElevation(4.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            AsyncImage(
+                model = sanpham.HinhAnh,
+                contentDescription = sanpham.TenSanPham,
+                modifier = Modifier
+                    .size(100.dp)
+                    .clip(RoundedCornerShape(8.dp)),
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Column {
+                Text(text = sanpham.TenSanPham, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                Text(text = formatGiaTien(sanpham.Gia), color = Color.Red, fontSize = 16.sp)
+            }
+        }
     }
 }

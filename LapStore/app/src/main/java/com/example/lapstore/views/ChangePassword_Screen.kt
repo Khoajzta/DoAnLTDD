@@ -154,7 +154,7 @@ fun ChangePasswordSection(
                     onClick = {
                         showDialog = false
                         if (taikhoan != null) {
-                            var taikhoan = TaiKhoan(tentaikhoan, taikhoan.MaKhachHang, matkhaumoi)
+                            var taikhoan = TaiKhoan(tentaikhoan, taikhoan.MaKhachHang, matkhaumoi,0,1)
                             taiKhoanViewModel.updateTaiKhoan(taikhoan)
                         }
                     }

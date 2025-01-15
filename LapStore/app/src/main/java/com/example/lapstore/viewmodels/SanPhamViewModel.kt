@@ -20,6 +20,7 @@ import kotlinx.coroutines.withContext
 
 class SanPhamViewModel : ViewModel() {
     var danhSachAllSanPham by mutableStateOf<List<SanPham>>(emptyList())
+    var danhSachSanPhamTrongHoaDon by mutableStateOf<List<SanPham>>(emptyList())
 
     var danhSachSanPhamVanPhong by mutableStateOf<List<SanPham>>(emptyList())
         private set
@@ -35,7 +36,7 @@ class SanPhamViewModel : ViewModel() {
     var sanPham by mutableStateOf<SanPham?>(null)
         private set
 
-    var danhSachSearch by mutableStateOf<List<SanPham>>(emptyList())
+    var danhSach by mutableStateOf<List<SanPham>>(emptyList())
 
     private val _danhsachSanPham = MutableStateFlow<List<SanPham>>(emptyList())
     val danhsachSanPham: StateFlow<List<SanPham>> get() = _danhsachSanPham
@@ -109,20 +110,33 @@ class SanPhamViewModel : ViewModel() {
         }
     }
 
-    fun getSanPhamTheoSearch(search:String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            isLoading = true
-            errorMessage = null
+    fun getSanPhamSearch(search:String) {
+        viewModelScope.launch {
             try {
-                val response = QuanLyBanLaptopRetrofitClient.sanphamAPIService.searchSanPham(search)
-                danhSachSearch = response.sanpham
-
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.sanphamAPIService.searchSanPham(search)
+                }
+                danhSach = response.sanpham
             } catch (e: Exception) {
-                errorMessage = e.message
-                Log.e("SanPhamViewModel", "Error fetching products", e)
-            } finally {
-                isLoading = false
+                Log.e("SanPham Error", "Lỗi khi lấy sản phẩm: ${e.message}")
             }
         }
+    }
+
+    fun getSanPhamTrongHoaDon(MaHoaDonBan: Int) {
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.sanphamAPIService.getSanPhamTheoHoaDon(MaHoaDonBan)
+                }
+                danhSachSanPhamTrongHoaDon = response.sanpham
+            } catch (e: Exception) {
+                Log.e("Sản Phẩm Error", "Lỗi khi lấy Sản Phẩm")
+            }
+        }
+    }
+
+    fun clearSanPhamSearch() {
+        danhSach = emptyList()
     }
 }

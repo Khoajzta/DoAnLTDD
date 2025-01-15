@@ -32,6 +32,11 @@ interface SanPhamAPIService{
         @Query("MaSanPham") MaSanPham: String
     ): SanPham
 
-    @GET("SanPham/searchTenSanPham.php")
+    @GET("SanPham/searchSanPham.php")
     suspend fun searchSanPham(@Query("search") search: String): SanPhamResponse
+
+    @GET("SanPham/laysanphamtheohoadon.php")
+    suspend fun getSanPhamTheoHoaDon(
+        @Query("MaHoaDonBan") MaHoaDonBan: Int
+    ): SanPhamResponse
 }

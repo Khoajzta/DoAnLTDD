@@ -58,9 +58,10 @@ class DiaChiViewmodel:ViewModel() {
                 val response = withContext(Dispatchers.IO) {
                     QuanLyBanLaptopRetrofitClient.diaChiAPIService.getDiaChiByMaKhachHang(MaKhachHang)
                 }
-                listDiacHi = response.diachi
+                listDiacHi = response.diachi ?: emptyList() // Gán giá trị mảng rỗng nếu response.diachi null
             } catch (e: Exception) {
                 Log.e("Dia Chi Error", "Lỗi khi lấy dia chi: ${e.message}")
+                listDiacHi = emptyList()
             }
         }
     }

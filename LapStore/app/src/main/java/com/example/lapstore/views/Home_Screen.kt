@@ -58,9 +58,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -85,6 +90,15 @@ fun HomeScreen(
     viewModel: SanPhamViewModel,
     tentaikhoan:String?,
 ) {
+    var isFocused by remember { mutableStateOf(false) }
+
+    // Điều hướng khi TextField được focus
+    LaunchedEffect(isFocused) {
+        if (isFocused) {
+            navController.navigate(NavRoute.SEARCHSCREEN.route + "?tentaikhoan=${tentaikhoan}")
+        }
+    }
+
     val systemUiController = rememberSystemUiController()
     val keyboardController = LocalSoftwareKeyboardController.current
     val scope = rememberCoroutineScope()
@@ -211,11 +225,9 @@ fun HomeScreen(
                                 },
                                 modifier = Modifier
                                     .height(50.dp)
-                                    .fillMaxWidth().clickable(
-                                        onClick = {
-                                            navController.navigate(NavRoute.SEARCHSCREEN.route)
-                                        }
-                                    ),
+                                    .fillMaxWidth().onFocusChanged { focusState ->
+                                        isFocused = focusState.isFocused  // Chỉ chuyển trang khi TextField được nhấn vào
+                                    },
                                 textStyle = TextStyle(
                                     color = Color.Black,
                                     fontSize = 16.sp
@@ -270,8 +282,9 @@ fun HomeScreen(
                                 IconButton(
                                     modifier = Modifier.size(45.dp),
                                     onClick = {
-                                        navController.popBackStack()
-                                        navController.navigate(NavRoute.HOME.route)
+                                        navController.navigate("${NavRoute.HOME.route}?tentaikhoan=${tentaikhoan}"){
+                                            popUpTo(0) { inclusive = true }
+                                        }
                                     }
                                 ) {
                                     Icon(

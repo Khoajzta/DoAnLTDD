@@ -28,7 +28,13 @@ class HoaDonBanVỉewModel: ViewModel() {
     private val _danhSachHoaDonCuaKhachHang = MutableStateFlow<List<HoaDonBan>>(emptyList())
     val danhSachHoaDonCuaKhachHang: StateFlow<List<HoaDonBan>> = _danhSachHoaDonCuaKhachHang
 
+    private val _danhSachHoaDonTheoTrangThai = MutableStateFlow<List<HoaDonBan>>(emptyList())
+    val danhSachHoaDonTheoTrangThai: StateFlow<List<HoaDonBan>> = _danhSachHoaDonTheoTrangThai
+
     var maHoaDonBan by mutableStateOf(0)
+
+    var HoaDonBan by mutableStateOf<HoaDonBan?>(null)
+        private set
 
     // Lấy hóa đơn theo khách hàng
     fun getHoaDonTheoKhachHang(MaKhachHang: Int, TrangThai: Int) {
@@ -41,6 +47,20 @@ class HoaDonBanVỉewModel: ViewModel() {
             } catch (e: Exception) {
                 Log.e("HoaDon Error", "Lỗi khi lấy hoadon: ${e.message}")
                 _danhSachHoaDonCuaKhachHang.value = emptyList() // Gán danh sách rỗng khi có lỗi
+            }
+        }
+    }
+
+    fun getHoaDonTheoTrangThai(TrangThai: Int) {
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.hoaDonBanAPIService.getHoaDonTheoTrangThai(TrangThai)
+                }
+                _danhSachHoaDonTheoTrangThai.value = response.hoadonban ?: emptyList()
+            } catch (e: Exception) {
+                Log.e("HoaDon Error", "Lỗi khi lấy hoadon: ${e.message}")
+                _danhSachHoaDonTheoTrangThai.value = emptyList()
             }
         }
     }
@@ -100,6 +120,16 @@ class HoaDonBanVỉewModel: ViewModel() {
             } catch (e: Exception) {
                 hoadonAddResult = "Lỗi khi cập nhật giỏ hàng: ${e.message}"
                 Log.e("GioHang Error", "Lỗi khi cập nhật giỏ hàng: ${e.message}")
+            }
+        }
+    }
+
+    fun getHoaDonByMaHoaDon(mahoadon: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                HoaDonBan = QuanLyBanLaptopRetrofitClient.hoaDonBanAPIService.getHoaDonByMaHoaDon(mahoadon)
+            } catch (e: Exception) {
+                Log.e("HoaDonBan ViewModel", "Error getting HoaDon", e)
             }
         }
     }

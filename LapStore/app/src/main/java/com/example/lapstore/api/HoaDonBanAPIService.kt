@@ -47,4 +47,14 @@ interface HoaDonBanAPIService{
     suspend fun updateHoaDon(
         @Body hoadon: HoaDonBan
     ): addHoaDonBanResponse
+
+    @GET("HoaDonBan/show.php")
+    suspend fun getHoaDonByMaHoaDon(
+        @Query("MaHoaDonBan") MaHoaDonBan: Int
+    ): HoaDonBan
+
+    @GET("HoaDonBan/layhoadontheotrangthai.php")
+    suspend fun getHoaDonTheoTrangThai(
+        @Query("TrangThai") TrangThai: Int
+    ): HoaDonBanResponse
 }

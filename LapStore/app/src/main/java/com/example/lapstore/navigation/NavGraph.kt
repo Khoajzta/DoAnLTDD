@@ -11,6 +11,7 @@ import com.example.lapstore.viewmodels.TaiKhoanViewModel
 import com.example.lapstore.views.AcccountScreen
 import com.example.lapstore.views.AddDiaChiScreen
 import com.example.lapstore.views.AddressManagementScreen
+import com.example.lapstore.views.AdminScreen
 import com.example.lapstore.views.CartManagementSection
 import com.example.lapstore.views.HomeScreen
 import com.example.lapstore.views.LoginScreen
@@ -30,7 +31,8 @@ sealed class NavRoute(val route: String) {
     object ADDDIACHI : NavRoute("adddiachi_screen")
     object UPDATEDIACHI : NavRoute("updatediachi_screen")
     object SEARCHSCREEN : NavRoute("searchscreen_screen")
-    object HOADONDETAILSCREEN : NavRoute("hoadondetailscreen_screen")
+    object HOADONDETAILSCREEN : NavRoute("hoadondetail_screen")
+    object ADMINSCREEN : NavRoute("admin_screen")
 }
 
 
@@ -198,16 +200,31 @@ fun NavgationGraph(
             UpdateDiaChiScreen(navController,makhachhang,madiachi)
         }
 
-        composable(NavRoute.SEARCHSCREEN.route) {
-            SearchScreen(navController)
+        composable(
+            route = NavRoute.PRODUCTDETAILSCREEN.route + "?tentaikhoan={tentaikhoan}",
+            arguments = listOf(
+                navArgument("makhachhang") { nullable = true },
+                navArgument("tentaikhoan") { type = NavType.StringType }
+            )
+        ) {
+            val tentaikhoan = it.arguments?.getString("tentaikhoan")
+            SearchScreen(navController,tentaikhoan)
         }
 
         composable(
-            route = "${NavRoute.HOADONDETAILSCREEN.route}?madonhang={madonhang}",
-            arguments = listOf(navArgument("madonhang") { type = NavType.IntType })
+            route = "${NavRoute.HOADONDETAILSCREEN.route}?madonhang={madonhang}&tongtien={tongtien}",
+            arguments = listOf(
+                navArgument("madonhang") { type = NavType.IntType },
+                navArgument("tongtien") { type = NavType.IntType },
+            )
         ) { backStackEntry ->
             val madonhang = backStackEntry.arguments?.getInt("madonhang") ?: 0
-            DonHangDetailScreen(navController, madonhang)
+            val tongtien = backStackEntry.arguments?.getInt("tongtien") ?: 0
+            DonHangDetailScreen(navController, madonhang,tongtien)
+        }
+
+        composable(NavRoute.ADMINSCREEN.route) {
+            AdminScreen(navController)
         }
 
     }
