@@ -14,7 +14,7 @@ data class addHoaDonBanResponse(
 )
 
 data class HoaDonBanResponse(
-    val hoadonban: List<HoaDonBan>? // Có thể API trả về null nếu không có dữ liệu
+    val hoadonban: List<HoaDonBan>?
 )
 
 data class MaHoaDonBanResponse(

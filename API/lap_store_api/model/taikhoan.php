@@ -6,6 +6,8 @@ class TaiKhoan{
     public $TenTaiKhoan;
     public $MaKhachHang;
     public $MatKhau;
+    public $LoaiTaiKhoan;
+    public $TrangThai;
 
     //connect db
 
@@ -32,6 +34,8 @@ class TaiKhoan{
         $this->TenTaiKhoan = $row['TenTaiKhoan'];
         $this->MaKhachHang = $row['MaKhachHang'];
         $this->MatKhau = $row['MatKhau'];
+        $this->LoaiTaiKhoan = $row['LoaiTaiKhoan'];
+        $this->TrangThai = $row['TrangThai'];
     }
 
     public function KiemTraDangNhap() {

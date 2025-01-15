@@ -21,6 +21,8 @@
         'TenTaiKhoan'=> $taikhoan->TenTaiKhoan,
         'MaKhachHang'=> $taikhoan->MaKhachHang,
         'MatKhau'=> $taikhoan->MatKhau,
+        'LoaiTaiKhoan'=> $taikhoan->LoaiTaiKhoan,
+        'TrangThai'=> $taikhoan->TrangThai,
     );
 
     print_r(json_encode($taikhoan_item,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));

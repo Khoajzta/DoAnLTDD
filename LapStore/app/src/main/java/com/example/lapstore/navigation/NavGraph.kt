@@ -201,14 +201,19 @@ fun NavgationGraph(
         }
 
         composable(
-            route = NavRoute.PRODUCTDETAILSCREEN.route + "?tentaikhoan={tentaikhoan}",
+            route = NavRoute.SEARCHSCREEN.route + "?makhachhang={makhachhang}&tentaikhoan={tentaikhoan}",
             arguments = listOf(
                 navArgument("makhachhang") { nullable = true },
                 navArgument("tentaikhoan") { type = NavType.StringType }
             )
         ) {
-            val tentaikhoan = it.arguments?.getString("tentaikhoan")
-            SearchScreen(navController,tentaikhoan)
+            val tentaikhoan = it.arguments?.getString("tentaikhoan")?:null
+            val makhachhang = it.arguments?.getString("makhachhang")?:null
+            SearchScreen(navController,makhachhang, tentaikhoan)
+        }
+
+        composable(NavRoute.SEARCHSCREEN.route) {
+            SearchScreen(navController,null,null)
         }
 
         composable(

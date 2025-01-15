@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th1 14, 2025 lúc 11:44 AM
+-- Thời gian đã tạo: Th1 15, 2025 lúc 05:32 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -66,20 +66,8 @@ INSERT INTO `chitiethoadonban` (`MaChiTietHoaDonBan`, `MaHoaDonBan`, `MaSanPham`
 (6, 4, 3, 3, 17290000, 0),
 (7, 4, 3, 1, 17290000, 0),
 (8, 4, 3, 3, 17290000, 0),
-(9, 4, 3, 1, 17290000, 0),
-(10, 5, 1, 1, 18000000, 0),
-(11, 5, 2, 5, 8990000, 0),
-(12, 6, 2, 1, 8990000, 0),
-(13, 6, 1, 1, 18000000, 0),
-(14, 7, 1, 1, 18000000, 0),
-(15, 8, 1, 1, 18000000, 0),
-(16, 8, 2, 1, 8990000, 0),
-(17, 9, 1, 3, 18000000, 0),
-(18, 10, 1, 1, 18000000, 0),
-(19, 11, 1, 1, 18000000, 0),
-(20, 12, 2, 1, 8990000, 0),
-(21, 12, 3, 1, 17290000, 0),
-(22, 12, 1, 2, 18000000, 0);
+(26, 16, 1, 3, 18000000, 0),
+(27, 16, 4, 5, 17390000, 0);
 
 -- --------------------------------------------------------
 
@@ -102,7 +90,8 @@ CREATE TABLE `diachi` (
 
 INSERT INTO `diachi` (`MaDiaChi`, `ThongTinDiaChi`, `TenNguoiNhan`, `SoDienThoai`, `MaKhachHang`, `MacDinh`) VALUES
 (1, 'Số 102 ấp Đông B', 'Anh B', '0901234545', 1, 1),
-(2, '1266 huỳnh tấn phát', 'huỳnh nhựt khoa', '0383184941', 1, 0);
+(6, '1250 Huynh Tan Phat  Q7', 'Nguyen Thi B', '0909909890', 1, 1),
+(7, '1250 huynh tan phat', 'Nguyen Thi B', '0918836151', 3, 1);
 
 -- --------------------------------------------------------
 
@@ -118,6 +107,13 @@ CREATE TABLE `giohang` (
   `TrangThai` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `giohang`
+--
+
+INSERT INTO `giohang` (`MaGioHang`, `MaKhachHang`, `MaSanPham`, `SoLuong`, `TrangThai`) VALUES
+(31, 1, 1, 2, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -127,6 +123,7 @@ CREATE TABLE `giohang` (
 CREATE TABLE `hinhanh` (
   `MaHinhAnh` int(11) NOT NULL,
   `DuongDan` varchar(500) DEFAULT NULL,
+  `MacDinh` int(1) NOT NULL,
   `MaSanPham` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -134,16 +131,21 @@ CREATE TABLE `hinhanh` (
 -- Đang đổ dữ liệu cho bảng `hinhanh`
 --
 
-INSERT INTO `hinhanh` (`MaHinhAnh`, `DuongDan`, `MaSanPham`) VALUES
-(1, 'https://i.postimg.cc/1zQSrgFQ/011vn-88f465ddba134eb2854752de1a3910f7-1024x1024.webp', 1),
-(2, 'https://i.postimg.cc/qMQfcXvZ/ava-c8a92176125145c5a743e6a836ebef42-1024x1024.png', 2),
-(3, 'https://i.postimg.cc/50S1K8vJ/asus-gaming-vivobook-k3605zf-rp634w-d59d42a7451f48d48cce32645f03f90c-1024x1024.webp', 3),
-(4, 'https://i.postimg.cc/Bb83SkkS/km095w-9e26278b10f642f18dd9855f30828c43-1024x1024.webp', 4),
-(5, 'https://i.postimg.cc/cCQM92V9/03-fx507-1-8a446be6628445bc8586d1bec682e63a-1024x1024.webp', 1),
-(6, 'https://i.postimg.cc/cCQM92V9/03-fx507-1-8a446be6628445bc8586d1bec682e63a-1024x1024.webp', 1),
-(7, 'https://i.postimg.cc/cCQM92V9/03-fx507-1-8a446be6628445bc8586d1bec682e63a-1024x1024.webp', 1),
-(8, 'https://i.postimg.cc/cCQM92V9/03-fx507-1-8a446be6628445bc8586d1bec682e63a-1024x1024.webp', 1),
-(9, 'https://i.postimg.cc/cCQM92V9/03-fx507-1-8a446be6628445bc8586d1bec682e63a-1024x1024.webp', 1);
+INSERT INTO `hinhanh` (`MaHinhAnh`, `DuongDan`, `MacDinh`, `MaSanPham`) VALUES
+(1, 'https://i.postimg.cc/50S1K8vJ/asus-gaming-vivobook-k3605zf-rp634w-d59d42a7451f48d48cce32645f03f90c-1024x1024.webp', 0, 3),
+(2, 'https://i.postimg.cc/cCQM92V9/03-fx507-1-8a446be6628445bc8586d1bec682e63a-1024x1024.webp', 1, 1),
+(3, 'https://i.postimg.cc/Bb83SkkS/km095w-9e26278b10f642f18dd9855f30828c43-1024x1024.webp', 0, 4),
+(4, 'https://i.postimg.cc/1zQSrgFQ/011vn-88f465ddba134eb2854752de1a3910f7-1024x1024.webp', 1, 2),
+(10, 'https://i.postimg.cc/sfY5hB88/lp040w-124541e5ca0947f78a7483bc988e44b4-grande.gif', 0, 1),
+(11, 'https://i.postimg.cc/J0pnQWjy/03-fx507-1-8a446be6628445bc8586d1bec682e63a-1024x1024.webp', 0, 1),
+(12, 'https://i.postimg.cc/PrFJpTt9/w800-3-7b88f352fe074af08e16a4c76346e998-1024x1024.png', 0, 1),
+(13, 'https://i.postimg.cc/sgQX5qxX/w800-2-60d5e4b1f652414596396e545c9f4f83-1024x1024.png', 0, 1),
+(14, 'https://i.postimg.cc/zGsf77Hk/w800-1-0296ad913a7b44798b11e6e6ff965348-1024x1024.png', 0, 1),
+(15, 'https://i.postimg.cc/brVyt9jk/rvn-laptop-msi-modern-14-c11m-011vn-2-cbbe9ef2b217457fa884468dd735dd22-8d6ccca29ff844fca4ebc312713a1.png', 0, 2),
+(16, 'https://i.postimg.cc/Fs1sQ8jZ/rvn-laptop-msi-modern-14-c11m-011vn-3-61f7caf6e5db4867941fca086d789f06-bbf4fdc78bba4cfe98aa979b3cbb3.png', 0, 2),
+(17, 'https://i.postimg.cc/cJ7dmSSs/asus-gaming-vivobook-k3605z-k3605v-product-photo-2k-bf5a83b87cf249fd8f86309daa5b170f-1024x1024.png', 1, 3),
+(18, 'https://i.postimg.cc/FR7NQJSK/asus-gaming-vivobook-k3605z-k3605v-product-photo-2k-indie-black-08-1-099bd8beb0514f36b6e6f8511129a4.png', 0, 3),
+(19, 'https://i.postimg.cc/BZP4YHsY/asus-gaming-vivobook-k3605z-k3605v-product-photo-2k-indie-black-12-ab9df3ac16b543d99b1ceeae874a1ade.png', 0, 3);
 
 -- --------------------------------------------------------
 
@@ -154,7 +156,7 @@ INSERT INTO `hinhanh` (`MaHinhAnh`, `DuongDan`, `MaSanPham`) VALUES
 CREATE TABLE `hoadonban` (
   `MaHoaDonBan` int(11) NOT NULL,
   `MaKhachHang` int(11) DEFAULT NULL,
-  `NgayDatHang` datetime NOT NULL,
+  `NgayDatHang` date NOT NULL,
   `MaDiaChi` int(11) DEFAULT NULL,
   `TongTien` int(11) DEFAULT NULL,
   `PhuongThucThanhToan` varchar(50) NOT NULL,
@@ -166,8 +168,7 @@ CREATE TABLE `hoadonban` (
 --
 
 INSERT INTO `hoadonban` (`MaHoaDonBan`, `MaKhachHang`, `NgayDatHang`, `MaDiaChi`, `TongTien`, `PhuongThucThanhToan`, `TrangThai`) VALUES
-(11, 1, '2025-01-14 00:00:00', 2, 18030000, 'Thanh toán khi nhận hàng', '2'),
-(12, 1, '2025-01-14 00:00:00', 1, 62310000, 'Thanh toán khi nhận hàng', '5');
+(16, 3, '2025-01-15', 7, 140980000, 'Chuyển khoản ngân hàng', '6');
 
 -- --------------------------------------------------------
 
@@ -189,8 +190,8 @@ CREATE TABLE `khachhang` (
 --
 
 INSERT INTO `khachhang` (`MaKhachHang`, `HoTen`, `GioiTinh`, `NgaySinh`, `Email`, `SoDienThoai`) VALUES
-(1, 'hahaha', 'Nam', '1990-05-11', 'a.@.gmail.com', '0901234545'),
-(3, '', '', '0000-00-00', '', '');
+(1, 'Nguyễn Văn A', 'Nam', '1990-05-11', 'a.@.gmail.com', '0901234545'),
+(3, 'Nguyễn Thị B', 'Nữ', '0000-00-00', '', '1234567890');
 
 -- --------------------------------------------------------
 
@@ -242,27 +243,26 @@ CREATE TABLE `sanpham` (
   `TenSanPham` varchar(100) NOT NULL,
   `MaLoaiSanPham` int(11) DEFAULT NULL,
   `CPU` char(50) DEFAULT NULL,
-  `RAM` int(11) DEFAULT NULL,
+  `RAM` varchar(10) DEFAULT NULL,
   `CardManHinh` varchar(20) DEFAULT NULL,
-  `SSD` int(11) DEFAULT NULL,
+  `SSD` varchar(10) DEFAULT NULL,
   `ManHinh` char(50) DEFAULT NULL,
   `MaMauSac` int(11) DEFAULT NULL,
   `Gia` int(11) DEFAULT NULL,
   `SoLuong` int(11) DEFAULT NULL,
   `MoTa` text DEFAULT NULL,
-  `TrangThai` int(11) DEFAULT NULL,
-  `HinhAnh` int(11) DEFAULT NULL
+  `TrangThai` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `sanpham`
 --
 
-INSERT INTO `sanpham` (`MaSanPham`, `TenSanPham`, `MaLoaiSanPham`, `CPU`, `RAM`, `CardManHinh`, `SSD`, `ManHinh`, `MaMauSac`, `Gia`, `SoLuong`, `MoTa`, `TrangThai`, `HinhAnh`) VALUES
-(1, 'Laptop gaming ASUS TUF Gaming F15 FX507VV LP304W', 2, 'INTEL CORE I9 12900K', 8, 'RTX 4060', 512, '1920x1080', 2, 18000000, 2, 'ASUS Vivobook 16X K3605ZU RP296W là một chiếc laptop gaming tầm trung mới ra mắt của ASUS với thiết kế hiện đại, hiệu năng mạnh mẽ và mức giá hợp lý.', 1, 2),
-(2, 'Laptop MSI Modern 14 C11M 011VN', 1, 'Intel Core i3-1115G4 (up to 4.1Ghz, 6MB)', 8, 'Intel UHD Graphics', 512, '1920x1080', 1, 8990000, 20, 'Laptop văn phòng', 1, 1),
-(3, 'Laptop gaming ASUS Vivobook 16X K3605ZF RP634W', 2, 'AMD R77700M', 16, 'RTX 3050', 1024, '1920x1080', 1, 17290000, 5, 'ASUS Vivobook 16X K3605ZC RP564W là một chiếc laptop được thiết kế để đáp ứng nhu cầu giải trí và làm việc hiệu năng cao của người dùng. Với bộ vi xử lý Intel® Core™ i5 thế hệ 12 mạnh mẽ, card đồ họa NVIDIA® GeForce RTX™ 3050 4GB, màn hình 16 inch WUXGA 144Hz sắc nét và bàn phím backlit, Vivobook 16X K3605ZC RP564W là lựa chọn hoàn hảo cho game thủ và những người sáng tạo nội dung.', 1, 3),
-(4, 'Laptop ASUS Vivobook', 1, 'INTEL CORE I7 12500H', 16, 'INTEL ARISXE', 1024, '1920x1080', 1, 17390000, 5, 'ASUS Vivobook 16X K3605ZC RP564W là một chiếc laptop được thiết kế để đáp ứng nhu cầu giải trí và làm việc hiệu năng cao của người dùng. Với bộ vi xử lý Intel® Core™ i5 thế hệ 12 mạnh mẽ, card đồ họa NVIDIA® GeForce RTX™ 3050 4GB, màn hình 16 inch WUXGA 144Hz sắc nét và bàn phím backlit, Vivobook 16X K3605ZC RP564W là lựa chọn hoàn hảo cho game thủ và những người sáng tạo nội dung.', 1, 1);
+INSERT INTO `sanpham` (`MaSanPham`, `TenSanPham`, `MaLoaiSanPham`, `CPU`, `RAM`, `CardManHinh`, `SSD`, `ManHinh`, `MaMauSac`, `Gia`, `SoLuong`, `MoTa`, `TrangThai`) VALUES
+(1, 'Laptop gaming ASUS TUF Gaming F15 FX507VV LP304W', 2, 'INTEL CORE I9 12900K', 'RAM 8 GB', 'RTX 4060', 'SSD 512 GB', '1920x1080', 2, 18000000, 2, 'ASUS Vivobook 16X K3605ZU RP296W là một chiếc laptop gaming tầm trung mới ra mắt của ASUS với thiết kế hiện đại, hiệu năng mạnh mẽ và mức giá hợp lý.', 1),
+(2, 'Laptop MSI Modern 14 C11M 011VN', 1, 'Intel Core i3-1115G4 (up to 4.1Ghz, 6MB)', 'RAM 8 GB', 'Intel UHD Graphics', 'SSD 512 GB', '1920x1080', 1, 8990000, 20, 'Laptop văn phòng', 1),
+(3, 'Laptop gaming ASUS Vivobook 16X K3605ZF RP634W', 2, 'AMD R77700M', 'RAM 8 GB', 'RTX 3050', 'SSD 1TB', '1920x1080', 1, 17290000, 5, 'ASUS Vivobook 16X K3605ZC RP564W là một chiếc laptop được thiết kế để đáp ứng nhu cầu giải trí và làm việc hiệu năng cao của người dùng. Với bộ vi xử lý Intel® Core™ i5 thế hệ 12 mạnh mẽ, card đồ họa NVIDIA® GeForce RTX™ 3050 4GB, màn hình 16 inch WUXGA 144Hz sắc nét và bàn phím backlit, Vivobook 16X K3605ZC RP564W là lựa chọn hoàn hảo cho game thủ và những người sáng tạo nội dung.', 1),
+(4, 'Laptop ASUS Vivobook', 1, 'INTEL CORE I7 12500H', 'RAM 8 GB', 'INTEL ARISXE', 'SSD 1TB', '1920x1080', 1, 17390000, 5, 'ASUS Vivobook 16X K3605ZC RP564W là một chiếc laptop được thiết kế để đáp ứng nhu cầu giải trí và làm việc hiệu năng cao của người dùng. Với bộ vi xử lý Intel® Core™ i5 thế hệ 12 mạnh mẽ, card đồ họa NVIDIA® GeForce RTX™ 3050 4GB, màn hình 16 inch WUXGA 144Hz sắc nét và bàn phím backlit, Vivobook 16X K3605ZC RP564W là lựa chọn hoàn hảo cho game thủ và những người sáng tạo nội dung.', 1);
 
 -- --------------------------------------------------------
 
@@ -274,6 +274,7 @@ CREATE TABLE `taikhoan` (
   `TenTaiKhoan` varchar(50) NOT NULL,
   `MaKhachHang` int(11) NOT NULL,
   `MatKhau` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `LoaiTaiKhoan` int(1) NOT NULL,
   `TrangThai` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -281,8 +282,9 @@ CREATE TABLE `taikhoan` (
 -- Đang đổ dữ liệu cho bảng `taikhoan`
 --
 
-INSERT INTO `taikhoan` (`TenTaiKhoan`, `MaKhachHang`, `MatKhau`, `TrangThai`) VALUES
-('nguyenvana', 1, '12345678', 1);
+INSERT INTO `taikhoan` (`TenTaiKhoan`, `MaKhachHang`, `MatKhau`, `LoaiTaiKhoan`, `TrangThai`) VALUES
+('nguyenthib', 3, '1234', 0, 1),
+('nguyenvana', 1, '12345678', 1, 1);
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -383,31 +385,31 @@ ALTER TABLE `binhluandanhgia`
 -- AUTO_INCREMENT cho bảng `chitiethoadonban`
 --
 ALTER TABLE `chitiethoadonban`
-  MODIFY `MaChiTietHoaDonBan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `MaChiTietHoaDonBan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT cho bảng `diachi`
 --
 ALTER TABLE `diachi`
-  MODIFY `MaDiaChi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `MaDiaChi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT cho bảng `giohang`
 --
 ALTER TABLE `giohang`
-  MODIFY `MaGioHang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `MaGioHang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT cho bảng `hinhanh`
 --
 ALTER TABLE `hinhanh`
-  MODIFY `MaHinhAnh` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `MaHinhAnh` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT cho bảng `hoadonban`
 --
 ALTER TABLE `hoadonban`
-  MODIFY `MaHoaDonBan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `MaHoaDonBan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT cho bảng `khachhang`

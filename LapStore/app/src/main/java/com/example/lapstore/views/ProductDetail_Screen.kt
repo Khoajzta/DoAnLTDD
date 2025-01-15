@@ -57,6 +57,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -88,6 +89,8 @@ fun ProductDetail_Screen(
     viewModel: SanPhamViewModel,
     hinhAnhViewModel: HinhAnhViewModel,
 ) {
+    var isFocused by remember { mutableStateOf(false) }
+
     val systemUiController = rememberSystemUiController()
     var gioHangViewModel:GioHangViewModel = viewModel()
 
@@ -97,6 +100,15 @@ fun ProductDetail_Screen(
     val sanPham = viewModel.sanPham
 
     var hinhAnhHienTai by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(isFocused) {
+        if (isFocused) {
+            if(tentaikhoan != null && makhachhang!=null)
+                navController.navigate("${NavRoute.SEARCHSCREEN.route}?makhachhang=${makhachhang}&tentaikhoan=${tentaikhoan}")
+            else
+                navController.navigate(NavRoute.SEARCHSCREEN.route)
+        }
+    }
 
     LaunchedEffect(makhachhang) {
         if(makhachhang!=null){
@@ -169,7 +181,9 @@ fun ProductDetail_Screen(
                             },
                             modifier = Modifier
                                 .height(50.dp)
-                                .fillMaxWidth(),
+                                .fillMaxWidth().onFocusChanged { focusState ->
+                                    isFocused = focusState.isFocused
+                                },
                             textStyle = TextStyle(
                                 color = Color.Black,
                                 fontSize = 16.sp

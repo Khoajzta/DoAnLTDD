@@ -50,6 +50,23 @@ class HoaDonBan
         }
     }
 
+    public function getAllHoaDonTheoTrangThai()
+    {
+        try {
+            $query = "SELECT * FROM hoadonban WHERE TrangThai = ? ORDER BY NgayDatHang DESC";
+            $stmt = $this->conn->prepare($query);
+
+            // Gắn giá trị cho từng tham số với đúng vị trí
+            $stmt->bindParam(1, $this->TrangThai, PDO::PARAM_INT); // Đổi vị trí thành 2
+
+            $stmt->execute();
+            return $stmt;
+        } catch (PDOException $e) {
+            echo "Lỗi: " . $e->getMessage();
+            return null;
+        }
+    }
+
 
     // Phương thức lấy hóa đơn bán theo ID
     public function getHoaDonBanById()

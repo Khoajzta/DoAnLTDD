@@ -1,5 +1,6 @@
 import NavRoute
 import SanPhamViewModel
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -80,20 +81,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchScreen(
     navController: NavHostController,
-    tentaikhoan: String?
+    makhachhang:String?,
+    tentaikhoan:String?
 ) {
     val systemUiController = rememberSystemUiController()
     SideEffect {
         systemUiController.setStatusBarColor(color = Color.Red, darkIcons = false)
     }
-
     var sanPhamViewModel:SanPhamViewModel = viewModel()
-    var taiKhoanViewModel:TaiKhoanViewModel = viewModel()
-
-    var taiKhoan = taiKhoanViewModel.taikhoan
-
-    taiKhoanViewModel.getTaiKhoanByTentaikhoan(tentaikhoan.toString())
-
     val danhSachSanPham = sanPhamViewModel.danhSach
 
     var timkiem by remember { mutableStateOf("") }
@@ -126,7 +121,12 @@ fun SearchScreen(
                 actions = {
                     IconButton(
                         onClick = {
-
+                            if(tentaikhoan==null && makhachhang == null){
+                                navController.navigate(NavRoute.LOGINSCREEN.route)
+                            }
+                            else{
+                                navController.navigate("${NavRoute.CART.route}?makhachhang=${makhachhang}&tentaikhoan=${tentaikhoan}")
+                            }
                         }
                     ) {
                         Icon(
@@ -194,10 +194,7 @@ fun SearchScreen(
             modifier = Modifier.padding(it)
         ) {
             items(danhSachSanPham){sanpham->
-                if(taiKhoan!=null)
-                    SanPhamSearchCard(sanpham,taiKhoan.MaKhachHang,tentaikhoan,navController)
-                else
-                    SanPhamSearchCard(sanpham,null,tentaikhoan,navController)
+                SanPhamSearchCard(sanpham,makhachhang,tentaikhoan,navController)
             }
         }
 
@@ -207,8 +204,8 @@ fun SearchScreen(
 @Composable
 fun SanPhamSearchCard(
     sanpham: SanPham,
-    makhachhang:Int?,
-    tentaikhoan:String?,
+    makhachhang: String?,
+    tentaikhoan: String?,
     navController: NavHostController
 ) {
     Card(

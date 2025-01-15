@@ -13,7 +13,7 @@ $conn = $database->Connect(); // Lấy kết nối PDO
 $hoadon = new HoaDonBan($conn);
 
 // Lấy MaHoaDonBan từ URL (phương thức GET)
-$hoadon->MaHoaDonBan = isset($_GET['id']) ? $_GET['id'] : die(json_encode(array('message' => 'Mã hóa đơn không tồn tại.')));
+$hoadon->MaHoaDonBan = isset($_GET['MaHoaDonBan']) ? $_GET['MaHoaDonBan'] : die(json_encode(array('message' => 'Mã hóa đơn không tồn tại.')));
 
 // Lấy thông tin chi tiết hóa đơn bán
 $hoadon->GetHoaDonBanById();

@@ -21,7 +21,7 @@ class SanPham
 
     public $MaKhachHang;
 
-    public$SoLuongTrongGioHang;
+    public $SoLuongTrongGioHang;
 
     //connect db
 
@@ -35,64 +35,68 @@ class SanPham
     public function GetAllSanPham()
     {
         $query = "SELECT sp.*,ha.DuongDan FROM SanPham sp 
-              join hinhanh ha on sp.HinhAnh = ha.MaHinhAnh";
+              join hinhanh ha on sp.MaSanPham = ha.MaSanPham where ha.MacDinh = 1";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt; // Trả về PDOStatement
     }
 
     public function GetSanPhamById()
-{
-    $query = "SELECT sp.*, ha.DuongDan FROM SanPham sp 
+    {
+        $query = "SELECT sp.*, ha.DuongDan FROM SanPham sp 
               JOIN hinhanh ha ON sp.HinhAnh = ha.MaHinhAnh
               WHERE sp.MaSanPham = ? LIMIT 1";
-    $stmt = $this->conn->prepare($query);
-    $stmt->bindParam(1, $this->MaSanPham);
-    $stmt->execute();
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->MaSanPham);
+        $stmt->execute();
 
-    // Lấy kết quả
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Lấy kết quả
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($row) {
-        // Gán giá trị từ kết quả vào các thuộc tính của đối tượng
-        $this->TenSanPham = $row['TenSanPham'] ?? null;
-        $this->MaLoaiSanPham = $row['MaLoaiSanPham'] ?? null;
-        $this->CPU = $row['CPU'] ?? null;
-        $this->RAM = $row['RAM'] ?? null;
-        $this->CardManHinh = $row['CardManHinh'] ?? null;
-        $this->SSD = $row['SSD'] ?? null;
-        $this->ManHinh = $row['ManHinh'] ?? null;
-        $this->MaMauSac = $row['MaMauSac'] ?? null;
-        $this->Gia = $row['Gia'] ?? null;
-        $this->SoLuong = $row['SoLuong'] ?? null;
-        $this->MoTa = $row['MoTa'] ?? null;
-        $this->HinhAnh = $row['DuongDan'] ?? null;
-        $this->TrangThai = $row['TrangThai'] ?? null;
-    } else {
-        // Không tìm thấy sản phẩm, có thể thông báo lỗi
-        echo "Sản phẩm không tồn tại.";
-        return false;
+        if ($row) {
+            // Gán giá trị từ kết quả vào các thuộc tính của đối tượng
+            $this->TenSanPham = $row['TenSanPham'] ?? null;
+            $this->MaLoaiSanPham = $row['MaLoaiSanPham'] ?? null;
+            $this->CPU = $row['CPU'] ?? null;
+            $this->RAM = $row['RAM'] ?? null;
+            $this->CardManHinh = $row['CardManHinh'] ?? null;
+            $this->SSD = $row['SSD'] ?? null;
+            $this->ManHinh = $row['ManHinh'] ?? null;
+            $this->MaMauSac = $row['MaMauSac'] ?? null;
+            $this->Gia = $row['Gia'] ?? null;
+            $this->SoLuong = $row['SoLuong'] ?? null;
+            $this->MoTa = $row['MoTa'] ?? null;
+            $this->HinhAnh = $row['DuongDan'] ?? null;
+            $this->TrangThai = $row['TrangThai'] ?? null;
+        } else {
+            // Không tìm thấy sản phẩm, có thể thông báo lỗi
+            echo "Sản phẩm không tồn tại.";
+            return false;
+        }
+
+        // Giải phóng bộ nhớ
+        unset($row);
     }
-
-    // Giải phóng bộ nhớ
-    unset($row);
-}
 
     public function GetSanPhamBySearch($searchTerm)
     {
-        $query = "SELECT * , ro.DungLuong as DungLuongROM ,  r.DungLuong as DungLuongRAM
-              FROM SanPham sp
-              JOIN HinhAnh ha ON sp.HinhAnh = ha.MaHinhAnh
-              JOIN CPU cpu ON sp.MaCPU = cpu.MaCPU
-              JOIN RAM r ON sp.MaRAM = r.MaRAM
-              JOIN ROM ro ON sp.MaROM = ro.MaROM
-              JOIN CardDoHoa cdh ON sp.MaCardDoHoa = cdh.MaCardDoHoa
-              JOIN ManHinh mh ON sp.MaManHinh = mh.MaManHinh
-              WHERE sp.TenSanPham LIKE ? OR sp.MoTa LIKE ?";
+        $query = "SELECT * 
+          FROM SanPham sp
+          JOIN HinhAnh ha ON sp.MaSanPham = ha.MaSanPham
+          WHERE sp.TenSanPham LIKE ? 
+          OR sp.MoTa LIKE ? 
+          or sp.CPU LIKE ? 
+          or sp.RAM like ? 
+          or sp.CardManHinh LIKE ?
+          OR sp.SSD LIKE ?";
         $stmt = $this->conn->prepare($query);
         $searchTerm = "%" . $searchTerm . "%"; // Thêm dấu '%' để tìm kiếm theo kiểu "like"
         $stmt->bindParam(1, $searchTerm);
         $stmt->bindParam(2, $searchTerm);
+        $stmt->bindParam(3, $searchTerm);
+        $stmt->bindParam(4, $searchTerm);
+        $stmt->bindParam(5, $searchTerm);
+        $stmt->bindParam(6, $searchTerm);
         $stmt->execute();
         return $stmt;
     }
@@ -100,13 +104,27 @@ class SanPham
 
     public function GetSanPhamByLoai()
     {
-        $query = "SELECT * 
+        $query = "SELECT sp.*,ha.DuongDan 
                   FROM SanPham sp 
-                  join hinhanh ha on sp.HinhAnh = ha.MaHinhAnh
+                  join hinhanh ha on sp.MaSanPham = ha.MaSanPham
                   WHERE sp.MaLoaiSanPham = ?
                   ";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->MaLoaiSanPham);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    public function GetSanPhamTrongHoaDon($mahoadon)
+    {
+        $query = "SELECT sp.*, ha.DuongDan
+                  FROM SanPham sp 
+                  join hinhanh ha on sp.HinhAnh = ha.MaHinhAnh 
+                  join ChiTietHoaDonBan cthd on sp.MaSanPham = cthd.MaSanPham
+                  WHERE cthd.MaHoaDonBan = ?
+                  ";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $mahoadon);
         $stmt->execute();
         return $stmt;
     }
@@ -249,3 +267,4 @@ class SanPham
         return false;
     }
 }
+?>
