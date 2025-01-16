@@ -7,7 +7,7 @@ data class SanPham(
     @SerializedName("TenSanPham") var TenSanPham: String,
     @SerializedName("MaLoaiSanPham") var MaLoaiSanPham: Int,
     @SerializedName("CPU") var CPU: String,
-    @SerializedName("RAM") var RAM: Int,
+    @SerializedName("RAM") var RAM: String,
     @SerializedName("CardManHinh") var CardManHinh: String,
     @SerializedName("SSD") var SSD: String,
     @SerializedName("ManHinh") var ManHinh: String,

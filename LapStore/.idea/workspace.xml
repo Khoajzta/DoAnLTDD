@@ -11,6 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="9f1e03c8-dd35-4f0b-aea0-2db12a533398" name="Changes" comment="">
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/RetrofitClient/QuanLyBanLaptopRetrofitClient.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/api/ChiTietHoaDonBan.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/api/DiaChiAPIService.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/api/GioHangAPIService.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/api/HinhAnhAPIService.kt" afterDir="false" />
@@ -18,6 +19,7 @@
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/api/KhachHangAPIService.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/api/SanPhamAPIService.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/api/TaiKhoanAPIService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/models/ChiTietHoaDon.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/models/DiaChi.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/models/GioHang.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/models/HinhAnh.kt" afterDir="false" />
@@ -26,9 +28,11 @@
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/models/SanPham.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/models/TaiKhoan.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/ui/CardDonHang.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/ui/CardDonHangAdmin.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/ui/DiaChiCard.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/ui/ProductCart_Card.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/ui/theme/Utilities.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/viewmodels/ChiTietHoaDonBanViewmodel.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/viewmodels/DiaChiViewmodel.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/viewmodels/GioHangViewModel.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/viewmodels/HinhAnhViewModel.kt" afterDir="false" />
@@ -40,8 +44,11 @@
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/views/Address_Screen.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/views/CartManage_Screen.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/views/ChangePassword_Screen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/views/DonHangDetail_Screen.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/views/PaySuccess_Screen.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/views/Pay_Screen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/views/Register_Screen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/lapstore/views/Search_Screen.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/checksuccess.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/qr.jpg" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/res/xml/network_security_config.xml" afterDir="false" />
@@ -107,15 +114,15 @@
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/LapStore/app/src/main/res/drawable&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/LapStore/app/src/main/java/com/example/lapstore/views&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\LapStore\app\src\main\res\drawable" />
       <recent name="D:\LapStore\app\src\main\java\com\example\lapstore\views" />
+      <recent name="D:\LapStore\app\src\main\res\drawable" />
       <recent name="D:\LapStore\app\src\main\java\com\example\lapstore\viewmodels" />
       <recent name="D:\LapStore\app\src\main\java\com\example\lapstore\models" />
       <recent name="D:\LapStore\app\src\main\java\com\example\lapstore\api" />
