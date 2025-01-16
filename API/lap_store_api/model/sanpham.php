@@ -44,8 +44,8 @@ class SanPham
     public function GetSanPhamById()
     {
         $query = "SELECT sp.*, ha.DuongDan FROM SanPham sp 
-              JOIN hinhanh ha ON sp.HinhAnh = ha.MaHinhAnh
-              WHERE sp.MaSanPham = ? LIMIT 1";
+              JOIN hinhanh ha ON sp.MaSanPham = ha.MaSanPham
+              WHERE ha.MacDinh = 1 and sp.MaSanPham = ? LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->MaSanPham);
         $stmt->execute();
@@ -80,15 +80,17 @@ class SanPham
 
     public function GetSanPhamBySearch($searchTerm)
     {
-        $query = "SELECT * 
+        $query = "SELECT sp.* ,ha.DuongDan
           FROM SanPham sp
           JOIN HinhAnh ha ON sp.MaSanPham = ha.MaSanPham
-          WHERE sp.TenSanPham LIKE ? 
+          WHERE ha.MacDinh = 1 AND (
+          sp.TenSanPham LIKE ? 
           OR sp.MoTa LIKE ? 
-          or sp.CPU LIKE ? 
-          or sp.RAM like ? 
-          or sp.CardManHinh LIKE ?
-          OR sp.SSD LIKE ?";
+          OR sp.CPU LIKE ? 
+          OR sp.RAM LIKE ? 
+          OR sp.CardManHinh LIKE ? 
+          OR sp.SSD LIKE ?
+        )";
         $stmt = $this->conn->prepare($query);
         $searchTerm = "%" . $searchTerm . "%"; // Thêm dấu '%' để tìm kiếm theo kiểu "like"
         $stmt->bindParam(1, $searchTerm);
@@ -107,7 +109,7 @@ class SanPham
         $query = "SELECT sp.*,ha.DuongDan 
                   FROM SanPham sp 
                   join hinhanh ha on sp.MaSanPham = ha.MaSanPham
-                  WHERE sp.MaLoaiSanPham = ?
+                  WHERE ha.MacDinh = 1 and sp.MaLoaiSanPham = ?
                   ";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->MaLoaiSanPham);
@@ -119,9 +121,9 @@ class SanPham
     {
         $query = "SELECT sp.*, ha.DuongDan
                   FROM SanPham sp 
-                  join hinhanh ha on sp.HinhAnh = ha.MaHinhAnh 
+                  join hinhanh ha on sp.MaSanPham = ha.MaSanPham 
                   join ChiTietHoaDonBan cthd on sp.MaSanPham = cthd.MaSanPham
-                  WHERE cthd.MaHoaDonBan = ?
+                  WHERE ha.MacDinh = 1 and cthd.MaHoaDonBan = ?
                   ";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $mahoadon);
@@ -134,8 +136,8 @@ class SanPham
         $query = "SELECT sp.*, ha.DuongDan
                 FROM sanpham sp 
                 JOIN giohang gh on sp.MaSanPham = gh.MaSanPham
-                JOIN hinhanh ha on sp.MaSanPham = ha.MaHinhAnh
-                WHERE gh.MaKhachHang = ?";
+                JOIN hinhanh ha on sp.MaSanPham = ha.MaSanPham
+                WHERE ha.MacDinh = 1 and gh.MaKhachHang = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->MaKhachHang);
         $stmt->execute();

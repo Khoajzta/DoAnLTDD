@@ -41,6 +41,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
@@ -93,11 +95,21 @@ fun ProductDetail_Screen(
 
     val systemUiController = rememberSystemUiController()
     var gioHangViewModel:GioHangViewModel = viewModel()
+    var sanPhamViewModel:SanPhamViewModel = viewModel()
 
     val danhSachHinhAnh = hinhAnhViewModel.danhsachhinhanhtheosanpham
     val danhsachgiohang = gioHangViewModel.listGioHang
+    val danhsachsanpham = sanPhamViewModel.danhSachAllSanPham
+
+    sanPhamViewModel.getAllSanPham()
 
     val sanPham = viewModel.sanPham
+
+    var snackbarHostState = remember {
+        SnackbarHostState()
+    }
+
+    var scope = rememberCoroutineScope()
 
     var hinhAnhHienTai by remember { mutableStateOf<String?>(null) }
 
@@ -304,25 +316,62 @@ fun ProductDetail_Screen(
                                 navController.navigate(NavRoute.LOGINSCREEN.route)
                             } else {
                                 var giohangnew: GioHang? = null
-                                var isProductFound = false
+                                var isProductInCart = false
 
+                                // Kiểm tra sản phẩm trong giỏ hàng
                                 for (giohang in danhsachgiohang) {
                                     if (sanPham.MaSanPham == giohang.MaSanPham) {
-                                        giohang.SoLuong += 1
-                                        gioHangViewModel.updateGioHang(giohang)
-                                        isProductFound = true
-                                        break
+                                        val sanphamTonKho = danhsachsanpham.find { it.MaSanPham == sanPham.MaSanPham }
+                                        if (sanphamTonKho != null) {
+                                            if (giohang.SoLuong >= sanphamTonKho.SoLuong) {
+                                                // Thông báo nếu số lượng đã đạt giới hạn
+                                                scope.launch {
+                                                    snackbarHostState.showSnackbar(
+                                                        message = "Số lượng trong kho chỉ còn ${sanphamTonKho.SoLuong} sản phẩm, không thể thêm nữa"
+                                                    )
+                                                }
+                                            } else {
+                                                // Tăng số lượng sản phẩm trong giỏ hàng
+                                                giohang.SoLuong += 1
+                                                gioHangViewModel.updateGioHang(giohang)
+                                                scope.launch {
+                                                    snackbarHostState.showSnackbar(
+                                                        message = "Cập nhật số lượng sản phẩm trong giỏ hàng thành công"
+                                                    )
+                                                }
+                                            }
+                                        } else {
+                                            scope.launch {
+                                                snackbarHostState.showSnackbar(
+                                                    message = "Sản phẩm không tồn tại trong kho"
+                                                )
+                                            }
+                                        }
+                                        isProductInCart = true
+                                        break // Thoát vòng lặp nếu sản phẩm đã được xử lý
                                     }
                                 }
 
-                                // Nếu sản phẩm không tìm thấy trong giỏ hàng thì thêm mới
-                                if (!isProductFound) {
-                                    giohangnew = GioHang(0, makhachhang.toInt(), sanPham.MaSanPham, 1, 1)
-                                    gioHangViewModel.addToCart(giohangnew)
+                                // Nếu sản phẩm chưa có trong giỏ hàng
+                                if (!isProductInCart) {
+                                    val sanphamTonKho = danhsachsanpham.find { it.MaSanPham == sanPham.MaSanPham }
+                                    if (sanphamTonKho != null && sanphamTonKho.SoLuong > 0) {
+                                        giohangnew = GioHang(0, makhachhang.toInt(), sanPham.MaSanPham, 1, 1)
+                                        gioHangViewModel.addToCart(giohangnew)
+                                        gioHangViewModel.getGioHangByKhachHang(makhachhang.toInt())
+                                        scope.launch {
+                                            snackbarHostState.showSnackbar(
+                                                message = "Thêm sản phẩm mới vào giỏ hàng thành công"
+                                            )
+                                        }
+                                    } else {
+                                        scope.launch {
+                                            snackbarHostState.showSnackbar(
+                                                message = "Sản phẩm đã hết hàng, không thể thêm vào giỏ hàng"
+                                            )
+                                        }
+                                    }
                                 }
-
-                                // Làm mới danh sách giỏ hàng
-                                gioHangViewModel.getGioHangByKhachHang(makhachhang.toInt())
                             }
                         },
                         modifier = Modifier.fillMaxWidth(),
@@ -337,6 +386,8 @@ fun ProductDetail_Screen(
                             fontSize = 18.sp
                         )
                     }
+
+
                 }
 
                 // Nút mua ngay
@@ -356,7 +407,13 @@ fun ProductDetail_Screen(
                         )
                     }
                 }
+                item {
+                    SnackbarHost(
+                        modifier = Modifier.padding(30.dp),
+                        hostState = snackbarHostState
+                    )
 
+                }
                 // Mô tả sản phẩm
                 item {
                     Text(

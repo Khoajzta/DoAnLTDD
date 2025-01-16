@@ -175,7 +175,9 @@ fun LoginScreen(
                     fontWeight = FontWeight.Bold
                 )
                 TextButton(
-                    onClick = {}
+                    onClick = {
+                        navController.navigate(NavRoute.REGISTERSCREEN.route)
+                    }
                 ) {
                     Text(
                         "Đăng ký ngay!",

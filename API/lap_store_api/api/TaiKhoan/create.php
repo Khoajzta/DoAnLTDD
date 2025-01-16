@@ -16,10 +16,12 @@
 
     $data = json_decode(file_get_contents("php://input"));
     $taikhoan->TenTaiKhoan = $data->TenTaiKhoan;
-    $taikhoan->MaNguoiDung = $data->MaNguoiDung;
+    $taikhoan->MaKhachHang = $data->MaKhachHang;
     $taikhoan->MatKhau = $data->MatKhau;
+    $taikhoan->LoaiTaiKhoan = $data->LoaiTaiKhoan;
+    $taikhoan->TrangThai = $data->TrangThai;
 
-
+    sleep(2);
     if($taikhoan->AddTaiKhoan()){
         echo json_encode(array('message','Tai Khoan Created'));
     }

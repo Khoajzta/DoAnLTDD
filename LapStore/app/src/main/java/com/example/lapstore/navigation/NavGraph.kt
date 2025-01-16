@@ -16,6 +16,7 @@ import com.example.lapstore.views.CartManagementSection
 import com.example.lapstore.views.HomeScreen
 import com.example.lapstore.views.LoginScreen
 import com.example.lapstore.views.ProductDetail_Screen
+import com.example.lapstore.views.RegisterScreen
 import com.example.lapstore.views.UpdateDiaChiScreen
 
 sealed class NavRoute(val route: String) {
@@ -33,6 +34,7 @@ sealed class NavRoute(val route: String) {
     object SEARCHSCREEN : NavRoute("searchscreen_screen")
     object HOADONDETAILSCREEN : NavRoute("hoadondetail_screen")
     object ADMINSCREEN : NavRoute("admin_screen")
+    object REGISTERSCREEN: NavRoute("register_screen")
 }
 
 
@@ -232,6 +234,13 @@ fun NavgationGraph(
             AdminScreen(navController)
         }
 
+        composable(NavRoute.REGISTERSCREEN.route) { // Khởi tạo rõ ràng ViewModel
+            RegisterScreen(
+                navController = navController,
+                taiKhoanViewModel = taiKhoanViewModel,
+                khachHangViewModel
+            )
+        }
     }
 }
 

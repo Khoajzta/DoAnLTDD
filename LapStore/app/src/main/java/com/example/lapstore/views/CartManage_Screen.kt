@@ -165,6 +165,12 @@ fun DaGiaoHangScreen(navController: NavHostController, makhachhang: Int?) {
     // Trạng thái lỗi (nếu có)
     val errorMessage = remember { mutableStateOf<String?>(null) }
 
+
+    val soluonghoadondagiaohang = remember { mutableStateOf(danhSachHoaDonBan.count()) }
+
+    LaunchedEffect(danhSachHoaDonBan) {
+        soluonghoadondagiaohang.value = danhSachHoaDonBan.count()
+    }
     // Hàm gọi API để lấy danh sách hóa đơn
 
     if (makhachhang != null) {
@@ -218,6 +224,14 @@ fun DaGiaoHangScreen(navController: NavHostController, makhachhang: Int?) {
                         .fillMaxSize()
                         .padding(4.dp)
                 ) {
+                    item {
+                        Text(
+                            "Số luượng đơn hàng(${soluonghoadondagiaohang.value})",
+                            modifier = Modifier.padding(4.dp),
+                            color = Color.Red,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                     items(danhSachHoaDonBan) { hoadon ->
                         CardDonHang(navController,hoadon, false)
                     }
@@ -242,6 +256,12 @@ fun ChoGiaoHangScreen(navController: NavHostController, makhachhang: Int?) {
     val errorMessage = remember { mutableStateOf<String?>(null) }
 
     // Hàm gọi API để lấy danh sách hóa đơn
+
+    val soluonghoadonchogiaohang = remember { mutableStateOf(danhSachHoaDonBan.count()) }
+
+    LaunchedEffect(danhSachHoaDonBan) {
+        soluonghoadonchogiaohang.value = danhSachHoaDonBan.count()
+    }
 
     if (makhachhang != null) {
         isLoading.value = true // Bắt đầu tải dữ liệu
@@ -294,6 +314,15 @@ fun ChoGiaoHangScreen(navController: NavHostController, makhachhang: Int?) {
                         .fillMaxSize()
                         .padding(4.dp)
                 ) {
+                    item {
+                        Text(
+                            "Số luượng đơn hàng(${soluonghoadonchogiaohang.value})",
+                            modifier = Modifier.padding(4.dp),
+                            color = Color.Red,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
                     items(danhSachHoaDonBan) { hoadon ->
                         CardDonHang(navController,hoadon, false)
                     }
@@ -318,6 +347,12 @@ fun ChoXacNhanHuy(navController: NavHostController, makhachhang: Int?) {
     val errorMessage = remember { mutableStateOf<String?>(null) }
 
     // Hàm gọi API để lấy danh sách hóa đơn
+
+    val soluonghoadonchoxacnhanhuy = remember { mutableStateOf(danhSachHoaDonBan.count()) }
+
+    LaunchedEffect(danhSachHoaDonBan) {
+        soluonghoadonchoxacnhanhuy.value = danhSachHoaDonBan.count()
+    }
 
     if (makhachhang != null) {
         isLoading.value = true // Bắt đầu tải dữ liệu
@@ -370,6 +405,14 @@ fun ChoXacNhanHuy(navController: NavHostController, makhachhang: Int?) {
                         .fillMaxSize()
                         .padding(4.dp)
                 ) {
+                    item {
+                        Text(
+                            "Số luượng đơn hàng(${soluonghoadonchoxacnhanhuy.value})",
+                            modifier = Modifier.padding(4.dp),
+                            color = Color.Red,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                     items(danhSachHoaDonBan) { hoadon ->
                         CardDonHang(navController,hoadon, false)
                     }
@@ -395,6 +438,12 @@ fun HuyDonHangScreen(navController: NavHostController,makhachhang: Int?) {
     // Trạng thái lỗi (nếu có)
     val errorMessage = remember { mutableStateOf<String?>(null) }
 
+
+    val soluonghoadondahuy = remember { mutableStateOf(danhSachHoaDonBan.count()) }
+
+    LaunchedEffect(danhSachHoaDonBan) {
+        soluonghoadondahuy.value = danhSachHoaDonBan.count()
+    }
     // Hàm gọi API để lấy danh sách hóa đơn
 
     if (makhachhang != null) {
@@ -448,6 +497,14 @@ fun HuyDonHangScreen(navController: NavHostController,makhachhang: Int?) {
                         .fillMaxSize()
                         .padding(4.dp)
                 ) {
+                    item {
+                        Text(
+                            "Số luượng đơn hàng(${soluonghoadondahuy.value})",
+                            modifier = Modifier.padding(4.dp),
+                            color = Color.Red,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                     items(danhSachHoaDonBan) { hoadon ->
                         CardDonHang(navController,hoadon, false)
                     }
@@ -470,6 +527,12 @@ fun ChoLayHangScreen(navController: NavHostController,makhachhang: Int?) {
 
     // Trạng thái lỗi (nếu có)
     val errorMessage = remember { mutableStateOf<String?>(null) }
+
+    val soluonghoadoncholayhang = remember { mutableStateOf(danhSachHoaDonBan.count()) }
+
+    LaunchedEffect(danhSachHoaDonBan) {
+        soluonghoadoncholayhang.value = danhSachHoaDonBan.count()
+    }
 
     // Hàm gọi API để lấy danh sách hóa đơn
 
@@ -524,6 +587,14 @@ fun ChoLayHangScreen(navController: NavHostController,makhachhang: Int?) {
                         .fillMaxSize()
                         .padding(4.dp)
                 ) {
+                    item {
+                        Text(
+                            "Số luượng đơn hàng(${soluonghoadoncholayhang.value})",
+                            modifier = Modifier.padding(4.dp),
+                            color = Color.Red,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                     items(danhSachHoaDonBan) { hoadon ->
                         CardDonHang(navController,hoadon, false)
                     }
@@ -548,6 +619,12 @@ fun ChoXacNhanScreen(navController: NavHostController,makhachhang: Int?) {
     val errorMessage = remember { mutableStateOf<String?>(null) }
 
     // Hàm gọi API để lấy danh sách hóa đơn
+
+    val soluonghoadonchoxacnhan = remember { mutableStateOf(danhSachHoaDonChoXacNhan.count()) }
+
+    LaunchedEffect(danhSachHoaDonChoXacNhan) {
+        soluonghoadonchoxacnhan.value = danhSachHoaDonChoXacNhan.count()
+    }
 
     if (makhachhang != null) {
         isLoading.value = true // Bắt đầu tải dữ liệu
@@ -599,6 +676,14 @@ fun ChoXacNhanScreen(navController: NavHostController,makhachhang: Int?) {
                         .fillMaxSize()
                         .padding(4.dp)
                 ) {
+                    item {
+                        Text(
+                            "Số luượng đơn hàng(${soluonghoadonchoxacnhan.value})",
+                            modifier = Modifier.padding(4.dp),
+                            color = Color.Red,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                     items(danhSachHoaDonChoXacNhan) { hoadon ->
                         CardDonHang(navController,hoadon, true)
                     }
@@ -620,8 +705,3 @@ fun formatDate(inputDate: String): String {
         "Ngày không hợp lệ"
     }
 }
-
-
-
-
-

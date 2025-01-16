@@ -11,6 +11,7 @@ import com.example.lapstore.api.QuanLyBanLaptopRetrofitClient
 import com.example.lapstore.models.DiaChi
 import com.example.lapstore.models.KhachHang
 import com.example.lapstore.models.SanPham
+import com.example.lapstore.models.TaiKhoan
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -22,6 +23,8 @@ class KhachHangViewModel: ViewModel() {
 
     var khachhangUpdateResult by mutableStateOf("")
         private set
+
+    var ThemKhachHangResult by mutableStateOf("")
 
     val allKhachHang = liveData(Dispatchers.IO) {
         try {
@@ -61,6 +64,22 @@ class KhachHangViewModel: ViewModel() {
             } catch (e: Exception) {
                 khachhangUpdateResult = "Lỗi khi cập nhật khách hàng: ${e.message}"
                 Log.e("GioHang Error", "Lỗi khi cập nhật khách hàng: ${e.message}")
+            }
+        }
+    }
+
+
+    fun ThemKhachHang(khachhang: KhachHang) {
+        viewModelScope.launch {
+            try {
+                val response = QuanLyBanLaptopRetrofitClient.khachHangAPIService.ThemKhachHang(khachhang)
+                ThemKhachHangResult = if (response.success) {
+                    "Đăng ký thành công: ${response.message}"
+                } else {
+                    "Đăng ký thất bại: ${response.message}"
+                }
+            } catch (e: Exception) {
+                Log.e("Thêm tài khoản", "Lỗi kết nối: ${e.message}")
             }
         }
     }
