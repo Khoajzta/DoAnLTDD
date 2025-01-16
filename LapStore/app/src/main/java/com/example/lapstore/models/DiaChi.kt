@@ -3,9 +3,9 @@ package com.example.lapstore.models
 data class DiaChi (
     var MaDiaChi:Int,
     var ThongTinDiaChi:String,
-    var MaKhachHang:String,
+    var MaKhachHang:Int?,
     var TenNguoiNhan:String,
     var SoDienThoai:String,
-    var MacDinh:String,
+    var MacDinh:Int,
 )
 

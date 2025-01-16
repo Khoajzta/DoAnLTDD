@@ -8,8 +8,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.lapstore.api.QuanLyBanLaptopRetrofitClient
+import com.example.lapstore.models.DiaChi
 import com.example.lapstore.models.KhachHang
 import com.example.lapstore.models.SanPham
+import com.example.lapstore.models.TaiKhoan
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -21,6 +23,8 @@ class KhachHangViewModel: ViewModel() {
 
     var khachhangUpdateResult by mutableStateOf("")
         private set
+
+    var ThemKhachHangResult by mutableStateOf("")
 
     val allKhachHang = liveData(Dispatchers.IO) {
         try {
@@ -46,11 +50,11 @@ class KhachHangViewModel: ViewModel() {
         }
     }
 
-    fun updateKhachHang(khachHang: KhachHang) {
+    fun updateKhachHang(khachhang: KhachHang) {
         viewModelScope.launch {
             try {
                 val response = withContext(Dispatchers.IO) {
-                    QuanLyBanLaptopRetrofitClient.khachHangAPIService.updateKhachHang(khachHang)
+                    QuanLyBanLaptopRetrofitClient.khachHangAPIService.updateKhachHang(khachhang)
                 }
                 khachhangUpdateResult = if (response.success) {
                     "Cập nhật thành công: ${response.message}"
@@ -58,8 +62,24 @@ class KhachHangViewModel: ViewModel() {
                     "Cập nhật thất bại: ${response.message}"
                 }
             } catch (e: Exception) {
-                khachhangUpdateResult = "Lỗi khi cập nhật thông tin cá nhân: ${e.message}"
-                Log.e("KhachHang Error", "Lỗi khi cập nhật thông tin cá nhaan: ${e.message}")
+                khachhangUpdateResult = "Lỗi khi cập nhật khách hàng: ${e.message}"
+                Log.e("GioHang Error", "Lỗi khi cập nhật khách hàng: ${e.message}")
+            }
+        }
+    }
+
+
+    fun ThemKhachHang(khachhang: KhachHang) {
+        viewModelScope.launch {
+            try {
+                val response = QuanLyBanLaptopRetrofitClient.khachHangAPIService.ThemKhachHang(khachhang)
+                ThemKhachHangResult = if (response.success) {
+                    "Đăng ký thành công: ${response.message}"
+                } else {
+                    "Đăng ký thất bại: ${response.message}"
+                }
+            } catch (e: Exception) {
+                Log.e("Thêm tài khoản", "Lỗi kết nối: ${e.message}")
             }
         }
     }

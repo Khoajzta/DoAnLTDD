@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.lapstore.api.QuanLyBanLaptopRetrofitClient
+import com.example.lapstore.models.HoaDonBan
 import com.example.lapstore.models.SanPham
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,11 +21,14 @@ import kotlinx.coroutines.withContext
 
 class SanPhamViewModel : ViewModel() {
     var danhSachAllSanPham by mutableStateOf<List<SanPham>>(emptyList())
+    var danhSachSanPhamTrongHoaDon by mutableStateOf<List<SanPham>>(emptyList())
 
-    var danhSachSanPhamVanPhong by mutableStateOf<List<SanPham>>(emptyList())
-        private set
-    var danhSachSanPhamGaming by mutableStateOf<List<SanPham>>(emptyList())
-        private set
+    private val _danhSachSanPhamGaming = MutableStateFlow<List<SanPham>>(emptyList())
+    val danhSachSanPhamGaming: StateFlow<List<SanPham>> = _danhSachSanPhamGaming
+
+    private val _danhSachSanPhamVanPhong = MutableStateFlow<List<SanPham>>(emptyList())
+    val danhSachSanPhamVanPhong: StateFlow<List<SanPham>> = _danhSachSanPhamVanPhong
+
     var danhSachSanPhamCuaKhachHang by mutableStateOf<List<SanPham>>(emptyList())
         private set
     var isLoading by mutableStateOf(false)
@@ -34,6 +38,8 @@ class SanPhamViewModel : ViewModel() {
 
     var sanPham by mutableStateOf<SanPham?>(null)
         private set
+
+    var danhSach by mutableStateOf<List<SanPham>>(emptyList())
 
     private val _danhsachSanPham = MutableStateFlow<List<SanPham>>(emptyList())
     val danhsachSanPham: StateFlow<List<SanPham>> get() = _danhsachSanPham
@@ -53,22 +59,30 @@ class SanPhamViewModel : ViewModel() {
         }
     }
 
-    fun getSanPhamTheoLoai(maLoaiSanPham: Int, isLoai1: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
-            isLoading = true
-            errorMessage = null
+    fun getSanPhamTheoLoaiGaming() {
+        viewModelScope.launch {
             try {
-                val response = QuanLyBanLaptopRetrofitClient.sanphamAPIService.getSanPhamByLoai(maLoaiSanPham)
-                if (isLoai1) {
-                    danhSachSanPhamVanPhong = response.sanpham
-                } else {
-                    danhSachSanPhamGaming = response.sanpham
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.sanphamAPIService.getSanPhamTheoLoai(2)
                 }
+                _danhSachSanPhamGaming.value = response.sanpham ?: emptyList()
             } catch (e: Exception) {
-                errorMessage = e.message
-                Log.e("SanPhamViewModel", "Error fetching products", e)
-            } finally {
-                isLoading = false
+                Log.e("SanPham Error", "Lỗi khi lấy sanpham: ${e.message}")
+                _danhSachSanPhamGaming.value = emptyList()
+            }
+        }
+    }
+
+    fun getSanPhamTheoLoaiVanPhong() {
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.sanphamAPIService.getSanPhamTheoLoai(1)
+                }
+                _danhSachSanPhamVanPhong.value = response.sanpham ?: emptyList()
+            } catch (e: Exception) {
+                Log.e("SanPham Error", "Lỗi khi lấy sanpham: ${e.message}")
+                _danhSachSanPhamVanPhong.value = emptyList()
             }
         }
     }
@@ -105,5 +119,35 @@ class SanPhamViewModel : ViewModel() {
                 Log.e("SanPhamViewModel", "Error getting SanPham", e)
             }
         }
+    }
+
+    fun getSanPhamSearch(search:String) {
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.sanphamAPIService.searchSanPham(search)
+                }
+                danhSach = response.sanpham
+            } catch (e: Exception) {
+                Log.e("SanPham Error", "Lỗi khi lấy sản phẩm: ${e.message}")
+            }
+        }
+    }
+
+    fun getSanPhamTrongHoaDon(MaHoaDonBan: Int) {
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.sanphamAPIService.getSanPhamTheoHoaDon(MaHoaDonBan)
+                }
+                danhSachSanPhamTrongHoaDon = response.sanpham
+            } catch (e: Exception) {
+                Log.e("Sản Phẩm Error", "Lỗi khi lấy Sản Phẩm")
+            }
+        }
+    }
+
+    fun clearSanPhamSearch() {
+        danhSach = emptyList()
     }
 }

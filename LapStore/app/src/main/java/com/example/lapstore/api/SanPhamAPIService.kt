@@ -18,8 +18,8 @@ interface SanPhamAPIService{
     suspend fun getAllSanPham(): SanPhamResponse
 
     @GET("SanPham/readByLoaiSanPham.php")
-    suspend fun getSanPhamByLoai(
-        @Query("MaLoaiSanPham") maLoaiSanPham: Int
+    suspend fun getSanPhamTheoLoai(
+        @Query("MaLoaiSanPham") MaLoaiSanPham: Int
     ): SanPhamResponse
 
     @GET("SanPham/getproductCardCuaKhachHang.php")
@@ -29,6 +29,14 @@ interface SanPhamAPIService{
 
     @GET("SanPham/show.php")
     suspend fun getSanPhamById(
-        @Query("id") id: String
+        @Query("MaSanPham") MaSanPham: String
     ): SanPham
+
+    @GET("SanPham/searchSanPham.php")
+    suspend fun searchSanPham(@Query("search") search: String): SanPhamResponse
+
+    @GET("SanPham/laysanphamtheohoadon.php")
+    suspend fun getSanPhamTheoHoaDon(
+        @Query("MaHoaDonBan") MaHoaDonBan: Int
+    ): SanPhamResponse
 }

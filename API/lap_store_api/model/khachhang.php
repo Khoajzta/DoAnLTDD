@@ -63,7 +63,7 @@ class Khachhang{
     }
 
     public function UpdateKhachHang(){
-        $query = "UPDATE khachhang SET HoTen =:HoTen ,  Email =:Email, SoDienThoai =:SoDienThoai, MaDiaChi =:MaDiaChi WHERE MaKhachHang=:MaKhachHang";
+        $query = "UPDATE khachhang SET HoTen =:HoTen, GioiTinh =:GioiTinh, NgaySinh =:NgaySinh,  Email =:Email, SoDienThoai =:SoDienThoai  WHERE MaKhachHang=:MaKhachHang";
 
         $stmt = $this->conn->prepare($query);
 

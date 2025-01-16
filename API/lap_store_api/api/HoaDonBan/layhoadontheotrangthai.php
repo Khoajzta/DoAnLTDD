@@ -13,18 +13,17 @@ $conn = $database->Connect(); // Lấy kết nối PDO
 $hoadon = new HoaDonBan($conn);
 
 // Kiểm tra và lấy giá trị MaKhachHang và TrangThai từ query string
-$hoadon->MaKhachHang = isset($_GET['MaKhachHang']) ? $_GET['MaKhachHang'] : die(json_encode(["message" => "MaKhachHang không được cung cấp."]));
 $hoadon->TrangThai = isset($_GET['TrangThai']) ? (int)$_GET['TrangThai'] : die(json_encode(["message" => "TrangThai không được cung cấp."]));
 
 // Lấy danh sách hóa đơn theo MaKhachHang và TrangThai
-$getHoaDonByMaKhachHang = $hoadon->getAllHoaDonBanByKhachHang();
-$numHoaDonByKhachHang = $getHoaDonByMaKhachHang->rowCount();
+$getHoaDonTheoTrangThai = $hoadon->getAllHoaDonTheoTrangThai();
+$numHoaDonTheoTrangThai = $getHoaDonTheoTrangThai->rowCount();
 
-if ($numHoaDonByKhachHang > 0) {
+if ($numHoaDonTheoTrangThai > 0) {
     $hoadonbykhachhang_array = [];
     $hoadonbykhachhang_array['hoadonban'] = [];
 
-    while ($row = $getHoaDonByMaKhachHang->fetch(PDO::FETCH_ASSOC)) {
+    while ($row = $getHoaDonTheoTrangThai->fetch(PDO::FETCH_ASSOC)) {
 
         error_log("MaHoaDonBan: " . $row['MaHoaDonBan']);
         extract($row);

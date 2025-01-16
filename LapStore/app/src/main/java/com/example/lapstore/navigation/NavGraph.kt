@@ -9,11 +9,15 @@ import com.example.lapstore.models.TaiKhoan
 import com.example.lapstore.viewmodels.KhachHangViewModel
 import com.example.lapstore.viewmodels.TaiKhoanViewModel
 import com.example.lapstore.views.AcccountScreen
+import com.example.lapstore.views.AddDiaChiScreen
 import com.example.lapstore.views.AddressManagementScreen
+import com.example.lapstore.views.AdminScreen
 import com.example.lapstore.views.CartManagementSection
 import com.example.lapstore.views.HomeScreen
 import com.example.lapstore.views.LoginScreen
 import com.example.lapstore.views.ProductDetail_Screen
+import com.example.lapstore.views.RegisterScreen
+import com.example.lapstore.views.UpdateDiaChiScreen
 
 sealed class NavRoute(val route: String) {
     object HOME : NavRoute("home_screen")
@@ -25,6 +29,12 @@ sealed class NavRoute(val route: String) {
     object PAYSUCCESS : NavRoute("paysuccess_screen")
     object QUANLYDONHANG : NavRoute("quanlydonhang_screen")
     object DIACHISCREEN : NavRoute("diachi_screen")
+    object ADDDIACHI : NavRoute("adddiachi_screen")
+    object UPDATEDIACHI : NavRoute("updatediachi_screen")
+    object SEARCHSCREEN : NavRoute("searchscreen_screen")
+    object HOADONDETAILSCREEN : NavRoute("hoadondetail_screen")
+    object ADMINSCREEN : NavRoute("admin_screen")
+    object REGISTERSCREEN: NavRoute("register_screen")
 }
 
 
@@ -163,14 +173,76 @@ fun NavgationGraph(
             CartManagementSection(navController,makhachhang)
         }
 
+
         composable(
             route = "${NavRoute.DIACHISCREEN.route}?makhachhang={makhachhang}",
-            arguments = listOf(navArgument("makhachhang") { type = NavType.IntType }) // Thay đổi StringType thành IntType
+            arguments = listOf(navArgument("makhachhang") { type = NavType.IntType })
         ) { backStackEntry ->
-            val makhachhang = backStackEntry.arguments?.getInt("makhachhang") ?: 0 // Lấy makhachhang dưới dạng Int
+            val makhachhang = backStackEntry.arguments?.getInt("makhachhang") ?: 0
             AddressManagementScreen(navController,makhachhang)
         }
 
+        composable(
+            route = "${NavRoute.ADDDIACHI.route}?makhachhang={makhachhang}",
+            arguments = listOf(navArgument("makhachhang") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val makhachhang = backStackEntry.arguments?.getInt("makhachhang") ?: 0
+            AddDiaChiScreen(navController, makhachhang)
+        }
+
+        composable(
+            route = "${NavRoute.UPDATEDIACHI.route}?makhachhang={makhachhang}&madiachi={madiachi}",
+            arguments = listOf(
+                navArgument("makhachhang") { type = NavType.IntType },
+                navArgument("madiachi") { type = NavType.IntType }
+            )
+        ) { backStackEntry ->
+            val makhachhang = backStackEntry.arguments?.getInt("makhachhang") ?: 0
+            val madiachi = backStackEntry.arguments?.getInt("madiachi") ?: 0
+            UpdateDiaChiScreen(navController,makhachhang,madiachi)
+        }
+
+        composable(
+            route = NavRoute.SEARCHSCREEN.route + "?makhachhang={makhachhang}&tentaikhoan={tentaikhoan}",
+            arguments = listOf(
+                navArgument("makhachhang") { nullable = true },
+                navArgument("tentaikhoan") { type = NavType.StringType }
+            )
+        ) {
+            val tentaikhoan = it.arguments?.getString("tentaikhoan")?:null
+            val makhachhang = it.arguments?.getString("makhachhang")?:null
+            SearchScreen(navController,makhachhang, tentaikhoan)
+        }
+
+        composable(NavRoute.SEARCHSCREEN.route) {
+            SearchScreen(navController,null,null)
+        }
+
+        composable(
+            route = "${NavRoute.HOADONDETAILSCREEN.route}?madonhang={madonhang}&tongtien={tongtien}",
+            arguments = listOf(
+                navArgument("madonhang") { type = NavType.IntType },
+                navArgument("tongtien") { type = NavType.IntType },
+            )
+        ) { backStackEntry ->
+            val madonhang = backStackEntry.arguments?.getInt("madonhang") ?: 0
+            val tongtien = backStackEntry.arguments?.getInt("tongtien") ?: 0
+            DonHangDetailScreen(navController, madonhang,tongtien)
+        }
+
+        composable(NavRoute.ADMINSCREEN.route) {
+            AdminScreen(navController)
+        }
+
+        composable(NavRoute.REGISTERSCREEN.route) { // Khởi tạo rõ ràng ViewModel
+            RegisterScreen(
+                navController = navController,
+                taiKhoanViewModel = taiKhoanViewModel,
+                khachHangViewModel
+            )
+        }
     }
 }
+
+
 

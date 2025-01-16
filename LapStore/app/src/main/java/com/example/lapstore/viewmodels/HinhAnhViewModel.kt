@@ -21,7 +21,7 @@ import kotlinx.coroutines.withContext
 class HinhAnhViewModel : ViewModel() {
     var danhsachhinhanhtheosanpham by mutableStateOf<List<HinhAnh>>(emptyList())
 
-    fun getHinhAnhTheoSanPham(MaSanPham: String) {
+    fun getHinhAnhTheoSanPham(MaSanPham: Int) {
         viewModelScope.launch {
             try {
                 // Thực hiện API request trong Dispatchers.IO

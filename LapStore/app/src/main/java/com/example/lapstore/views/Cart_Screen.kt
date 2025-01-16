@@ -1,4 +1,5 @@
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,6 +30,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -39,6 +41,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,8 +53,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.example.lapstore.models.DiaChi
+import com.example.lapstore.viewmodels.DiaChiViewmodel
 import com.example.lapstore.viewmodels.GioHangViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,24 +67,30 @@ fun CartScreen(
     makhachhang: String,
     tentaikhoan:String
 ) {
-
-
     val gioHangViewModel: GioHangViewModel = viewModel()
     val sanPhamViewModel: SanPhamViewModel = viewModel()
+    val diaChiViewmodel: DiaChiViewmodel = viewModel()
 
     val systemUiController = rememberSystemUiController()
     SideEffect {
         systemUiController.setStatusBarColor(color = Color.Red, darkIcons = false)
     }
+
+
+
+    var openDialog by remember { mutableStateOf(false) }
+
+
     // Lấy danh sách giỏ hàng và sản phẩm
     val listGioHang = gioHangViewModel.listGioHang
+    var danhsachdiahi = diaChiViewmodel.danhsachDiaChi
 
     // Biến lưu tổng tiền
     var totalPrice by remember { mutableStateOf(0) }
 
     // Biến lưu trạng thái checkbox của từng sản phẩm
     val selectedItems = remember { mutableStateMapOf<Int, Boolean>() }
-
+    //MaSanPham, Soluong, MaGioHang
     val selectedProducts = remember { mutableListOf<Triple<Int, Int, Int>>() }
 
     var showDialog by remember { mutableStateOf(false) }
@@ -95,12 +107,24 @@ fun CartScreen(
         }
     }
 
+
+
     // Lấy dữ liệu và tính tổng tiền ban đầu
     LaunchedEffect(makhachhang) {
-        gioHangViewModel.getGioHangByKhachHang(makhachhang.toInt())
-        sanPhamViewModel.getSanPhamTheoGioHang(makhachhang.toInt())
-        listGioHang.forEach { selectedItems[it.MaGioHang] = false } // Mặc định không chọn sản phẩm nào
+        if(makhachhang!=null){
+            gioHangViewModel.getGioHangByKhachHang(makhachhang.toInt())
+            sanPhamViewModel.getSanPhamTheoGioHang(makhachhang.toInt())
+            listGioHang.forEach { selectedItems[it.MaGioHang] = false }
+        }
     }
+
+    LaunchedEffect(makhachhang) {
+        diaChiViewmodel.getDiaChiKhachHang(makhachhang.toInt())
+    }
+
+
+
+    Log.d("",danhsachdiahi.toString())
 
     // Tính tổng tiền khi dữ liệu giỏ hàng hoặc sản phẩm thay đổi
     LaunchedEffect(listGioHang, sanPhamViewModel.danhSachSanPhamCuaKhachHang) {
@@ -143,15 +167,42 @@ fun CartScreen(
                     Button(
                         onClick = {
                             if (selectedProducts.isEmpty()) {
-                                showDialog = true // Hiển thị dialog nếu không có sản phẩm nào được chọn
+                                showDialog = true // Hiển thị thông báo nếu chưa chọn sản phẩm nào
+                            } else if (diaChiViewmodel.listDiacHi.isEmpty()) { // Kiểm tra danh sách địa chỉ rỗng
+                                openDialog = true // Hiển thị dialog thông báo thêm địa chỉ
                             } else {
-                                navController.navigate("${NavRoute.PAYSCREEN.route}?selectedProducts=${selectedProductsString}&tongtien=${totalPrice}&tentaikhoan=${tentaikhoan}")
+                                val selectedProductsString = selectedProducts.joinToString(",") { "${it.first}:${it.second}:${it.third}" }
+                                navController.navigate(
+                                    "${NavRoute.PAYSCREEN.route}?selectedProducts=${selectedProductsString}&tongtien=${totalPrice}&tentaikhoan=${tentaikhoan}"
+                                )
                             }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Text("Mua hàng")
+                    }
+
+
+                    if (openDialog == true) {
+                        AlertDialog(
+                            onDismissRequest = { openDialog = false }, // Đóng khi nhấn ngoài dialog
+                            text = {
+                                Text(
+                                    "Bạn chưa có địa chỉ giao hàng, vui lòng thêm địa chỉ giao hàng"
+                                )
+                            },
+                            confirmButton = {
+                                Button(
+                                    onClick = {
+                                        openDialog = false
+                                        navController.navigate("${NavRoute.DIACHISCREEN.route}?makhachhang=${makhachhang}")
+                                    }
+                                ) {
+                                    Text("OK")
+                                }
+                            },
+                        )
                     }
                 }
             }
@@ -263,7 +314,8 @@ fun CartScreen(
                                                         selectedProducts[index] = Triple(giohang.MaSanPham, soLuong, giohang.MaGioHang)
                                                     }
 
-                                                    calculateTotalPrice() // Tính lại tổng tiền
+                                                    calculateTotalPrice()
+                                                    gioHangViewModel.updateAllGioHang()// Tính lại tổng tiền
                                                 }
                                             }
                                         ) {
@@ -282,7 +334,8 @@ fun CartScreen(
                                                         selectedProducts[index] = Triple(giohang.MaSanPham, soLuong, giohang.MaGioHang)
                                                     }
 
-                                                    calculateTotalPrice() // Tính lại tổng tiền
+                                                    calculateTotalPrice()
+                                                    gioHangViewModel.updateAllGioHang()// Tính lại tổng tiền
                                                 }
                                             }
                                         ) {

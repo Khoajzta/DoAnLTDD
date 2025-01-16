@@ -15,8 +15,11 @@
     $diachi = new DiaChi($conn);
 
     $data = json_decode(file_get_contents("php://input"));
-    $diachi->MaDiaChi = $data->MaDiaChi;
     $diachi->ThongTinDiaChi = $data->ThongTinDiaChi;
+    $diachi->MaKhachHang = $data->MaKhachHang;
+    $diachi->TenNguoiNhan = $data->TenNguoiNhan;
+    $diachi->SoDienThoai = $data->SoDienThoai;
+    $diachi->MacDinh = $data->MacDinh;
 
 
     if($diachi->AddDiaChi()){

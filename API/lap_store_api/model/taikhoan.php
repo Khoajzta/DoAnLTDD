@@ -6,6 +6,8 @@ class TaiKhoan{
     public $TenTaiKhoan;
     public $MaKhachHang;
     public $MatKhau;
+    public $LoaiTaiKhoan;
+    public $TrangThai;
 
     //connect db
 
@@ -32,6 +34,8 @@ class TaiKhoan{
         $this->TenTaiKhoan = $row['TenTaiKhoan'];
         $this->MaKhachHang = $row['MaKhachHang'];
         $this->MatKhau = $row['MatKhau'];
+        $this->LoaiTaiKhoan = $row['LoaiTaiKhoan'];
+        $this->TrangThai = $row['TrangThai'];
     }
 
     public function KiemTraDangNhap() {
@@ -51,21 +55,38 @@ class TaiKhoan{
             return false;
         }
     }
-    
-    
 
-    public function AddTaiKhoan(){
-        $query = "INSERT INTO taikhoan SET TenTaiKhoan =:TenTaiKhoan ,  MaKhachHang =:MaKhachHang, MatKhau =:MatKhau";
-
+    public function KiemTraTrungUsername() {
+        $query = "SELECT * FROM taikhoan WHERE TenTaiKhoan = ?";
         $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->TenTaiKhoan);
+   
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        if ($row) {
+            // Nếu tài khoản và mật khẩu đúng, trả về true
+            return true;
+        } else {
+            // Nếu không tìm thấy tài khoản hoặc mật khẩu sai, trả về false
+            return false;
+        }
+    }
+    
+    public function AddTaiKhoan(){
+        $query = "INSERT INTO taikhoan (TenTaiKhoan, MaKhachHang, MatKhau, LoaiTaiKhoan, TrangThai) 
+                        VALUES (:TenTaiKhoan,(SELECT MAX(MaKhachHang) FROM KhachHang) , :MatKhau, :LoaiTaiKhoan, :TrangThai)";
+            $stmt = $this->conn->prepare($query);
 
         $this->TenTaiKhoan = htmlspecialchars(strip_tags($this->TenTaiKhoan));
-        $this->MaKhachHang = htmlspecialchars(strip_tags($this->MaKhachHang));
         $this->MatKhau = htmlspecialchars(strip_tags($this->MatKhau));
+        $this->LoaiTaiKhoan = htmlspecialchars(strip_tags($this->LoaiTaiKhoan));
+        $this->TrangThai = htmlspecialchars(strip_tags($this->TrangThai));
 
         $stmt->bindParam(':TenTaiKhoan',$this->TenTaiKhoan);
-        $stmt->bindParam(':MaKhachHang',$this->MaKhachHang);
         $stmt->bindParam(':MatKhau',$this->MatKhau);
+        $stmt->bindParam(':LoaiTaiKhoan',$this->LoaiTaiKhoan);
+        $stmt->bindParam(':TrangThai',$this->TrangThai);
 
         if($stmt->execute()){
             return true;

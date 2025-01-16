@@ -38,7 +38,7 @@ if ($numDiaChiByKhachHang > 0) {
     }
     echo json_encode($diachi_array, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
 } else {
-    echo json_encode(["message" => "Không tìm thấy địa chỉ nào với MaKhachHang = " . $diachikhachhang->MaKhachHang]);
+    echo json_encode(["message" => "Không tìm thấy địa chỉ nào"]);
 }
 
 ?>

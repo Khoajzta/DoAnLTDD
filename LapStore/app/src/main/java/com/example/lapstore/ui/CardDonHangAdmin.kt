@@ -25,13 +25,12 @@ import com.example.lapstore.viewmodels.HoaDonBanVỉewModel
 import com.example.lapstore.views.formatDate
 
 @Composable
-fun CardDonHang(
+fun CardDonHangAdmin(
     navController: NavHostController,
     hoaDonBan: HoaDonBan,
-    ishuy:Boolean,
-){
-    var hoaDonBanVỉewModel:HoaDonBanVỉewModel = viewModel()
-
+    trangthai: Int,
+    hoaDonBanVỉewModel: HoaDonBanVỉewModel
+) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color.White
@@ -55,15 +54,13 @@ fun CardDonHang(
             Column(
                 modifier = Modifier.weight(1f) // Cột chiếm không gian linh hoạt
             ) {
-                Text(
-                    text = "Mã Hóa Đơn: ${hoaDonBan.MaHoaDonBan}",
-                )
+                Text(text = "Mã Hóa Đơn: ${hoaDonBan.MaHoaDonBan}")
                 Text(text = "Ngày Đặt Hàng: ${formatDate(hoaDonBan.NgayDatHang)}")
                 Text(text = "Tổng Tiền: ${formatGiaTien(hoaDonBan.TongTien)}")
             }
 
             // Nút Hủy
-            if (ishuy) {
+            if (trangthai != 4 && trangthai != 6) {
                 Box(
                     modifier = Modifier
                         .fillMaxHeight()
@@ -75,15 +72,42 @@ fun CardDonHang(
                             containerColor = Color.Red
                         ),
                         shape = RoundedCornerShape(10.dp),
-                        onClick =  {
-                            var hoadonbannew = HoaDonBan(hoaDonBan.MaHoaDonBan,hoaDonBan.MaKhachHang,hoaDonBan.NgayDatHang,hoaDonBan.MaDiaChi,hoaDonBan.TongTien,hoaDonBan.PhuongThucThanhToan,5)
-                            hoaDonBanVỉewModel.updateHoaDonBan(hoadonbannew)
+                        onClick = {
+                            XacNhan(trangthai, hoaDonBan, hoaDonBanVỉewModel)
                         }
                     ) {
-                        Text("Hủy")
+                        Text("Xác nhận")
                     }
                 }
             }
         }
     }
+}
+
+// Hàm xác nhận đơn hàng, sử dụng when thay vì if-else
+fun XacNhan(
+    trangthai: Int,
+    hoaDonBan: HoaDonBan,
+    hoaDonBanVỉewModel: HoaDonBanVỉewModel
+) {
+    val trangThaiMoi = when (trangthai) {
+        1 -> 2
+        2 -> 3
+        3 -> 4
+        4 -> 5
+        5 -> 6
+        else -> trangthai // Nếu không có trạng thái hợp lệ, không thay đổi
+    }
+
+    val hoadonbannew = HoaDonBan(
+        hoaDonBan.MaHoaDonBan,
+        hoaDonBan.MaKhachHang,
+        hoaDonBan.NgayDatHang,
+        hoaDonBan.MaDiaChi,
+        hoaDonBan.TongTien,
+        hoaDonBan.PhuongThucThanhToan,
+        trangThaiMoi
+    )
+
+    hoaDonBanVỉewModel.updateHoaDonBan(hoadonbannew)
 }

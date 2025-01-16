@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AdminPanelSettings
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.LocationOn
@@ -42,6 +43,8 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
@@ -64,6 +67,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.lapstore.models.KhachHang
+import com.example.lapstore.models.TaiKhoan
 import com.example.lapstore.viewmodels.DiaChiViewmodel
 import com.example.lapstore.viewmodels.KhachHangViewModel
 import com.example.lapstore.viewmodels.TaiKhoanViewModel
@@ -75,6 +79,11 @@ fun AcccountScreen(
     navController: NavHostController,
     tentaikhoan: String
 ) {
+    val systemUiController = rememberSystemUiController()
+    SideEffect {
+        systemUiController.setStatusBarColor(color = Color.Red, darkIcons = false)
+    }
+
     // Lấy ViewModel
     val taiKhoanViewModel: TaiKhoanViewModel = viewModel()
 
@@ -94,7 +103,6 @@ fun AcccountScreen(
 
     // Kiểm tra trạng thái Tab
     var currentTab by remember { mutableStateOf("accountInfo") }
-    val diaChiViewModel: DiaChiViewmodel = viewModel()
 
     Scaffold(
         containerColor = Color.Red,
@@ -139,7 +147,9 @@ fun AcccountScreen(
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp, top = 16.dp)
                 ) {
+
                     when (currentTab) {
+                        "duyetdonhang" -> navController.navigate(NavRoute.ADMINSCREEN.route)
                         "accountInfo" -> AccountInfoSection(tentaikhoan)
                         "cartManagement" -> navController.navigate("${NavRoute.QUANLYDONHANG.route}?makhachhang=${taikhoan.MaKhachHang}")
                         "changePassword" -> ChangePasswordSection(tentaikhoan)
@@ -158,7 +168,8 @@ fun AcccountScreen(
                     onOptionSelected = { selectedTab ->
                         currentTab = selectedTab
                     }, currentTab = currentTab,
-                    navController
+                    navController,
+                    taikhoan
                 )
             }
         }
@@ -335,16 +346,15 @@ fun AccountInfoSection(
                             snackbarMessage.value = "Email không được để trống!"
                             showSnackbar.value = true
                         } else {
-                            khachhangviewModel.updateKhachHang(
-                                KhachHang(
-                                    MaKhachHang = khachhang.MaKhachHang,
-                                    HoTen = hoTen.value,
-                                    GioiTinh = gioiTinh.value,
-                                    NgaySinh = "${selectedYear.value}-${selectedMonth.value}-${selectedDay.value}",
-                                    Email = email.value,
-                                    SoDienThoai = soDienThoai.value
-                                )
+                            var khachHang = KhachHang(
+                                MaKhachHang = khachhang.MaKhachHang,
+                                HoTen = hoTen.value,
+                                GioiTinh = gioiTinh.value,
+                                NgaySinh = "${selectedYear.value}-${selectedMonth.value}-${selectedDay.value}",
+                                Email = email.value,
+                                SoDienThoai = soDienThoai.value
                             )
+                            khachhangviewModel.updateKhachHang(khachHang)
                             snackbarMessage.value = "Cập nhật thành công!"
                             showSnackbar.value = true
                         }
@@ -431,7 +441,8 @@ fun DropdownMenuField(
 fun AccountOptionsSection(
     onOptionSelected: (String) -> Unit,
     currentTab: String,
-    navController: NavHostController
+    navController: NavHostController,
+    taikhoan: TaiKhoan
 ) {
     val openDialog = remember { mutableStateOf(false) }
 
@@ -443,7 +454,19 @@ fun AccountOptionsSection(
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
+
+
         Column(modifier = Modifier.padding(8.dp)) {
+
+            if(taikhoan.LoaiTaiKhoan==1){
+                AccountOptionItem(
+                    iconRes = Icons.Filled.AdminPanelSettings,
+                    label = "Duyệt đơn hàng",
+                    isSelected = currentTab == "duyetdonhang",
+                    onClick = { onOptionSelected("duyetdonhang") }
+                )
+            }
+
             AccountOptionItem(
                 iconRes = Icons.Filled.Person,
                 label = "Thông tin tài khoản",

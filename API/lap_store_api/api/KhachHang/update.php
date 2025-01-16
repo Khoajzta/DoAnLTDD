@@ -27,6 +27,7 @@ $khachhang->HoTen = $data->HoTen;
 $khachhang->GioiTinh = $data->GioiTinh;
 $khachhang->NgaySinh = $data->NgaySinh;
 $khachhang->SoDienThoai = $data->SoDienThoai;
+$khachhang->Email = $data->Email;
 
 if ($khachhang->UpdateKhachHang()) {
     echo json_encode(array('message' => 'Khach Hang Updated'));

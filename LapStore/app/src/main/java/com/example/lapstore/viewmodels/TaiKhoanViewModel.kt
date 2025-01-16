@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.lapstore.models.GioHang
+import com.example.lapstore.models.HoaDonBan
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -28,9 +29,14 @@ class TaiKhoanViewModel:ViewModel() {
     private val _loginResult = mutableStateOf<KiemTraTaiKhoanResponse?>(null)
     val loginResult: State<KiemTraTaiKhoanResponse?> = _loginResult
 
+    private val _checkUsernameResult = mutableStateOf<KiemTraTaiKhoanResponse?>(null)
+    val checkUsernameResult: State<KiemTraTaiKhoanResponse?> = _checkUsernameResult
+
     var taikhoanUpdateResult by mutableStateOf("")
 
     var tentaikhoan: String? = null
+
+    var TaoTaiKhoanResult by mutableStateOf("")
 
     fun kiemTraDangNhap(tenTaiKhoan: String, matKhau: String) {
         viewModelScope.launch {
@@ -45,6 +51,23 @@ class TaiKhoanViewModel:ViewModel() {
                 // Xử lý lỗi nếu có
                 Log.e("TaiKhoanViewModel", "Đã xảy ra lỗi: ${e.message}")
                 _loginResult.value = KiemTraTaiKhoanResponse(result = false, message = e.message)
+            }
+        }
+    }
+
+    fun kiemTraTrungUsername(tenTaiKhoan: String) {
+        viewModelScope.launch {
+            try {
+                // Thực hiện yêu cầu API
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.taiKhoanAPIService.kiemTraTrunUsername(tenTaiKhoan)
+                }
+                // Cập nhật kết quả API vào state
+                _checkUsernameResult.value = response
+            } catch (e: Exception) {
+                // Xử lý lỗi nếu có
+                Log.e("TaiKhoanViewModel", "Đã xảy ra lỗi: ${e.message}")
+                _checkUsernameResult.value = KiemTraTaiKhoanResponse(result = false, message = e.message)
             }
         }
     }
@@ -74,6 +97,21 @@ class TaiKhoanViewModel:ViewModel() {
             } catch (e: Exception) {
                 taikhoanUpdateResult = "Lỗi khi cập nhật giỏ hàng: ${e.message}"
                 Log.e("GioHang Error", "Lỗi khi cập nhật giỏ hàng: ${e.message}")
+            }
+        }
+    }
+
+    fun TaoTaiKhoan(taikhoan: TaiKhoan) {
+        viewModelScope.launch {
+            try {
+                val response = QuanLyBanLaptopRetrofitClient.taiKhoanAPIService.TaoTaiKhoan(taikhoan)
+                TaoTaiKhoanResult = if (response.success) {
+                    "Đăng ký thành công: ${response.message}"
+                } else {
+                    "Đăng ký thất bại: ${response.message}"
+                }
+            } catch (e: Exception) {
+                Log.e("Thêm tài khoản", "Lỗi kết nối: ${e.message}")
             }
         }
     }

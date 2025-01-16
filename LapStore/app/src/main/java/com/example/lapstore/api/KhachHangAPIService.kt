@@ -1,6 +1,7 @@
 
 import com.example.lapstore.models.KhachHang
 import com.example.lapstore.models.SanPham
+import com.example.lapstore.models.TaiKhoan
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.http.Body
@@ -15,6 +16,11 @@ data class KhachHangResponse(
     val khachhang: List<KhachHang>
 )
 
+data class KhachHangUpdateResponse(
+    val success: Boolean,
+    val message: String
+)
+
 interface KhachHangAPIService {
     // Lấy tất cả khách hàng
     @GET("KhachHang/read.php")
@@ -23,10 +29,15 @@ interface KhachHangAPIService {
     @PUT("KhachHang/update.php")
     suspend fun updateKhachHang(
         @Body khachHang: KhachHang
-    ): UpdateResponse
+    ): KhachHangUpdateResponse
 
     @GET("KhachHang/show.php")
     suspend fun getKhachHangById(
         @Query("id") id: String
     ): KhachHang
+
+    @POST("KhachHang/create.php")
+    suspend fun ThemKhachHang(
+        @Body khachhang: KhachHang,
+    ): KhachHangUpdateResponse
 }

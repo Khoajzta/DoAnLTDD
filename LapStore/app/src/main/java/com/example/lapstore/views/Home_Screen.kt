@@ -4,6 +4,7 @@ import NavRoute
 import ProductCard
 import SanPhamViewModel
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -55,11 +56,17 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -84,20 +91,31 @@ fun HomeScreen(
     viewModel: SanPhamViewModel,
     tentaikhoan:String?,
 ) {
+    var isFocused by remember { mutableStateOf(false) }
+
+
     val systemUiController = rememberSystemUiController()
     val keyboardController = LocalSoftwareKeyboardController.current
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     val danhSachSanPham = viewModel.danhSachAllSanPham
-    val danhSachSanPhamGaming = viewModel.danhSachSanPhamGaming
-    val danhSachSanPhamVanPhong = viewModel.danhSachSanPhamVanPhong
+    val danhSachSanPhamGaming = viewModel.danhSachSanPhamGaming.collectAsState()
+    val danhSachSanPhamVanPhong = viewModel.danhSachSanPhamVanPhong.collectAsState()
     val isLoading = viewModel.isLoading
     val errorMessage = viewModel.errorMessage
 
     val taiKhoanViewModel: TaiKhoanViewModel = viewModel()
 
     val taikhoan = taiKhoanViewModel.taikhoan
+    LaunchedEffect(isFocused) {
+        if (isFocused) {
+            if(taikhoan!=null)
+                navController.navigate("${NavRoute.SEARCHSCREEN.route}?makhachhang=${taikhoan.MaKhachHang}&tentaikhoan=${taikhoan.TenTaiKhoan}")
+            else
+                navController.navigate(NavRoute.SEARCHSCREEN.route)
+        }
+    }
 
     if(tentaikhoan != null){
         taiKhoanViewModel.getTaiKhoanByTentaikhoan(tentaikhoan)
@@ -106,8 +124,8 @@ fun HomeScreen(
         systemUiController.setStatusBarColor(color = Color.Red, darkIcons = false)
     }
     LaunchedEffect(Unit) {
-        viewModel.getSanPhamTheoLoai(maLoaiSanPham = 1, isLoai1 = true)
-        viewModel.getSanPhamTheoLoai(maLoaiSanPham = 2, isLoai1 = false)
+        viewModel.getSanPhamTheoLoaiGaming()
+        viewModel.getSanPhamTheoLoaiVanPhong()
         viewModel.getAllSanPham()
     }
     ModalNavigationDrawer(
@@ -210,7 +228,9 @@ fun HomeScreen(
                                 },
                                 modifier = Modifier
                                     .height(50.dp)
-                                    .fillMaxWidth(),
+                                    .fillMaxWidth().onFocusChanged { focusState ->
+                                        isFocused = focusState.isFocused  // Chỉ chuyển trang khi TextField được nhấn vào
+                                    },
                                 textStyle = TextStyle(
                                     color = Color.Black,
                                     fontSize = 16.sp
@@ -265,8 +285,9 @@ fun HomeScreen(
                                 IconButton(
                                     modifier = Modifier.size(45.dp),
                                     onClick = {
-                                        navController.popBackStack()
-                                        navController.navigate(NavRoute.HOME.route)
+                                        navController.navigate("${NavRoute.HOME.route}?tentaikhoan=${tentaikhoan}"){
+                                            popUpTo(0) { inclusive = true }
+                                        }
                                     }
                                 ) {
                                     Icon(
@@ -400,7 +421,7 @@ fun HomeScreen(
                             contentPadding = PaddingValues(horizontal = 8.dp),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            items(danhSachSanPhamVanPhong) { sanphamvp ->
+                            items(danhSachSanPhamVanPhong.value) { sanphamvp ->
                                 if(taikhoan!=null){
                                     ProductCard(sanphamvp,taikhoan.MaKhachHang.toString(),taikhoan.TenTaiKhoan, navController)
                                 }
@@ -425,7 +446,7 @@ fun HomeScreen(
                             contentPadding = PaddingValues(horizontal = 8.dp),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            items(danhSachSanPhamGaming) { sanphamgm ->
+                            items(danhSachSanPhamGaming.value) { sanphamgm ->
                                 if(taikhoan!=null){
                                     ProductCard(sanphamgm,taikhoan.MaKhachHang.toString(),tentaikhoan, navController)
                                 }

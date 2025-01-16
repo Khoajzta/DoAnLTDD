@@ -21,7 +21,7 @@ class SanPham
 
     public $MaKhachHang;
 
-    public$SoLuongTrongGioHang;
+    public $SoLuongTrongGioHang;
 
     //connect db
 
@@ -34,8 +34,8 @@ class SanPham
 
     public function GetAllSanPham()
     {
-        $query = "SELECT * FROM SanPham sp 
-              join hinhanh ha on sp.HinhAnh = ha.MaHinhAnh";
+        $query = "SELECT sp.*,ha.DuongDan FROM SanPham sp 
+              join hinhanh ha on sp.MaSanPham = ha.MaSanPham where ha.MacDinh = 1";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt; // Trả về PDOStatement
@@ -43,47 +43,62 @@ class SanPham
 
     public function GetSanPhamById()
     {
-        $query = "SELECT * 
-                  FROM SanPham sp 
-                  join hinhanh ha on sp.HinhAnh = ha.MaHinhAnh
-                  WHERE sp.MaSanPham = ? LIMIT 1";
+        $query = "SELECT sp.*, ha.DuongDan FROM SanPham sp 
+              JOIN hinhanh ha ON sp.MaSanPham = ha.MaSanPham
+              WHERE ha.MacDinh = 1 and sp.MaSanPham = ? LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->MaSanPham);
         $stmt->execute();
+
         // Lấy kết quả
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Gán giá trị từ kết quả vào các thuộc tính của đối tượng
-        $this->TenSanPham = $row['TenSanPham'] ?? null;  // Sử dụng giá trị mặc định nếu không có giá trị
-        $this->MaLoaiSanPham = $row['MaLoaiSanPham'] ?? null;
-        $this->CPU = $row['CPU'] ?? null;
-        $this->RAM = $row['RAM'] ?? null;
-        $this->CardManHinh = $row['CardManHinh'] ?? null;
-        $this->SSD = $row['SSD'] ?? null;
-        $this->ManHinh = $row['ManHinh'] ?? null;
-        $this->MaMauSac = $row['MaMauSac'] ?? null;
-        $this->Gia = $row['Gia'] ?? null;
-        $this->SoLuong = $row['SoLuong'] ?? null;
-        $this->MoTa = $row['MoTa'] ?? null;
-        $this->HinhAnh = $row['DuongDan'] ?? null;
-        $this->TrangThai = $row['TrangThai'] ?? null;
+        if ($row) {
+            // Gán giá trị từ kết quả vào các thuộc tính của đối tượng
+            $this->TenSanPham = $row['TenSanPham'] ?? null;
+            $this->MaLoaiSanPham = $row['MaLoaiSanPham'] ?? null;
+            $this->CPU = $row['CPU'] ?? null;
+            $this->RAM = $row['RAM'] ?? null;
+            $this->CardManHinh = $row['CardManHinh'] ?? null;
+            $this->SSD = $row['SSD'] ?? null;
+            $this->ManHinh = $row['ManHinh'] ?? null;
+            $this->MaMauSac = $row['MaMauSac'] ?? null;
+            $this->Gia = $row['Gia'] ?? null;
+            $this->SoLuong = $row['SoLuong'] ?? null;
+            $this->MoTa = $row['MoTa'] ?? null;
+            $this->HinhAnh = $row['DuongDan'] ?? null;
+            $this->TrangThai = $row['TrangThai'] ?? null;
+        } else {
+            // Không tìm thấy sản phẩm, có thể thông báo lỗi
+            echo "Sản phẩm không tồn tại.";
+            return false;
+        }
+
+        // Giải phóng bộ nhớ
+        unset($row);
     }
 
     public function GetSanPhamBySearch($searchTerm)
     {
-        $query = "SELECT * , ro.DungLuong as DungLuongROM ,  r.DungLuong as DungLuongRAM
-              FROM SanPham sp
-              JOIN HinhAnh ha ON sp.HinhAnh = ha.MaHinhAnh
-              JOIN CPU cpu ON sp.MaCPU = cpu.MaCPU
-              JOIN RAM r ON sp.MaRAM = r.MaRAM
-              JOIN ROM ro ON sp.MaROM = ro.MaROM
-              JOIN CardDoHoa cdh ON sp.MaCardDoHoa = cdh.MaCardDoHoa
-              JOIN ManHinh mh ON sp.MaManHinh = mh.MaManHinh
-              WHERE sp.TenSanPham LIKE ? OR sp.MoTa LIKE ?";
+        $query = "SELECT sp.* ,ha.DuongDan
+          FROM SanPham sp
+          JOIN HinhAnh ha ON sp.MaSanPham = ha.MaSanPham
+          WHERE ha.MacDinh = 1 AND (
+          sp.TenSanPham LIKE ? 
+          OR sp.MoTa LIKE ? 
+          OR sp.CPU LIKE ? 
+          OR sp.RAM LIKE ? 
+          OR sp.CardManHinh LIKE ? 
+          OR sp.SSD LIKE ?
+        )";
         $stmt = $this->conn->prepare($query);
         $searchTerm = "%" . $searchTerm . "%"; // Thêm dấu '%' để tìm kiếm theo kiểu "like"
         $stmt->bindParam(1, $searchTerm);
         $stmt->bindParam(2, $searchTerm);
+        $stmt->bindParam(3, $searchTerm);
+        $stmt->bindParam(4, $searchTerm);
+        $stmt->bindParam(5, $searchTerm);
+        $stmt->bindParam(6, $searchTerm);
         $stmt->execute();
         return $stmt;
     }
@@ -91,13 +106,27 @@ class SanPham
 
     public function GetSanPhamByLoai()
     {
-        $query = "SELECT * 
+        $query = "SELECT sp.*,ha.DuongDan 
                   FROM SanPham sp 
-                  join hinhanh ha on sp.HinhAnh = ha.MaHinhAnh
-                  WHERE sp.MaLoaiSanPham = ?
+                  join hinhanh ha on sp.MaSanPham = ha.MaSanPham
+                  WHERE ha.MacDinh = 1 and sp.MaLoaiSanPham = ?
                   ";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->MaLoaiSanPham);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    public function GetSanPhamTrongHoaDon($mahoadon)
+    {
+        $query = "SELECT sp.*, ha.DuongDan
+                  FROM SanPham sp 
+                  join hinhanh ha on sp.MaSanPham = ha.MaSanPham 
+                  join ChiTietHoaDonBan cthd on sp.MaSanPham = cthd.MaSanPham
+                  WHERE ha.MacDinh = 1 and cthd.MaHoaDonBan = ?
+                  ";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $mahoadon);
         $stmt->execute();
         return $stmt;
     }
@@ -107,8 +136,8 @@ class SanPham
         $query = "SELECT sp.*, ha.DuongDan
                 FROM sanpham sp 
                 JOIN giohang gh on sp.MaSanPham = gh.MaSanPham
-                JOIN hinhanh ha on sp.MaSanPham = ha.MaHinhAnh
-                WHERE gh.MaKhachHang = ?";
+                JOIN hinhanh ha on sp.MaSanPham = ha.MaSanPham
+                WHERE ha.MacDinh = 1 and gh.MaKhachHang = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->MaKhachHang);
         $stmt->execute();
@@ -240,3 +269,4 @@ class SanPham
         return false;
     }
 }
+?>

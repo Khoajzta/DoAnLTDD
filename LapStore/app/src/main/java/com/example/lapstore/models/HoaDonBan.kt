@@ -6,6 +6,7 @@ data class HoaDonBan(
     val NgayDatHang: String,
     val MaDiaChi: Int,
     val TongTien: Int,
-    val TrangThai: Int // Đảm bảo là kiểu Int
+    val PhuongThucThanhToan: String,
+    val TrangThai: Int
 )
 

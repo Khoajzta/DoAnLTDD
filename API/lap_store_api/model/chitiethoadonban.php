@@ -17,9 +17,9 @@ class ChiTietHoaDonBan {
     }
 
     // Phương thức lấy tất cả chi tiết hóa đơn bán
-    public function getAllDetails() {
+    public function getAllChiTietHoaDon() {
         try {
-            $query = "SELECT * FROM chitiethoadonban ORDER BY MaChiTietHoaDonBan DESC";
+            $query = "SELECT * FROM chitiethoadonban ORDER BY MaChiTietHoaDonBan ASC";
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
             return $stmt;
@@ -27,6 +27,17 @@ class ChiTietHoaDonBan {
             echo "Lỗi: " . $e->getMessage();
             return null;
         }
+    }
+
+    public function getChiTietHoaDonByMaHoaDonBan() {
+        $query = "SELECT * 
+                  FROM chitiethoadonban 
+                  WHERE MaHoaDonBan = ?
+                  ";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->MaHoaDonBan);
+        $stmt->execute();
+        return $stmt;
     }
 
     // Phương thức lấy chi tiết hóa đơn bán theo ID
@@ -55,11 +66,10 @@ class ChiTietHoaDonBan {
     public function addDetail() {
         try {
             $query = "INSERT INTO chitiethoadonban (MaHoaDonBan, MaSanPham, SoLuong, DonGia, ThanhTien, GiamGia) 
-                      VALUES (:MaHoaDonBan, :MaSanPham, :SoLuong, :DonGia, :ThanhTien, :GiamGia)";
+                        VALUES ((SELECT MAX(MaHoaDonBan) FROM HoaDonBan), :MaSanPham, :SoLuong, :DonGia, :ThanhTien, :GiamGia)";
             $stmt = $this->conn->prepare($query);
 
             // Làm sạch dữ liệu đầu vào
-            $this->MaHoaDonBan = htmlspecialchars(strip_tags($this->MaHoaDonBan));
             $this->MaSanPham = htmlspecialchars(strip_tags($this->MaSanPham));
             $this->SoLuong = htmlspecialchars(strip_tags($this->SoLuong));
             $this->DonGia = htmlspecialchars(strip_tags($this->DonGia));
@@ -67,7 +77,6 @@ class ChiTietHoaDonBan {
             $this->GiamGia = htmlspecialchars(strip_tags($this->GiamGia));
 
             // Gắn tham số
-            $stmt->bindParam(':MaHoaDonBan', $this->MaHoaDonBan);
             $stmt->bindParam(':MaSanPham', $this->MaSanPham);
             $stmt->bindParam(':SoLuong', $this->SoLuong);
             $stmt->bindParam(':DonGia', $this->DonGia);
