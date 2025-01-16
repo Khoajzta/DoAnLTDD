@@ -11,11 +11,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
@@ -37,6 +43,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -61,8 +70,9 @@ fun LoginScreen(
 
     val systemUiController = rememberSystemUiController()
 
-    var tendangnhap by remember { mutableStateOf("nguyenvana") }
-    var matkhau by remember { mutableStateOf("12345678") }
+    var tendangnhap by remember { mutableStateOf("") }
+    var matkhau by remember { mutableStateOf("") }
+    var isPasswordVisible by remember { mutableStateOf(false) }
 
     val loginResult = taiKhoanViewModel.loginResult.value
 
@@ -118,6 +128,16 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth(),
                 value = matkhau,
                 label = { Text("Mật khẩu") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+                        Icon(
+                            imageVector = if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                            contentDescription = if (isPasswordVisible) "Ẩn mật khẩu" else "Hiển thị mật khẩu"
+                        )
+                    }
+                },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Red,
                     unfocusedBorderColor = Color.Red,
@@ -195,24 +215,38 @@ fun LoginScreen(
 
             if (openDialog == true) {
                 AlertDialog(
-                    onDismissRequest = { openDialog = false }, // Đóng khi nhấn ngoài dialog
+                    containerColor = Color.White,
+                    title = { Text("Đăng nhâp", color = Color.Red) },
+                    onDismissRequest = { openDialog = false },
                     text = {
                         if(loginResult!=null){
                             if(tendangnhap == "" || matkhau ==""){
-                                Text("Vui lòng nhập đầy đủ thông tin")
+                                Text(
+                                    "Vui lòng nhập đầy đủ thông tin!!!",
+                                    fontSize = 17.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
                             }
                             else if(loginResult.result == false){
-                                Text("Tài khoản hoặc mật khẩu không chính xác")
+                                Text(
+                                    "Tài khoản hoặc mật khẩu không chính xác",
+                                    fontSize = 17.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
                             }
                         }
                     },
                     confirmButton = {
-                        Button(
+                        TextButton(
                             onClick = {
                                 openDialog = false
                             }
                         ) {
-                            Text("OK")
+                            Text(
+                                "OK",
+                                fontSize = 17.sp,
+                                color = Color.Red
+                            )
                         }
                     },
                 )

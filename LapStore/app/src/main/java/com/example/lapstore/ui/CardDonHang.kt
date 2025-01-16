@@ -1,3 +1,4 @@
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.lapstore.models.HoaDonBan
+import com.example.lapstore.models.SanPham
+import com.example.lapstore.viewmodels.ChiTietHoaDonBanViewmodel
 import com.example.lapstore.viewmodels.DiaChiViewmodel
 import com.example.lapstore.viewmodels.HoaDonBanVỉewModel
 import com.example.lapstore.views.formatDate
@@ -28,10 +36,9 @@ import com.example.lapstore.views.formatDate
 fun CardDonHang(
     navController: NavHostController,
     hoaDonBan: HoaDonBan,
-    ishuy:Boolean,
-){
-    var hoaDonBanVỉewModel:HoaDonBanVỉewModel = viewModel()
-
+    ishuy: Boolean,
+) {
+    val hoaDonBanViewModel: HoaDonBanVỉewModel = viewModel()
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color.White
@@ -75,9 +82,12 @@ fun CardDonHang(
                             containerColor = Color.Red
                         ),
                         shape = RoundedCornerShape(10.dp),
-                        onClick =  {
-                            var hoadonbannew = HoaDonBan(hoaDonBan.MaHoaDonBan,hoaDonBan.MaKhachHang,hoaDonBan.NgayDatHang,hoaDonBan.MaDiaChi,hoaDonBan.TongTien,hoaDonBan.PhuongThucThanhToan,5)
-                            hoaDonBanVỉewModel.updateHoaDonBan(hoadonbannew)
+                        onClick = {
+                            // Cập nhật trạng thái của hóa đơn thành "Chờ xác nhận hủy"
+                            val hoadonbannew = hoaDonBan.copy(
+                                TrangThai = 5 // Giả sử trạng thái 5 là "Đã Hủy"
+                            )
+                            hoaDonBanViewModel.updateHoaDonBan(hoadonbannew)
                         }
                     ) {
                         Text("Hủy")

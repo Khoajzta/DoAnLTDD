@@ -33,9 +33,12 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -78,6 +81,7 @@ import com.example.lapstore.models.TaiKhoan
 import com.example.lapstore.viewmodels.GioHangViewModel
 import com.example.lapstore.viewmodels.TaiKhoanViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -86,16 +90,18 @@ import kotlinx.coroutines.launch
 fun ProductDetail_Screen(
     navController: NavHostController,
     id: String,
-    makhachhang:String?,
-    tentaikhoan:String?,
+    makhachhang: String?,
+    tentaikhoan: String?,
     viewModel: SanPhamViewModel,
     hinhAnhViewModel: HinhAnhViewModel,
 ) {
     var isFocused by remember { mutableStateOf(false) }
 
+    var isLoading by remember { mutableStateOf(false) }
+
     val systemUiController = rememberSystemUiController()
-    var gioHangViewModel:GioHangViewModel = viewModel()
-    var sanPhamViewModel:SanPhamViewModel = viewModel()
+    var gioHangViewModel: GioHangViewModel = viewModel()
+    var sanPhamViewModel: SanPhamViewModel = viewModel()
 
     val danhSachHinhAnh = hinhAnhViewModel.danhsachhinhanhtheosanpham
     val danhsachgiohang = gioHangViewModel.listGioHang
@@ -109,23 +115,22 @@ fun ProductDetail_Screen(
         SnackbarHostState()
     }
 
+
     var scope = rememberCoroutineScope()
 
     var hinhAnhHienTai by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(isFocused) {
         if (isFocused) {
-            if(tentaikhoan != null && makhachhang!=null)
+            if (tentaikhoan != null && makhachhang != null)
                 navController.navigate("${NavRoute.SEARCHSCREEN.route}?makhachhang=${makhachhang}&tentaikhoan=${tentaikhoan}")
             else
                 navController.navigate(NavRoute.SEARCHSCREEN.route)
         }
     }
 
-    LaunchedEffect(makhachhang) {
-        if(makhachhang!=null){
-            gioHangViewModel.getGioHangByKhachHang(makhachhang.toInt())
-        }
+    if (makhachhang != null) {
+        gioHangViewModel.getGioHangByKhachHang(makhachhang.toInt())
     }
 
     LaunchedEffect(id) {
@@ -145,6 +150,7 @@ fun ProductDetail_Screen(
         }
     }
     Scaffold(
+        containerColor = Color.White,
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
@@ -165,10 +171,9 @@ fun ProductDetail_Screen(
                 actions = {
                     IconButton(
                         onClick = {
-                            if(makhachhang == null && tentaikhoan == null){
+                            if (makhachhang == null && tentaikhoan == null) {
                                 navController.navigate(NavRoute.LOGINSCREEN.route)
-                            }
-                            else{
+                            } else {
                                 navController.navigate("${NavRoute.CART.route}?makhachhang=${makhachhang}&tentaikhoan=${tentaikhoan}")
                             }
                         }
@@ -193,7 +198,8 @@ fun ProductDetail_Screen(
                             },
                             modifier = Modifier
                                 .height(50.dp)
-                                .fillMaxWidth().onFocusChanged { focusState ->
+                                .fillMaxWidth()
+                                .onFocusChanged { focusState ->
                                     isFocused = focusState.isFocused
                                 },
                             textStyle = TextStyle(
@@ -313,83 +319,85 @@ fun ProductDetail_Screen(
                     Button(
                         onClick = {
                             if (makhachhang == null) {
+                                // Điều hướng tới màn hình đăng nhập nếu khách hàng chưa đăng nhập
                                 navController.navigate(NavRoute.LOGINSCREEN.route)
                             } else {
-                                var giohangnew: GioHang? = null
-                                var isProductInCart = false
+                                isLoading = true // Bắt đầu hiệu ứng loading
+                                scope.launch {
+                                    // Lấy giỏ hàng hiện tại
+                                    gioHangViewModel.getGioHangByKhachHang(makhachhang.toInt())
+                                    val gioHangHienTai = danhsachgiohang
 
-                                // Kiểm tra sản phẩm trong giỏ hàng
-                                for (giohang in danhsachgiohang) {
-                                    if (sanPham.MaSanPham == giohang.MaSanPham) {
-                                        val sanphamTonKho = danhsachsanpham.find { it.MaSanPham == sanPham.MaSanPham }
-                                        if (sanphamTonKho != null) {
-                                            if (giohang.SoLuong >= sanphamTonKho.SoLuong) {
-                                                // Thông báo nếu số lượng đã đạt giới hạn
-                                                scope.launch {
-                                                    snackbarHostState.showSnackbar(
-                                                        message = "Số lượng trong kho chỉ còn ${sanphamTonKho.SoLuong} sản phẩm, không thể thêm nữa"
-                                                    )
-                                                }
-                                            } else {
-                                                // Tăng số lượng sản phẩm trong giỏ hàng
-                                                giohang.SoLuong += 1
-                                                gioHangViewModel.updateGioHang(giohang)
-                                                scope.launch {
-                                                    snackbarHostState.showSnackbar(
-                                                        message = "Cập nhật số lượng sản phẩm trong giỏ hàng thành công"
-                                                    )
-                                                }
-                                            }
+                                    // Kiểm tra sản phẩm đã có trong giỏ hàng hay chưa
+                                    val gioHangSanPham =
+                                        gioHangHienTai.find { it.MaSanPham == sanPham.MaSanPham }
+
+                                    val sanPhamTonKho =
+                                        danhsachsanpham.find { it.MaSanPham == sanPham.MaSanPham }
+
+                                    // Đảm bảo vòng loading kết thúc trước khi hiện snackbar
+                                    if (sanPhamTonKho == null || sanPhamTonKho.SoLuong <= 0) {
+                                        // Trường hợp sản phẩm hết hàng
+                                        delay(1000) // Hiệu ứng loading trong 1 giây
+                                        snackbarHostState.showSnackbar("Sản phẩm đã hết hàng, không thể thêm vào giỏ hàng.")
+                                    } else if (gioHangSanPham != null) {
+                                        // Nếu sản phẩm đã có trong giỏ hàng, kiểm tra số lượng
+                                        if (gioHangSanPham.SoLuong >= sanPhamTonKho.SoLuong) {
+                                            // Đạt giới hạn kho
+                                            delay(1000) // Hiệu ứng loading trong 1 giây
+                                            snackbarHostState.showSnackbar("Số lượng trong kho chỉ còn ${sanPhamTonKho.SoLuong} sản phẩm, không thể thêm nữa.")
                                         } else {
-                                            scope.launch {
-                                                snackbarHostState.showSnackbar(
-                                                    message = "Sản phẩm không tồn tại trong kho"
-                                                )
-                                            }
-                                        }
-                                        isProductInCart = true
-                                        break // Thoát vòng lặp nếu sản phẩm đã được xử lý
-                                    }
-                                }
-
-                                // Nếu sản phẩm chưa có trong giỏ hàng
-                                if (!isProductInCart) {
-                                    val sanphamTonKho = danhsachsanpham.find { it.MaSanPham == sanPham.MaSanPham }
-                                    if (sanphamTonKho != null && sanphamTonKho.SoLuong > 0) {
-                                        giohangnew = GioHang(0, makhachhang.toInt(), sanPham.MaSanPham, 1, 1)
-                                        gioHangViewModel.addToCart(giohangnew)
-                                        gioHangViewModel.getGioHangByKhachHang(makhachhang.toInt())
-                                        scope.launch {
-                                            snackbarHostState.showSnackbar(
-                                                message = "Thêm sản phẩm mới vào giỏ hàng thành công"
-                                            )
+                                            // Tăng số lượng sản phẩm trong giỏ hàng
+                                            gioHangSanPham.SoLuong += 1
+                                            gioHangViewModel.updateGioHang(gioHangSanPham)
+                                            delay(1000) // Hiệu ứng loading trong 1 giây
+                                            snackbarHostState.showSnackbar("Cập nhật số lượng sản phẩm trong giỏ hàng thành công.")
                                         }
                                     } else {
-                                        scope.launch {
-                                            snackbarHostState.showSnackbar(
-                                                message = "Sản phẩm đã hết hàng, không thể thêm vào giỏ hàng"
-                                            )
-                                        }
+                                        // Nếu sản phẩm chưa có trong giỏ hàng, thêm mới
+                                        val gioHangMoi = GioHang(
+                                            MaGioHang = 0,
+                                            MaKhachHang = makhachhang.toInt(),
+                                            MaSanPham = sanPham.MaSanPham,
+                                            SoLuong = 1,
+                                            TrangThai = 1
+                                        )
+                                        gioHangViewModel.addToCart(gioHangMoi)
+                                        delay(5000) // Hiệu ứng loading trong 1 giây
+                                        snackbarHostState.showSnackbar("Thêm sản phẩm mới vào giỏ hàng thành công.")
                                     }
+
+                                    // Sau khi loading xong thì cập nhật lại giỏ hàng
+                                    gioHangViewModel.getGioHangByKhachHang(makhachhang.toInt()) // Tải lại danh sách giỏ hàng
+
+                                    isLoading = false // Kết thúc loading, bật lại nút
                                 }
                             }
                         },
+                        enabled = !isLoading, // Vô hiệu hóa nút khi isLoading = true
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(10.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0XFF27A4F2)
+                            containerColor = if (!isLoading) Color(0XFF27A4F2) else Color.Gray // Màu nút thay đổi khi bị vô hiệu hóa
                         )
                     ) {
-                        Text(
-                            "THÊM VÀO GIỎ HÀNG",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp
-                        )
+                        if (isLoading) {
+                            // Hiển thị vòng loading khi trạng thái isLoading = true
+                            CircularProgressIndicator(
+                                color = Color.White,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        } else {
+                            // Hiển thị text bình thường khi không loading
+                            Text(
+                                "THÊM VÀO GIỎ HÀNG",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp
+                            )
+                        }
                     }
 
-
                 }
-
                 // Nút mua ngay
                 item {
                     Button(
@@ -409,27 +417,46 @@ fun ProductDetail_Screen(
                 }
                 item {
                     SnackbarHost(
-                        modifier = Modifier.padding(30.dp),
+                        modifier = Modifier.padding(4.dp),
                         hostState = snackbarHostState
                     )
 
                 }
-                // Mô tả sản phẩm
                 item {
-                    Text(
-                        text = "Mô tả sản phẩm",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Text(
-                        text = sanPham!!.MoTa,
-                        fontSize = 16.sp,
-                        lineHeight = 22.sp,
-                        modifier = Modifier.padding(top = 8.dp)
+                    HorizontalDivider(
+                        color = Color.Black,
+                        thickness = 1.dp,
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
-
-                // Thông số kỹ thuật
+//                // Mô tả sản phẩm
+                item {
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Mô tả sản phẩm",
+                            fontSize = 22.sp,
+                            textAlign = TextAlign.Justify,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(
+                            text = sanPham!!.MoTa,
+                            fontSize = 20.sp,
+                            textAlign = TextAlign.Justify,
+                            lineHeight = 28.sp,
+                            modifier = Modifier.padding(top = 8.dp)
+                        )
+                    }
+                }
+                item {
+                    HorizontalDivider(
+                        color = Color.Black,
+                        thickness = 1.dp,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+//                // Thông số kỹ thuật
                 item {
                     Text(
                         text = "Thông số kỹ thuật",
@@ -440,16 +467,15 @@ fun ProductDetail_Screen(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         modifier = Modifier.padding(top = 8.dp)
                     ) {
-                        Text("CPU: ${sanPham!!.CPU}")
-                        Text("Card đồ họa: ${sanPham!!.CardManHinh}")
-                        Text("RAM: ${sanPham!!.RAM} GB")
-                        Text("ROM: ${sanPham!!.SSD} GB")
+                        Text("CPU: ${sanPham!!.CPU}", fontWeight = FontWeight.Bold)
+                        Text("Card đồ họa: ${sanPham!!.CardManHinh}", fontWeight = FontWeight.Bold)
+                        Text("${sanPham!!.RAM}", fontWeight = FontWeight.Bold)
+                        Text("${sanPham!!.SSD}", fontWeight = FontWeight.Bold)
                     }
                 }
             }
         }
     }
-
 }
 
 

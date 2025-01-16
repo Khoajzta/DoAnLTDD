@@ -32,6 +32,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -138,8 +139,10 @@ fun CartScreen(
                 title = { Text("Giỏ hàng", color = Color.White) },
                 navigationIcon = {
                     IconButton(onClick = {
-                        gioHangViewModel.updateAllGioHang()
-                        navController.popBackStack()
+//                        gioHangViewModel.updateAllGioHang()
+                        navController.navigate("${NavRoute.HOME.route}?tentaikhoan=${tentaikhoan}"){
+                            popUpTo(0) { inclusive = true }
+                        }
                     }) {
                         Icon(Icons.Filled.ArrowBackIosNew, contentDescription = null, tint = Color.White)
                     }
@@ -186,20 +189,30 @@ fun CartScreen(
 
                     if (openDialog == true) {
                         AlertDialog(
+                            containerColor = Color.White,
+                            title = {
+                                Text("Cập nhật địa chỉ")
+                            },
                             onDismissRequest = { openDialog = false }, // Đóng khi nhấn ngoài dialog
                             text = {
                                 Text(
-                                    "Bạn chưa có địa chỉ giao hàng, vui lòng thêm địa chỉ giao hàng"
+                                    "Bạn chưa có địa chỉ giao hàng, vui lòng thêm địa chỉ giao hàng",
+                                    fontSize = 17.sp,
+                                    fontWeight = FontWeight.Bold
                                 )
                             },
                             confirmButton = {
-                                Button(
+                                TextButton(
                                     onClick = {
                                         openDialog = false
                                         navController.navigate("${NavRoute.DIACHISCREEN.route}?makhachhang=${makhachhang}")
                                     }
                                 ) {
-                                    Text("OK")
+                                    Text(
+                                        "Cập nhật địa chỉ",
+                                        fontSize = 17.sp,
+                                        color = Color.Red
+                                    )
                                 }
                             },
                         )

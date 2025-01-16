@@ -182,6 +182,8 @@ fun AccountInfoSection(
     tentaikhoan: String
 ) {
 
+    val maxLength = 10
+
     var taikhoanviewModel: TaiKhoanViewModel = viewModel()
     var khachhangviewModel: KhachHangViewModel = viewModel()
 
@@ -260,7 +262,11 @@ fun AccountInfoSection(
                 Text("Số điện thoại: ", fontWeight = FontWeight.Bold)
                 OutlinedTextField(
                     value = soDienThoai.value,
-                    onValueChange = { soDienThoai.value = it },
+                    onValueChange = {
+                        if(it.length <=maxLength){
+                            soDienThoai.value = it
+                        }
+                    },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone),
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(

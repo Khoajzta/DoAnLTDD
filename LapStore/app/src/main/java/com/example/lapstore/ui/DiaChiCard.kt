@@ -48,7 +48,7 @@ fun DiaChiCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    "Tên người nhận: ${diachi.TenNguoiNhan}",
+                    "Họ Tên: ${diachi.TenNguoiNhan}",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                 )

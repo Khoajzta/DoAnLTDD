@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircleOutline
@@ -42,6 +43,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -64,12 +67,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.lapstore.models.DiaChi
 import com.example.lapstore.viewmodels.DiaChiViewmodel
 import com.example.lapstore.viewmodels.KhachHangViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -167,9 +173,16 @@ fun AddDiaChiScreen(
     navController: NavHostController,
     makhachhang: Int?
 ) {
+    val maxLength = 10
+    var snackbarHostState = remember {
+        SnackbarHostState()
+    }
+
+    var scope = rememberCoroutineScope()
+
     val systemUiController = rememberSystemUiController()
     SideEffect {
-        systemUiController.setStatusBarColor(color = Color.White, darkIcons = false)
+        systemUiController.setStatusBarColor(color = Color.White, darkIcons = true)
     }
     var hoten by remember { mutableStateOf("") }
     var sodienthoai by remember { mutableStateOf("") }
@@ -181,6 +194,8 @@ fun AddDiaChiScreen(
 
     var listDiaChi = diaChiViewmodel.listDiacHi
     diaChiViewmodel.getDiaChiKhachHang(makhachhang)
+
+    Log.d("",listDiaChi.toString())
 
     Scaffold(
         containerColor = Color.White,
@@ -266,7 +281,9 @@ fun AddDiaChiScreen(
                     ),
                     shape = RoundedCornerShape(10.dp),
                     onValueChange = {
-                        sodienthoai = it
+                        if(it.length <=maxLength){
+                            sodienthoai = it
+                        }
                     }
                 )
                 HorizontalDivider(
@@ -354,7 +371,10 @@ fun AddDiaChiScreen(
 
                 }
             }
-
+            SnackbarHost(
+                modifier = Modifier.padding(4.dp),
+                hostState = snackbarHostState
+            )
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -364,33 +384,53 @@ fun AddDiaChiScreen(
                     containerColor = Color.Red
                 ),
                 onClick = {
-                    if (isChecked) {
-                        for (diachi in listDiaChi) {
-                            if (diachi.MacDinh == 1) {
-                                var diachi = DiaChi(
-                                    diachi.MaDiaChi,
-                                    diachi.ThongTinDiaChi,
-                                    diachi.MaKhachHang,
-                                    diachi.TenNguoiNhan,
-                                    diachi.SoDienThoai,
-                                    0
-                                )
-                                diaChiViewmodel.updateDiaChi(diachi)
-                            }
+                    if(hoten == "" || sodienthoai == "" && thongtindiachi == ""){
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = "Vui lòng nhập đây đủ thông tin"
+                            )
                         }
                     }
-                    if (makhachhang != null) {
-                        var diachi = DiaChi(
-                            0,
-                            thongtindiachi,
-                            makhachhang,
-                            hoten,
-                            sodienthoai,
-                            if (isChecked) 1 else 0
-                        )
-                        diaChiViewmodel.addDiaChi(diachi)
+                    else{
+                        if (isChecked) {
+                            for (diachi in listDiaChi) {
+                                if (diachi.MacDinh == 1) {
+                                    var diachi = DiaChi(
+                                        diachi.MaDiaChi,
+                                        diachi.ThongTinDiaChi,
+                                        diachi.MaKhachHang,
+                                        diachi.TenNguoiNhan,
+                                        diachi.SoDienThoai,
+                                        0
+                                    )
+                                    diaChiViewmodel.updateDiaChi(diachi)
+                                }
+                            }
+                        }
+                        if (makhachhang != null) {
+                            var diachi = DiaChi(
+                                0,
+                                thongtindiachi,
+                                makhachhang,
+                                hoten,
+                                sodienthoai,
+                                if (isChecked) 1 else 0
+                            )
+                            var diachinew = DiaChi(
+                                0,
+                                thongtindiachi,
+                                makhachhang,
+                                hoten,
+                                sodienthoai,
+                                1
+                            )
+                            if(listDiaChi.isEmpty())
+                                diaChiViewmodel.addDiaChi(diachinew)
+                            else
+                                diaChiViewmodel.addDiaChi(diachi)
+                        }
+                        navController.popBackStack()
                     }
-                    navController.popBackStack()
                 }
             ) {
                 Text(
@@ -411,6 +451,13 @@ fun UpdateDiaChiScreen(
     makhachhang: Int?,
     madiachi: Int
 ) {
+    var snackbarHostState = remember {
+        SnackbarHostState()
+    }
+
+    val maxLength = 10
+
+    var scope = rememberCoroutineScope()
 
     val systemUiController = rememberSystemUiController()
     SideEffect {
@@ -520,9 +567,13 @@ fun UpdateDiaChiScreen(
                         focusedBorderColor = Color.White,
                         unfocusedBorderColor = Color.White,
                     ),
+                    maxLines = 1,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     shape = RoundedCornerShape(10.dp),
                     onValueChange = {
-                        sodienthoai = it
+                        if(it.length <=maxLength){
+                            sodienthoai = it
+                        }
                     }
                 )
                 HorizontalDivider(
@@ -647,7 +698,10 @@ fun UpdateDiaChiScreen(
                     color = Color.Red
                 )
             }
-
+            SnackbarHost(
+                modifier = Modifier.padding(4.dp),
+                hostState = snackbarHostState
+            )
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -657,33 +711,42 @@ fun UpdateDiaChiScreen(
                     containerColor = Color.Red
                 ),
                 onClick = {
-                    if (isChecked) {
-                        for (diachi in listDiaChi) {
-                            if (diachi.MacDinh == 1) {
-                                var diachi = DiaChi(
-                                    diachi.MaDiaChi,
-                                    diachi.ThongTinDiaChi,
-                                    diachi.MaKhachHang,
-                                    diachi.TenNguoiNhan,
-                                    diachi.SoDienThoai,
-                                    0
-                                )
-                                diaChiViewmodel.updateDiaChi(diachi)
-                            }
+                    if(hoten == "" || sodienthoai == "" && thongtindiachi == ""){
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = "Vui lòng nhập đây đủ thông tin"
+                            )
                         }
                     }
-                    if (makhachhang != null) {
-                        var diachi = DiaChi(
-                            madiachi,
-                            thongtindiachi,
-                            makhachhang,
-                            hoten,
-                            sodienthoai,
-                            if (isChecked) 1 else 0
-                        )
-                        diaChiViewmodel.updateDiaChi(diachi)
+                    else{
+                        if (isChecked) {
+                            for (diachi in listDiaChi) {
+                                if (diachi.MacDinh == 1) {
+                                    var diachi = DiaChi(
+                                        diachi.MaDiaChi,
+                                        diachi.ThongTinDiaChi,
+                                        diachi.MaKhachHang,
+                                        diachi.TenNguoiNhan,
+                                        diachi.SoDienThoai,
+                                        0
+                                    )
+                                    diaChiViewmodel.updateDiaChi(diachi)
+                                }
+                            }
+                        }
+                        if (makhachhang != null) {
+                            var diachi2 = DiaChi(
+                                madiachi,
+                                thongtindiachi,
+                                makhachhang,
+                                hoten,
+                                sodienthoai,
+                                if (isChecked) 1 else 0
+                            )
+                            diaChiViewmodel.updateDiaChi(diachi2)
+                        }
+                        navController.popBackStack()
                     }
-                    navController.popBackStack()
                 }
             ) {
                 Text(

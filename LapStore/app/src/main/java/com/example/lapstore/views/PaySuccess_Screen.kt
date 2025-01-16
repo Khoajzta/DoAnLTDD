@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -87,6 +88,8 @@ fun PaySuccess_Screen(
             ) {
                 Text(
                     "Màn hình chính",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 17.sp,
                     color = Color.Red
                 )
             }

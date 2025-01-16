@@ -1,3 +1,4 @@
+import com.example.lapstore.models.KhachHang
 import com.example.lapstore.models.SanPham
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
@@ -39,4 +40,9 @@ interface SanPhamAPIService{
     suspend fun getSanPhamTheoHoaDon(
         @Query("MaHoaDonBan") MaHoaDonBan: Int
     ): SanPhamResponse
+
+    @PUT("SanPham/update.php")
+    suspend fun updateSanPham(
+        @Body sanpham: SanPham
+    ): KhachHangUpdateResponse
 }

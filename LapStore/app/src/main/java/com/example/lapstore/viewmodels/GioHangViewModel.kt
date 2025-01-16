@@ -13,7 +13,6 @@ import com.example.lapstore.models.GioHang
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.Response
 
 class GioHangViewModel : ViewModel() {
     var listGioHang by mutableStateOf<List<GioHang>>(emptyList())

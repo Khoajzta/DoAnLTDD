@@ -114,7 +114,7 @@ fun PayScreen(
     }
 
     SideEffect {
-        systemUiController.setStatusBarColor(color = Color.White, darkIcons = false)
+        systemUiController.setStatusBarColor(color = Color.White, darkIcons = true)
     }
 
     Scaffold(
@@ -209,6 +209,25 @@ fun PayScreen(
 
                                             // Thêm ChiTietHoaDonBan
                                             chiTietHoaDonBanViewmodel.addHoaDon(chitiethoadon)
+
+                                            var sanphamnew = SanPham(
+                                                MaSanPham = sanpham.MaSanPham,
+                                                TenSanPham = sanpham.TenSanPham,
+                                                MaLoaiSanPham = sanpham.MaLoaiSanPham,
+                                                CPU = sanpham.CPU,
+                                                RAM = sanpham.RAM,
+                                                CardManHinh = sanpham.CardManHinh,
+                                                SSD = sanpham.SSD,
+                                                ManHinh = sanpham.ManHinh,
+                                                MaMauSac = sanpham.MaMauSac,
+                                                Gia = sanpham.Gia,
+                                                SoLuong = sanpham.SoLuong - triple.second,
+                                                MoTa = sanpham.MoTa,
+                                                HinhAnh = sanpham.HinhAnh,
+                                                TrangThai = sanpham.TrangThai
+                                            )
+
+                                            sanPhamViewModel.updateSanPham(sanphamnew)
                                         }
                                     }
                                 }
