@@ -209,25 +209,6 @@ fun PayScreen(
 
                                             // Thêm ChiTietHoaDonBan
                                             chiTietHoaDonBanViewmodel.addHoaDon(chitiethoadon)
-
-                                            var sanphamnew = SanPham(
-                                                MaSanPham = sanpham.MaSanPham,
-                                                TenSanPham = sanpham.TenSanPham,
-                                                MaLoaiSanPham = sanpham.MaLoaiSanPham,
-                                                CPU = sanpham.CPU,
-                                                RAM = sanpham.RAM,
-                                                CardManHinh = sanpham.CardManHinh,
-                                                SSD = sanpham.SSD,
-                                                ManHinh = sanpham.ManHinh,
-                                                MaMauSac = sanpham.MaMauSac,
-                                                Gia = sanpham.Gia,
-                                                SoLuong = sanpham.SoLuong - triple.second,
-                                                MoTa = sanpham.MoTa,
-                                                HinhAnh = sanpham.HinhAnh,
-                                                TrangThai = sanpham.TrangThai
-                                            )
-
-                                            sanPhamViewModel.updateSanPham(sanphamnew)
                                         }
                                     }
                                 }
@@ -491,7 +472,7 @@ fun ProductItem(sanPham: SanPham, soLuong: Int) {
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            sanPham.Gia.toString(),
+                            formatGiaTien(sanPham.Gia),
                             color = Color.Red
                         )
                         Text(

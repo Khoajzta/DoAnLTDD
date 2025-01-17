@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th1 16, 2025 lúc 04:23 PM
+-- Thời gian đã tạo: Th1 17, 2025 lúc 09:03 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -75,7 +75,10 @@ INSERT INTO `chitiethoadonban` (`MaChiTietHoaDonBan`, `MaHoaDonBan`, `MaSanPham`
 (44, 30, 3, 2, 17290000, 0),
 (45, 31, 1, 1, 29990000, 0),
 (46, 32, 1, 2, 29990000, 0),
-(47, 32, 4, 2, 17390000, 0);
+(47, 32, 4, 2, 17390000, 0),
+(48, 33, 4, 2, 17390000, 0),
+(49, 33, 1, 4, 29990000, 0),
+(50, 34, 1, 5, 29990000, 0);
 
 -- --------------------------------------------------------
 
@@ -98,14 +101,11 @@ CREATE TABLE `diachi` (
 
 INSERT INTO `diachi` (`MaDiaChi`, `ThongTinDiaChi`, `TenNguoiNhan`, `SoDienThoai`, `MaKhachHang`, `MacDinh`) VALUES
 (1, 'Số 102 ấp Đông B', 'Anh B', '0901234545', 1, 1),
-(6, '1250 Huynh Tan Phat  Q7', 'Nguyen Thi B', '0909909890', 1, 0),
 (8, 'Dong hoa chau thanh tien giang', 'Nguyen Thi Te Le', '0984581041', 6, 1),
 (16, 'gfdgfd', 'gfdg', 'gfdgdf', 3, 0),
 (17, 'gfgdf', 'gfdgf', 'gfdgf', 3, 0),
 (18, 'hgfhfg', 'hghg', 'hghf', 3, 0),
 (19, 'gfdgfd', 'gfdggfdgfd', 'gfggfd', 3, 1),
-(20, 'Dong Hoa Chau Thanh Tien Giang', 'Huynh Nhut Khoa', '0383184941', 1, 0),
-(25, 'Số 102 ấp Đông B', 'Anh B', '0901234545', 1, 0),
 (26, '123 P10 Q10 Tp.HCM', 'Nguy thi Be Tu', '0987654387', 10, 1);
 
 -- --------------------------------------------------------
@@ -127,9 +127,9 @@ CREATE TABLE `giohang` (
 --
 
 INSERT INTO `giohang` (`MaGioHang`, `MaKhachHang`, `MaSanPham`, `SoLuong`, `TrangThai`) VALUES
-(119, 3, 1, 3, 1),
-(120, 3, 1, 1, 1),
-(171, 1, 2, 1, 1);
+(193, 1, 1, 12, 1),
+(194, 1, 2, 11, 1),
+(195, 1, 3, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -201,7 +201,9 @@ INSERT INTO `hoadonban` (`MaHoaDonBan`, `MaKhachHang`, `NgayDatHang`, `MaDiaChi`
 (29, 10, '2025-01-16', 26, 90000000, 'Chuyển khoản ngân hàng', '4'),
 (30, 10, '2025-01-16', 26, 34610000, 'Thanh toán khi nhận hàng', '6'),
 (31, 10, '2025-01-16', 26, 30020000, 'Chuyển khoản ngân hàng', '4'),
-(32, 1, '2025-01-16', 1, 94790000, 'Thanh toán khi nhận hàng', '4');
+(32, 1, '2025-01-16', 1, 94790000, 'Thanh toán khi nhận hàng', '4'),
+(33, 3, '2025-01-17', 19, 154770000, 'Thanh toán khi nhận hàng', '6'),
+(34, 3, '2025-01-17', 19, 149980000, 'Thanh toán khi nhận hàng', '3');
 
 -- --------------------------------------------------------
 
@@ -224,13 +226,14 @@ CREATE TABLE `khachhang` (
 
 INSERT INTO `khachhang` (`MaKhachHang`, `HoTen`, `GioiTinh`, `NgaySinh`, `Email`, `SoDienThoai`) VALUES
 (1, 'Nguyễn Văn D', 'Nam', '1990-05-11', 'a.@.gmail.com', '0901234545'),
-(3, 'Nguyễn Thị B', 'Nữ', '0000-00-00', '', '1234567890'),
+(3, 'Nguyễn Thị B', 'Nữ', '1992-01-01', 'nguyenthib@gmail.com', '1234567890'),
 (5, 'lamvanc', 'Nam', '1997-03-05', 'lamvanc@gmail.com', '0939049151'),
 (6, 'nguyenthitele', '', '0000-00-00', 'tele@gmail.com', ''),
 (7, 'nguyenvana', '', '0000-00-00', 'vn@gmail.com', ''),
 (8, 'nguyenvana', '', '0000-00-00', 'gfgfg', ''),
 (9, 'nguyenvanaa', '', '0000-00-00', 'gfgfdg', ''),
-(10, 'nguyenthibetu', 'Nữ', '2004-06-05', 'betubungbu@gmail.com', '0904853621');
+(10, 'nguyenthibetu', 'Nữ', '2004-06-05', 'betubungbu@gmail.com', '0904853621'),
+(11, 'khoajzta', 'Nam', '2004-09-23', 'khoahuynh23092004@gmail.com', '0383184941');
 
 -- --------------------------------------------------------
 
@@ -298,9 +301,9 @@ CREATE TABLE `sanpham` (
 --
 
 INSERT INTO `sanpham` (`MaSanPham`, `TenSanPham`, `MaLoaiSanPham`, `CPU`, `RAM`, `CardManHinh`, `SSD`, `ManHinh`, `MaMauSac`, `Gia`, `SoLuong`, `MoTa`, `TrangThai`) VALUES
-(1, 'Laptop gaming ASUS TUF Gaming F15 FX507VV LP304W', 2, 'INTEL CORE I9 12900K', 'RAM 16 GB', 'RTX 4060', 'SSD 512 GB', '1920x1080', 2, 29990000, 25, 'Laptop gaming RTX 40 Series mạnh nhất cho học sinh, sinh viên\n\nHoạt động bền bỉ, làm chủ trận chiến trên chiếc laptop ASUS TUF Gaming F15 (2023), sử dụng bộ vi xử lý Intel Core™ i7-13620H với sự kết hợp giữa lõi hiệu năng (P-core) và lõi tiết kiệm điện (E-core) cân bằng sức mạnh chơi game và khả năng đa nhiệm tuyệt vời. ASUS TUF Gaming F15 còn được trang bị đồ họa NVIDIA GeForce RTX™ 40 series mới nhất hỗ trợ G-SYNC® và có TGP tối đa là 140 W với Dynamic Boost. Sự kết hợp giữa CPU mạnh mẽ và GPU hiệu suất cao mang lại khả năng chơi game đáng kinh ngạc trên cả các tựa game mới nhất. Màn hình FHD 144Hz cho trải nghiệm gaming mượt mà, tận hưởng không gian giải trí đắm chìm. ', 1),
+(1, 'Laptop gaming ASUS TUF Gaming F15 FX507VV LP304W', 2, 'INTEL CORE I9 12900K', 'RAM 16 GB', 'RTX 4060', 'SSD 512 GB', '1920x1080', 2, 29990000, 20, 'Laptop gaming RTX 40 Series mạnh nhất cho học sinh, sinh viên\n\nHoạt động bền bỉ, làm chủ trận chiến trên chiếc laptop ASUS TUF Gaming F15 (2023), sử dụng bộ vi xử lý Intel Core™ i7-13620H với sự kết hợp giữa lõi hiệu năng (P-core) và lõi tiết kiệm điện (E-core) cân bằng sức mạnh chơi game và khả năng đa nhiệm tuyệt vời. ASUS TUF Gaming F15 còn được trang bị đồ họa NVIDIA GeForce RTX™ 40 series mới nhất hỗ trợ G-SYNC® và có TGP tối đa là 140 W với Dynamic Boost. Sự kết hợp giữa CPU mạnh mẽ và GPU hiệu suất cao mang lại khả năng chơi game đáng kinh ngạc trên cả các tựa game mới nhất. Màn hình FHD 144Hz cho trải nghiệm gaming mượt mà, tận hưởng không gian giải trí đắm chìm. ', 1),
 (2, 'Laptop MSI Modern 14 C11M 011VN', 1, 'Intel Core i3-1115G4 (up to 4.1Ghz, 6MB)', 'RAM 8 GB', 'Intel UHD Graphics', 'SSD 512 GB', '1920x1080', 1, 8990000, 110, 'MSI Modern 14 C11M-011VN nằm trong phân khúc laptop 9 triệu được trang bị màn hình rộng 14 inch có độ phân giải Full HD cùng tần số quét ở mức cơ bản 60Hz. Màn hình IPS này sẽ đủ sắc nét để người dùng có thể thoải mái sử dụng trong học tập, nghiên cứu và làm việc.', 1),
-(3, 'Laptop gaming ASUS Vivobook 16X K3605ZF RP634W', 2, 'AMD R77700M', 'RAM 16 GB', 'RTX 3050', 'SSD 1TB', '1920x1080', 1, 17290000, 5, 'Bên trong ASUS Gaming Vivobook K3605ZF-RP634W là bộ vi xử lý Intel Core i5-12500H với 4 nhân hiệu năng cao và 8 nhân tiết kiệm điện, cùng với bộ nhớ đệm 18MB, đạt tốc độ tối đa lên đến 4.5 GHz. Cấu hình này không chỉ đáp ứng tốt các tựa game phổ biến mà còn tối ưu cho các tác vụ đa nhiệm và xử lý đồ họa nặng.', 1),
+(3, 'Laptop gaming ASUS Vivobook 16X K3605ZF RP634W', 2, 'AMD R77700M', 'RAM 16 GB', 'RTX 3050', 'SSD 1TB', '1920x1080', 1, 17290000, 0, 'Bên trong ASUS Gaming Vivobook K3605ZF-RP634W là bộ vi xử lý Intel Core i5-12500H với 4 nhân hiệu năng cao và 8 nhân tiết kiệm điện, cùng với bộ nhớ đệm 18MB, đạt tốc độ tối đa lên đến 4.5 GHz. Cấu hình này không chỉ đáp ứng tốt các tựa game phổ biến mà còn tối ưu cho các tác vụ đa nhiệm và xử lý đồ họa nặng.', 1),
 (4, 'Laptop ASUS Vivobook 14 OLED A1405VA KM095W', 1, 'INTEL CORE I7 12500H', 'RAM 8 GB', 'INTEL ARISXE', 'SSD 1TB', '1920x1080', 1, 17390000, 3, 'Tỏa sáng với cả thế giới cùng ASUS Vivobook 14 OLED mạnh mẽ, chiếc laptop tích hợp nhiều tính năng với màn hình OLED rực rỡ, gam màu DCI-P3 đẳng cấp điện ảnh. Mọi thứ trở nên dễ dàng hơn nhờ những tiện ích thân thiện với người dùng bao gồm bản lề duỗi thẳng 180°, nắp che webcam vật lý và các phím chức năng chuyên dụng. Bảo vệ sức khỏe an toàn với ASUS kháng khuẩn Guard Plus trên các bề mặt thường xuyên chạm vào. Bắt đầu ngày mới đầy hứng khởi với ASUS Vivobook 14 OLED!', 1),
 (5, 'Laptop Acer Swift 14 AI SF14 51 53P9', 1, 'Intel® Core™ Ultra 5 Processor 226V', '16GB', '	Intel® Arc™ Graphic', '1TB NVMe P', '14\" 3K (2880 x 1800) OLED', 1, 13399000, 10, 'Acer Swift 14 AI SF14 51 53P9 tiếp tục thừa hưởng ngôn ngữ thiết kế tối giản, thanh lịch của dòng Swift. Vỏ máy được chế tác từ hợp kim nhôm cao cấp, mang đến vẻ ngoài sang trọng và độ bền bỉ cao. Với độ mỏng ấn tượng chỉ 15.95mm và trọng lượng siêu nhẹ 1.26kg, chiếc laptop ai này là người bạn đồng hành lý tưởng cho những người thường xuyên di chuyển. ', 1);
 
@@ -323,8 +326,9 @@ CREATE TABLE `taikhoan` (
 --
 
 INSERT INTO `taikhoan` (`TenTaiKhoan`, `MaKhachHang`, `MatKhau`, `LoaiTaiKhoan`, `TrangThai`) VALUES
+('khoajzta', 11, 'Khoa23092004', 0, 1),
 ('lamvanc', 5, '123', 0, 1),
-('nguyenthib', 3, '1234', 0, 1),
+('nguyenthib', 3, 'Khoacoi123', 0, 1),
 ('nguyenthibetu', 10, '12345678', 0, 1),
 ('nguyenthitele', 6, '12345678', 0, 1),
 ('nguyenvana', 1, '12345678', 1, 1),
@@ -429,7 +433,7 @@ ALTER TABLE `binhluandanhgia`
 -- AUTO_INCREMENT cho bảng `chitiethoadonban`
 --
 ALTER TABLE `chitiethoadonban`
-  MODIFY `MaChiTietHoaDonBan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `MaChiTietHoaDonBan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT cho bảng `diachi`
@@ -441,7 +445,7 @@ ALTER TABLE `diachi`
 -- AUTO_INCREMENT cho bảng `giohang`
 --
 ALTER TABLE `giohang`
-  MODIFY `MaGioHang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=174;
+  MODIFY `MaGioHang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=196;
 
 --
 -- AUTO_INCREMENT cho bảng `hinhanh`
@@ -453,13 +457,13 @@ ALTER TABLE `hinhanh`
 -- AUTO_INCREMENT cho bảng `hoadonban`
 --
 ALTER TABLE `hoadonban`
-  MODIFY `MaHoaDonBan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `MaHoaDonBan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT cho bảng `khachhang`
 --
 ALTER TABLE `khachhang`
-  MODIFY `MaKhachHang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `MaKhachHang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT cho bảng `loaisanpham`

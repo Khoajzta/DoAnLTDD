@@ -1,4 +1,3 @@
-
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -66,7 +65,7 @@ import kotlinx.coroutines.launch
 fun CartScreen(
     navController: NavHostController,
     makhachhang: String,
-    tentaikhoan:String
+    tentaikhoan: String
 ) {
     val gioHangViewModel: GioHangViewModel = viewModel()
     val sanPhamViewModel: SanPhamViewModel = viewModel()
@@ -76,8 +75,6 @@ fun CartScreen(
     SideEffect {
         systemUiController.setStatusBarColor(color = Color.Red, darkIcons = false)
     }
-
-
 
     var openDialog by remember { mutableStateOf(false) }
 
@@ -95,24 +92,25 @@ fun CartScreen(
     val selectedProducts = remember { mutableListOf<Triple<Int, Int, Int>>() }
 
     var showDialog by remember { mutableStateOf(false) }
+
     // Hàm tính tổng tiền
     fun calculateTotalPrice() {
         if (listGioHang.isEmpty()) {
             totalPrice = 0
         } else {
-            totalPrice = listGioHang.filter { selectedItems[it.MaGioHang] == true }.sumOf { giohang ->
-                val sanPham = sanPhamViewModel.danhSachSanPhamCuaKhachHang.find { it.MaSanPham == giohang.MaSanPham }
-                val gia = sanPham?.Gia ?: 0
-                gia * giohang.SoLuong
-            }
+            totalPrice =
+                listGioHang.filter { selectedItems[it.MaGioHang] == true }.sumOf { giohang ->
+                    val sanPham =
+                        sanPhamViewModel.danhSachSanPhamCuaKhachHang.find { it.MaSanPham == giohang.MaSanPham }
+                    val gia = sanPham?.Gia ?: 0
+                    gia * giohang.SoLuong
+                }
         }
     }
 
-
-
     // Lấy dữ liệu và tính tổng tiền ban đầu
     LaunchedEffect(makhachhang) {
-        if(makhachhang!=null){
+        if (makhachhang != null) {
             gioHangViewModel.getGioHangByKhachHang(makhachhang.toInt())
             sanPhamViewModel.getSanPhamTheoGioHang(makhachhang.toInt())
             listGioHang.forEach { selectedItems[it.MaGioHang] = false }
@@ -123,11 +121,6 @@ fun CartScreen(
         diaChiViewmodel.getDiaChiKhachHang(makhachhang.toInt())
     }
 
-
-
-    Log.d("",danhsachdiahi.toString())
-
-    // Tính tổng tiền khi dữ liệu giỏ hàng hoặc sản phẩm thay đổi
     LaunchedEffect(listGioHang, sanPhamViewModel.danhSachSanPhamCuaKhachHang) {
         calculateTotalPrice() // Tính tổng tiền khi dữ liệu thay đổi
     }
@@ -139,12 +132,13 @@ fun CartScreen(
                 title = { Text("Giỏ hàng", color = Color.White) },
                 navigationIcon = {
                     IconButton(onClick = {
-//                        gioHangViewModel.updateAllGioHang()
-                        navController.navigate("${NavRoute.HOME.route}?tentaikhoan=${tentaikhoan}"){
-                            popUpTo(0) { inclusive = true }
-                        }
+                        navController.popBackStack()
                     }) {
-                        Icon(Icons.Filled.ArrowBackIosNew, contentDescription = null, tint = Color.White)
+                        Icon(
+                            Icons.Filled.ArrowBackIosNew,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Red)
@@ -165,7 +159,8 @@ fun CartScreen(
                         color = Color.Red,
                         fontSize = 20.sp
                     )
-                    val selectedProductsString = selectedProducts.joinToString(",") { "${it.first}:${it.second}:${it.third}" }
+                    val selectedProductsString =
+                        selectedProducts.joinToString(",") { "${it.first}:${it.second}:${it.third}" }
 
                     Button(
                         onClick = {
@@ -174,7 +169,8 @@ fun CartScreen(
                             } else if (diaChiViewmodel.listDiacHi.isEmpty()) { // Kiểm tra danh sách địa chỉ rỗng
                                 openDialog = true // Hiển thị dialog thông báo thêm địa chỉ
                             } else {
-                                val selectedProductsString = selectedProducts.joinToString(",") { "${it.first}:${it.second}:${it.third}" }
+                                val selectedProductsString =
+                                    selectedProducts.joinToString(",") { "${it.first}:${it.second}:${it.third}" }
                                 navController.navigate(
                                     "${NavRoute.PAYSCREEN.route}?selectedProducts=${selectedProductsString}&tongtien=${totalPrice}&tentaikhoan=${tentaikhoan}"
                                 )
@@ -223,12 +219,23 @@ fun CartScreen(
     ) { paddingValues ->
         if (showDialog) {
             AlertDialog(
+                containerColor = Color.White,
                 onDismissRequest = { showDialog = false },
                 title = { Text("Thông báo") },
-                text = { Text("Vui lòng chọn sản phẩm để mua.") },
+                text = {
+                    Text(
+                        "Vui lòng chọn sản phẩm để mua.",
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
                 confirmButton = {
-                    Button(onClick = { showDialog = false }) {
-                        Text("OK")
+                    TextButton(onClick = { showDialog = false }) {
+                        Text(
+                            "OK",
+                            fontSize = 17.sp,
+                            color = Color.Red
+                        )
                     }
                 }
             )
@@ -241,7 +248,8 @@ fun CartScreen(
             items(listGioHang) { giohang ->
                 var soLuong by remember { mutableStateOf(giohang.SoLuong) }
 
-                val sanPham = sanPhamViewModel.danhSachSanPhamCuaKhachHang.find { it.MaSanPham == giohang.MaSanPham }
+                val sanPham =
+                    sanPhamViewModel.danhSachSanPhamCuaKhachHang.find { it.MaSanPham == giohang.MaSanPham }
                 var chieucaocard by remember { mutableStateOf(190) }
                 if (sanPham != null) {
                     Card(
@@ -274,7 +282,13 @@ fun CartScreen(
 
                                     if (isChecked) {
                                         // Thêm sản phẩm vào danh sách selectedProducts cùng với MaGioHang
-                                        selectedProducts.add(Triple(giohang.MaSanPham, giohang.SoLuong, giohang.MaGioHang))
+                                        selectedProducts.add(
+                                            Triple(
+                                                giohang.MaSanPham,
+                                                giohang.SoLuong,
+                                                giohang.MaGioHang
+                                            )
+                                        )
                                     } else {
                                         // Loại bỏ sản phẩm khỏi danh sách
                                         selectedProducts.removeAll { it.first == giohang.MaSanPham }
@@ -322,9 +336,14 @@ fun CartScreen(
                                                     giohang.SoLuong = soLuong
 
                                                     // Cập nhật lại số lượng trong selectedProducts
-                                                    val index = selectedProducts.indexOfFirst { it.first == giohang.MaSanPham }
+                                                    val index =
+                                                        selectedProducts.indexOfFirst { it.first == giohang.MaSanPham }
                                                     if (index != -1) {
-                                                        selectedProducts[index] = Triple(giohang.MaSanPham, soLuong, giohang.MaGioHang)
+                                                        selectedProducts[index] = Triple(
+                                                            giohang.MaSanPham,
+                                                            soLuong,
+                                                            giohang.MaGioHang
+                                                        )
                                                     }
 
                                                     calculateTotalPrice()
@@ -332,7 +351,10 @@ fun CartScreen(
                                                 }
                                             }
                                         ) {
-                                            Icon(Icons.Filled.RemoveCircleOutline, contentDescription = null)
+                                            Icon(
+                                                Icons.Filled.RemoveCircleOutline,
+                                                contentDescription = null
+                                            )
                                         }
                                         Text(soLuong.toString())
                                         IconButton(
@@ -342,9 +364,14 @@ fun CartScreen(
                                                     giohang.SoLuong = soLuong
 
                                                     // Cập nhật lại số lượng trong selectedProducts
-                                                    val index = selectedProducts.indexOfFirst { it.first == giohang.MaSanPham }
+                                                    val index =
+                                                        selectedProducts.indexOfFirst { it.first == giohang.MaSanPham }
                                                     if (index != -1) {
-                                                        selectedProducts[index] = Triple(giohang.MaSanPham, soLuong, giohang.MaGioHang)
+                                                        selectedProducts[index] = Triple(
+                                                            giohang.MaSanPham,
+                                                            soLuong,
+                                                            giohang.MaGioHang
+                                                        )
                                                     }
 
                                                     calculateTotalPrice()
@@ -352,7 +379,10 @@ fun CartScreen(
                                                 }
                                             }
                                         ) {
-                                            Icon(Icons.Filled.AddCircleOutline, contentDescription = null)
+                                            Icon(
+                                                Icons.Filled.AddCircleOutline,
+                                                contentDescription = null
+                                            )
                                         }
                                     }
 
@@ -363,25 +393,29 @@ fun CartScreen(
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    if (sanPham.SoLuong <= 5) {
+                                    if (sanPham.SoLuong==0) {
                                         Text(
-                                            "Còn lại: ${sanPham.SoLuong} sp",
+                                            "(Hết hàng)",
                                             color = Color.Red
                                         )
-                                    }
-                                    else if (soLuong == sanPham.SoLuong) {
+                                    } else if (soLuong == sanPham.SoLuong) {
                                         Text(
                                             "Chỉ còn ${sanPham.SoLuong} sp",
                                             color = Color.Red
                                         )
-                                    }
-                                    else{
+                                    } else if(sanPham.SoLuong<=5){
+                                        Text(
+                                            "Còn ${sanPham.SoLuong} sp",
+                                            color = Color.Red
+                                        )
+                                    }else {
                                         Spacer(modifier = Modifier.width(20.dp))
                                     }
                                     Button(
                                         onClick = {
                                             gioHangViewModel.deleteGioHang(giohang.MaGioHang)
-                                            gioHangViewModel.listGioHang = gioHangViewModel.listGioHang.filter { it.MaGioHang != giohang.MaGioHang }
+                                            gioHangViewModel.listGioHang =
+                                                gioHangViewModel.listGioHang.filter { it.MaGioHang != giohang.MaGioHang }
                                             calculateTotalPrice()
                                         },
                                         modifier = Modifier

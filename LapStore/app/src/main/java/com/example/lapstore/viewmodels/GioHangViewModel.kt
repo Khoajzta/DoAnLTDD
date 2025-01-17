@@ -28,7 +28,8 @@ class GioHangViewModel : ViewModel() {
                 }
                 listGioHang = response.giohang
             } catch (e: Exception) {
-                Log.e("GioHang Error", "Lỗi khi lấy giỏ hàng: ${e.message}")
+                listGioHang = emptyList()
+                Log.d("GioHang Trống", "Không có gì trong gi: ${e.message}")
             }
         }
     }

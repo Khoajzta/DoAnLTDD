@@ -149,25 +149,29 @@ fun RegisterScreen(
                     } else if (!email.contains("@")) {
                         scope.launch {
                             snackbarHostState.showSnackbar(
-                                message = "Email phải chứa ký tự '@'."
+                                message = "Email phải chứa ký tự '@'.",
+                                duration = SnackbarDuration.Short
                             )
                         }
                     } else if (tentaikhoan.contains(" ")) {
                         scope.launch {
                             snackbarHostState.showSnackbar(
-                                message = "Username không được chứa khoảng trắng."
+                                message = "Username không được chứa khoảng trắng.",
+                                duration = SnackbarDuration.Short
                             )
                         }
                     } else if (matkhau.contains(tentaikhoan)) {
                         scope.launch {
                             snackbarHostState.showSnackbar(
-                                message = "Password không được chứa Username."
+                                message = "Password không được chứa Username.",
+                                duration = SnackbarDuration.Short
                             )
                         }
                     } else if (matkhau.length < 8) {
                         scope.launch {
                             snackbarHostState.showSnackbar(
-                                message = "Password phải từ 8 ký tự trở lên."
+                                message = "Password phải từ 8 ký tự trở lên.",
+                                duration = SnackbarDuration.Short
                             )
                         }
                     } else {
@@ -178,14 +182,16 @@ fun RegisterScreen(
                             if (checkUsernameResult.result == true) {
                                 scope.launch {
                                     snackbarHostState.showSnackbar(
-                                        message = "Tên đăng nhập đã tồn tại."
+                                        message = "Tên đăng nhập đã tồn tại.",
+                                        duration = SnackbarDuration.Short
                                     )
                                 }
                             } else {
                                 if (matkhau != confirmMatkhau) {
                                     scope.launch {
                                         snackbarHostState.showSnackbar(
-                                            message = "Xác nhận mật khẩu không khớp."
+                                            message = "Xác nhận mật khẩu không khớp.",
+                                            duration = SnackbarDuration.Short
                                         )
                                     }
                                 } else {
