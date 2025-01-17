@@ -25,6 +25,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.Computer
 import androidx.compose.material.icons.filled.Headset
@@ -157,7 +158,7 @@ fun HomeScreen(
                         }
                     ) {
                         Icon(
-                            Icons.Filled.ArrowForwardIos,
+                            Icons.Filled.ArrowBackIosNew,
                             contentDescription = "",
                             tint = Color.White
                         )

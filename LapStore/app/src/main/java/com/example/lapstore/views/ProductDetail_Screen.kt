@@ -499,6 +499,8 @@ fun ProductDetail_Screen(
                         Text("Card đồ họa: ${sanPham!!.CardManHinh}", fontWeight = FontWeight.Bold)
                         Text("${sanPham!!.RAM}", fontWeight = FontWeight.Bold)
                         Text("${sanPham!!.SSD}", fontWeight = FontWeight.Bold)
+                        Text("Màn Hình: ${sanPham!!.ManHinh}", fontWeight = FontWeight.Bold)
+                        Text("${sanPham!!.SSD}", fontWeight = FontWeight.Bold)
                     }
                 }
             }
