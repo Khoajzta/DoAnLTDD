@@ -33,16 +33,22 @@ class DiaChiViewmodel:ViewModel() {
 
     fun getDiaChiByMaDiaChi(madiachi: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            diachi = QuanLyBanLaptopRetrofitClient.diaChiAPIService.getDiaChiByMaDiaChi(madiachi)
+            try {
+                diachi = QuanLyBanLaptopRetrofitClient.diaChiAPIService.getDiaChiByMaDiaChi(madiachi)
+            } catch (e: Exception) {
+                Log.e("Dia Chi ViewModel", "Error getting Dia Chi", e)
+            }
         }
     }
 
     fun getDiaChiByMaDiaChi2(madiachi: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-
+            try {
                 val diachi = QuanLyBanLaptopRetrofitClient.diaChiAPIService.getDiaChiByMaDiaChi(madiachi)
                 _danhsachDiaChi.update { currentList -> currentList + diachi }
-
+            } catch (e: Exception) {
+                Log.e("SanPhamViewModel", "Error getting SanPham", e)
+            }
         }
     }
 
@@ -54,6 +60,7 @@ class DiaChiViewmodel:ViewModel() {
                 }
                 listDiacHi = response.diachi ?: emptyList() // Gán giá trị mảng rỗng nếu response.diachi null
             } catch (e: Exception) {
+                Log.e("Dia Chi Error", "Lỗi khi lấy dia chi: ${e.message}")
                 listDiacHi = emptyList()
             }
         }
@@ -61,20 +68,26 @@ class DiaChiViewmodel:ViewModel() {
 
     fun getDiaChiMacDinh(maKhachHang: Int?, macDinh: Int?) {
         if (maKhachHang == null || macDinh == null) {
-            return
+            Log.e("DiaChiViewModel", "Tham số MaKhachHang hoặc MacDinh bị null")
+            return // Ngừng xử lý nếu tham số null
         }
-        viewModelScope.launch(Dispatchers.IO) {
 
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
                 diachi = QuanLyBanLaptopRetrofitClient.diaChiAPIService.getDiaChiMacDinh(
                     MaKhachHang = maKhachHang,
                     MacDinh = macDinh
                 )
-
+                Log.d("DiaChiViewModel", "Đã lấy địa chỉ thành công: $diachi")
+            } catch (e: Exception) {
+                Log.e("DiaChiViewModel", "Lỗi khi lấy địa chỉ mặc định", e)
+            }
         }
     }
 
     fun addDiaChi(diachi:DiaChi) {
         viewModelScope.launch {
+            try {
                 // Gọi API để thêm sản phẩm vào giỏ hàng trên server
                 val response = QuanLyBanLaptopRetrofitClient.diaChiAPIService.addDiaChi(diachi)
                 diachiAddResult = if (response.success) {
@@ -82,11 +95,15 @@ class DiaChiViewmodel:ViewModel() {
                 } else {
                     "Cập nhật thất bại: ${response.message}"
                 }
+            } catch (e: Exception) {
+                Log.e("Add Dia Chi", "Lỗi kết nối: ${e.message}")
+            }
         }
     }
 
     fun updateDiaChi(diachi: DiaChi) {
         viewModelScope.launch {
+            try {
                 val response = withContext(Dispatchers.IO) {
                     QuanLyBanLaptopRetrofitClient.diaChiAPIService.updateDiaChi(diachi)
                 }
@@ -95,7 +112,28 @@ class DiaChiViewmodel:ViewModel() {
                 } else {
                     "Cập nhật thất bại: ${response.message}"
                 }
+            } catch (e: Exception) {
+                diachiUpdateResult = "Lỗi khi cập nhật giỏ hàng: ${e.message}"
+                Log.e("GioHang Error", "Lỗi khi cập nhật giỏ hàng: ${e.message}")
+            }
+        }
+    }
 
+    fun updateDiaChiMacDinh(MaKhachHang: Int) {
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.diaChiAPIService.updateDiaChiMacDinh(MaKhachHang)
+                }
+                diachiUpdateResult = if (response.success) {
+                    "Cập nhật thành công: ${response.message}"
+                } else {
+                    "Cập nhật thất bại: ${response.message}"
+                }
+            } catch (e: Exception) {
+                diachiUpdateResult = "Lỗi khi cập nhật giỏ hàng: ${e.message}"
+                Log.e("GioHang Error", "Lỗi khi cập nhật giỏ hàng: ${e.message}")
+            }
         }
     }
 

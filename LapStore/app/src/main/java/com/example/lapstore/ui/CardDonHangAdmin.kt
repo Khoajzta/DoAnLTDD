@@ -90,20 +90,6 @@ fun CardDonHangAdmin(
                         ),
                         shape = RoundedCornerShape(10.dp),
                         onClick = {
-                            if(trangthai == 5){
-                                // Duyệt qua danh sách chi tiết hóa đơn để cộng số lượng vào sản phẩm
-                                for (chiTiet in danhsachchitiethoadon) {
-                                    val sanPham = danhSachAllSanPham.find { it.MaSanPham == chiTiet.MaSanPham }
-                                    if (sanPham != null) {
-                                        // Cộng số lượng trong chi tiết hóa đơn vào sản phẩm
-                                        sanPham.SoLuong += chiTiet.SoLuong
-
-                                        // Cập nhật lại sản phẩm
-                                        sanPhamViewModel.updateSanPham(sanPham)
-                                    }
-                                }
-                            }
-
                             if(trangthai==2){
                                 for (chiTiet in danhsachchitiethoadon) {
                                     val sanPham = danhSachAllSanPham.find { it.MaSanPham == chiTiet.MaSanPham }

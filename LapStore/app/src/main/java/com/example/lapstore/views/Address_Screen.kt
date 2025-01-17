@@ -275,6 +275,7 @@ fun AddDiaChiScreen(
                         .height(50.dp),
                     value = sodienthoai,
                     placeholder = { Text("Số điện thoại") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color.White,
                         unfocusedBorderColor = Color.White,

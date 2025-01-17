@@ -575,9 +575,9 @@ fun DuyetDonChoXacNhan(navController: NavHostController) {
     val errorMessage = remember { mutableStateOf<String?>(null) }
 
     // Hàm gọi API để lấy danh sách hóa đơn
-
     val soluonghoadonchoxacnhan = remember { mutableStateOf(danhSachHoaDonChoXacNhan.count()) }
 
+    hoaDonBanViewModel.getHoaDonTheoTrangThai(1)
     LaunchedEffect(danhSachHoaDonChoXacNhan) {
         soluonghoadonchoxacnhan.value = danhSachHoaDonChoXacNhan.count()
     }
