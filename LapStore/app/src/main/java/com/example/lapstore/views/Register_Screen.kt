@@ -19,6 +19,7 @@ import com.example.lapstore.models.TaiKhoan
 import com.example.lapstore.viewmodels.KhachHangViewModel
 import com.example.lapstore.viewmodels.TaiKhoanViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,6 +37,13 @@ fun RegisterScreen(
 
     val openDialog = remember { mutableStateOf(false) }
     val dialogMessage = remember { mutableStateOf("") }
+
+    var snackbarHostState = remember {
+        SnackbarHostState()
+    }
+    var issuccess by remember { mutableStateOf(false) }
+
+    var scope = rememberCoroutineScope()
 
     val checkUsernameResult = taiKhoanViewModel.checkUsernameResult.value
 
@@ -123,7 +131,10 @@ fun RegisterScreen(
             )
 
             Spacer(modifier = Modifier.height(20.dp))
-
+            SnackbarHost(
+                modifier = Modifier.padding(4.dp),
+                hostState = snackbarHostState
+            )
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -132,43 +143,83 @@ fun RegisterScreen(
                 shape = RoundedCornerShape(17.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
                 onClick = {
-                    if (tentaikhoan.isEmpty() || matkhau.isEmpty() || confirmMatkhau.isEmpty()) {
+                    if (tentaikhoan.isEmpty() || matkhau.isEmpty() || confirmMatkhau.isEmpty() || email.isEmpty()) {
                         dialogMessage.value = "Vui lòng nhập đầy đủ thông tin."
                         openDialog.value = true
-                    }
-                    else{
-                        taiKhoanViewModel.kiemTraTrungUsername(tentaikhoan)
-
-                        if(checkUsernameResult!=null){
-                            Log.d("fdfd",checkUsernameResult.result.toString())
-                            if(checkUsernameResult.result == true){
-                                dialogMessage.value = "Tên tài khoản đã tồn tại."
-                                openDialog.value = true
-                            }
+                    } else if (!email.contains("@")) {
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = "Email phải chứa ký tự '@'.",
+                                duration = SnackbarDuration.Short
+                            )
                         }
-                        if (matkhau != confirmMatkhau) {
-                            dialogMessage.value = "Mật khẩu và xác nhận mật khẩu không khớp."
-                            openDialog.value = true
-                        }else{
-                            var khachhang = KhachHang(
-                                MaKhachHang = 0,
-                                HoTen = tentaikhoan,
-                                GioiTinh = "Nam",
-                                NgaySinh = "",
-                                Email = email,
-                                SoDienThoai = ""
+                    } else if (tentaikhoan.contains(" ")) {
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = "Username không được chứa khoảng trắng.",
+                                duration = SnackbarDuration.Short
                             )
-                            khachHangViewModel.ThemKhachHang(khachhang)
-                            var taikhoan = TaiKhoan(
-                                TenTaiKhoan = tentaikhoan,
-                                MaKhachHang = 0,
-                                MatKhau = confirmMatkhau,
-                                LoaiTaiKhoan = 0,
-                                TrangThai = 1
+                        }
+                    } else if (matkhau.contains(tentaikhoan)) {
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = "Password không được chứa Username.",
+                                duration = SnackbarDuration.Short
                             )
-                            taiKhoanViewModel.TaoTaiKhoan(taikhoan)
-                            dialogMessage.value = "Đăng ký thành công"
-                            openDialog.value = true
+                        }
+                    } else if (matkhau.length < 8) {
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = "Password phải từ 8 ký tự trở lên.",
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                    } else {
+                        // Kiểm tra trùng lặp tên tài khoản
+                        taiKhoanViewModel.kiemTraTrungUsername(tentaikhoan)
+                        if (checkUsernameResult != null) {
+                            Log.d("DEBUG", checkUsernameResult.result.toString())
+                            if (checkUsernameResult.result == true) {
+                                scope.launch {
+                                    snackbarHostState.showSnackbar(
+                                        message = "Tên đăng nhập đã tồn tại.",
+                                        duration = SnackbarDuration.Short
+                                    )
+                                }
+                            } else {
+                                if (matkhau != confirmMatkhau) {
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(
+                                            message = "Xác nhận mật khẩu không khớp.",
+                                            duration = SnackbarDuration.Short
+                                        )
+                                    }
+                                } else {
+                                    // Nếu hợp lệ, tiến hành tạo tài khoản
+                                    val khachhang = KhachHang(
+                                        MaKhachHang = 0,
+                                        HoTen = tentaikhoan,
+                                        GioiTinh = "Nam",
+                                        NgaySinh = "",
+                                        Email = email,
+                                        SoDienThoai = ""
+                                    )
+                                    khachHangViewModel.ThemKhachHang(khachhang)
+
+                                    val taikhoan = TaiKhoan(
+                                        TenTaiKhoan = tentaikhoan,
+                                        MaKhachHang = 0,
+                                        MatKhau = confirmMatkhau,
+                                        LoaiTaiKhoan = 0,
+                                        TrangThai = 1
+                                    )
+                                    taiKhoanViewModel.TaoTaiKhoan(taikhoan)
+
+                                    dialogMessage.value = "Đăng ký thành công."
+                                    openDialog.value = true
+                                    issuccess = true
+                                }
+                            }
                         }
                     }
                 }
@@ -178,31 +229,65 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Nút điều hướng về màn hình đăng nhập
-            TextButton(
-                onClick = {
-                    navController.popBackStack()
-                    navController.navigate("login_screen") // Điều hướng về trang đăng nhập
-
-                }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Đã có tài khoản? Đăng nhập", color = Color.Red)
+                Text(
+                    "Bạn đã có tài khoản? ",
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold
+                )
+
+                TextButton(
+                    onClick = {
+                        navController.popBackStack()
+                        navController.navigate(NavRoute.LOGINSCREEN.route)
+                    }
+                ) {
+                    Text(
+                        text = "Đăng nhập",
+                        color = Color.Blue,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
+
         }
 
         // Hiển thị Dialog thông báo
         if (openDialog.value) {
             AlertDialog(
+                containerColor = Color.White,
                 onDismissRequest = { openDialog.value = false },
-                title = { Text("Thông báo") },
-                text = { Text(dialogMessage.value) },
+                title = {
+                    Text(
+                        "Đăng ký",
+                        color = Color.Red,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                text = {
+                    Text(
+                        dialogMessage.value,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
                 confirmButton = {
-                    Button(onClick = {
+                    TextButton(onClick = {
                         openDialog.value = false
-                        // Quay về trang đăng nhập sau khi nhấn "OK"
-                        navController.navigate(NavRoute.LOGINSCREEN.route)
+                        if (issuccess) {
+                            navController.navigate(NavRoute.LOGINSCREEN.route)
+                        }
                     }) {
-                        Text("OK")
+                        Text(
+                            "OK",
+                            fontSize = 17.sp,
+                            color = Color.Red
+                        )
                     }
                 }
             )

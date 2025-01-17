@@ -52,7 +52,7 @@ fun AdminScreen(navController: NavHostController) {
     val systemUiController = rememberSystemUiController()
 
     SideEffect {
-        systemUiController.setStatusBarColor(color = Color.White, darkIcons = false)
+        systemUiController.setStatusBarColor(color = Color.White, darkIcons = true)
     }
 
     var selectedTabIndexItem by remember { mutableStateOf(0) }

@@ -114,7 +114,7 @@ fun PayScreen(
     }
 
     SideEffect {
-        systemUiController.setStatusBarColor(color = Color.White, darkIcons = false)
+        systemUiController.setStatusBarColor(color = Color.White, darkIcons = true)
     }
 
     Scaffold(
@@ -472,7 +472,7 @@ fun ProductItem(sanPham: SanPham, soLuong: Int) {
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            sanPham.Gia.toString(),
+                            formatGiaTien(sanPham.Gia),
                             color = Color.Red
                         )
                         Text(

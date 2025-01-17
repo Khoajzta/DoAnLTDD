@@ -148,10 +148,10 @@ class SanPham
     {
         $query = "INSERT INTO SanPham 
         (MaSanPham, TenSanPham, MaLoaiSanPham, CPU, RAM, CardManHinh, 
-        SSD, ManHinh, MaMauSac, Gia, SoLuong, MoTa, HinhAnh, TrangThai) 
+        SSD, ManHinh, MaMauSac, Gia, SoLuong, MoTa, TrangThai) 
         VALUES 
         (:MaSanPham, :TenSanPham, :MaLoaiSanPham, :CPU, :RAM, :CardManHinh, 
-        :SSD, :ManHinh, :MaMauSac, :Gia, :SoLuong, :MoTa, :HinhAnh, :TrangThai)";
+        :SSD, :ManHinh, :MaMauSac, :Gia, :SoLuong, :MoTa, :TrangThai)";
 
         $stmt = $this->conn->prepare($query);
 
@@ -167,7 +167,6 @@ class SanPham
         $this->Gia = htmlspecialchars(strip_tags($this->Gia));
         $this->SoLuong = htmlspecialchars(strip_tags($this->SoLuong));
         $this->MoTa = htmlspecialchars(strip_tags($this->MoTa));
-        $this->HinhAnh = htmlspecialchars(strip_tags($this->HinhAnh));
         $this->TrangThai = htmlspecialchars(strip_tags($this->TrangThai));
 
 
@@ -183,7 +182,6 @@ class SanPham
         $stmt->bindParam(':Gia', $this->Gia);
         $stmt->bindParam(':SoLuong', $this->SoLuong);
         $stmt->bindParam(':MoTa', $this->MoTa);
-        $stmt->bindParam(':HinhAnh', $this->HinhAnh);
         $stmt->bindParam(':TrangThai', $this->TrangThai);
 
         if ($stmt->execute()) {
@@ -207,7 +205,6 @@ class SanPham
         Gia = :Gia, 
         SoLuong = :SoLuong, 
         MoTa = :MoTa, 
-        HinhAnh = :HinhAnh, 
         TrangThai = :TrangThai 
         WHERE MaSanPham = :MaSanPham";
 
@@ -225,7 +222,6 @@ class SanPham
         $this->Gia = htmlspecialchars(strip_tags($this->Gia));
         $this->SoLuong = htmlspecialchars(strip_tags($this->SoLuong));
         $this->MoTa = htmlspecialchars(strip_tags($this->MoTa));
-        $this->HinhAnh = htmlspecialchars(strip_tags($this->HinhAnh));
         $this->TrangThai = htmlspecialchars(strip_tags($this->TrangThai));
         $this->MaSanPham = htmlspecialchars(strip_tags($this->MaSanPham));
 
@@ -241,7 +237,6 @@ class SanPham
         $stmt->bindParam(':Gia', $this->Gia);
         $stmt->bindParam(':SoLuong', $this->SoLuong);
         $stmt->bindParam(':MoTa', $this->MoTa);
-        $stmt->bindParam(':HinhAnh', $this->HinhAnh);
         $stmt->bindParam(':TrangThai', $this->TrangThai);
         $stmt->bindParam(':MaSanPham', $this->MaSanPham);
 

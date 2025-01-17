@@ -11,6 +11,7 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.lapstore.api.QuanLyBanLaptopRetrofitClient
 import com.example.lapstore.models.HoaDonBan
+import com.example.lapstore.models.KhachHang
 import com.example.lapstore.models.SanPham
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,6 +35,9 @@ class SanPhamViewModel : ViewModel() {
     var isLoading by mutableStateOf(false)
         private set
     var errorMessage by mutableStateOf<String?>(null)
+        private set
+
+    var sanPhamUpdateResult by mutableStateOf("")
         private set
 
     var sanPham by mutableStateOf<SanPham?>(null)
@@ -149,5 +153,23 @@ class SanPhamViewModel : ViewModel() {
 
     fun clearSanPhamSearch() {
         danhSach = emptyList()
+    }
+
+    fun updateSanPham(sanpham: SanPham) {
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.sanphamAPIService.updateSanPham(sanpham)
+                }
+                sanPhamUpdateResult = if (response.success) {
+                    "Cập nhật thành công: ${response.message}"
+                } else {
+                    "Cập nhật thất bại: ${response.message}"
+                }
+            } catch (e: Exception) {
+                sanPhamUpdateResult = "Lỗi khi cập nhật khách hàng: ${e.message}"
+                Log.e("SanPham Error", "Lỗi khi cập nhật khách hàng: ${e.message}")
+            }
+        }
     }
 }

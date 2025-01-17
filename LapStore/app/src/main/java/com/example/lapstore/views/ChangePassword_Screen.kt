@@ -13,12 +13,15 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,17 +32,20 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lapstore.models.TaiKhoan
 import com.example.lapstore.viewmodels.TaiKhoanViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun ChangePasswordSection(
     tentaikhoan: String
 ) {
+    var snackbarHostState = remember {
+        SnackbarHostState()
+    }
+    var scope = rememberCoroutineScope()
 
     var matkhaucu by remember { mutableStateOf("") }
     var matkhaumoi by remember { mutableStateOf("") }
     var kiemtramkmoi by remember { mutableStateOf("") }
-
-    var showDialog by remember { mutableStateOf(false) }
 
     var taiKhoanViewModel: TaiKhoanViewModel = viewModel()
 
@@ -99,70 +105,61 @@ fun ChangePasswordSection(
                 onValueChange = { kiemtramkmoi = it }
             )
             Spacer(modifier = Modifier.height(8.dp))
-
+            SnackbarHost(
+                modifier = Modifier.padding(4.dp),
+                hostState = snackbarHostState
+            )
             Button(
                 onClick = {
                     if (taikhoan != null) {
-                        if (matkhaucu != "" && matkhaumoi != "" && kiemtramkmoi != "") {
-                            if (matkhaucu != taikhoan.MatKhau) {
-                                Log.d("mật khẩu cũ", "không chính xác")
-                                showDialog = true
-                            } else if (matkhaumoi != kiemtramkmoi) {
-                                Log.d("mật khẩu mới", "Xác nhận mật khẩu không chính xác")
-                                showDialog = true
-                            } else {
-                                showDialog = true
+                        if (tentaikhoan.isEmpty() || matkhaucu.isEmpty() || kiemtramkmoi.isEmpty()) {
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "Vui lòng nhập đày đủ thông tin."
+                                )
                             }
-                        } else {
-                            showDialog = true
-                            Log.d("trống", "Vui lòng nhập thông tin")
+                        }else if(matkhaumoi!=kiemtramkmoi){
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "Xác nhận mật khẩu không khớp."
+                                )
+                            }
+                        } else if (tentaikhoan.contains(" ")) {
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "Username không được chứa khoảng trắng."
+                                )
+                            }
+                        } else if (matkhaumoi.contains(tentaikhoan)) {
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "Password không được chứa Username."
+                                )
+                            }
+                        } else if (matkhaumoi.length < 8) {
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "Password phải từ 8 ký tự trở lên."
+                                )
+                            }
+                        }else{
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "Đổi mật khẩu thành công."
+                                )
+                            }
+                            val updatedTaiKhoan = TaiKhoan(tentaikhoan, taikhoan.MaKhachHang, matkhaumoi, 0, 1)
+                            taiKhoanViewModel.updateTaiKhoan(updatedTaiKhoan)
                         }
                     }
                 },
+
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("ĐỔI MẬT KHẨU", color = Color.White)
             }
         }
-    }
-
-    // Hiển thị Dialog xác nhận đổi mật khẩu
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false }, // Đóng khi nhấn ngoài dialog
-            text = {
-                if (taikhoan != null) {
-                    if(matkhaucu != "" && matkhaumoi != "" && kiemtramkmoi != ""){
-                        if (matkhaucu != taikhoan.MatKhau) {
-                            Text("Mật khẩu cũ không trùng khớp")
-                        }
-                        else if(matkhaumoi != kiemtramkmoi){
-                            Text("Xác nhận mật khẩu không chính xác")
-                        }
-                        else{
-                            Text("Đổi mật khẩu thành công")
-                        }
-                    }
-                    else{
-                        Text("Vui lòng nhập đầy đủ thông tin")
-                    }
-                }
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        showDialog = false
-                        if (taikhoan != null) {
-                            var taikhoan = TaiKhoan(tentaikhoan, taikhoan.MaKhachHang, matkhaumoi,0,1)
-                            taiKhoanViewModel.updateTaiKhoan(taikhoan)
-                        }
-                    }
-                ) {
-                    Text("OK")
-                }
-            },
-        )
     }
 }
 

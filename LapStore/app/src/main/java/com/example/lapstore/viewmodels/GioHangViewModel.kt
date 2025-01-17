@@ -13,7 +13,6 @@ import com.example.lapstore.models.GioHang
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.Response
 
 class GioHangViewModel : ViewModel() {
     var listGioHang by mutableStateOf<List<GioHang>>(emptyList())
@@ -29,7 +28,8 @@ class GioHangViewModel : ViewModel() {
                 }
                 listGioHang = response.giohang
             } catch (e: Exception) {
-                Log.e("GioHang Error", "Lỗi khi lấy giỏ hàng: ${e.message}")
+                listGioHang = emptyList()
+                Log.d("GioHang Trống", "Không có gì trong gi: ${e.message}")
             }
         }
     }

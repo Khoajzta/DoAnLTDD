@@ -1,4 +1,5 @@
 import android.icu.text.DecimalFormat
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -85,13 +86,29 @@ fun ProductCard(
 
             }
             // Giá sản phẩm
-            Text(
-                text = "Giá: ${formatGiaTien(sanpham.Gia)}",
-                fontSize = 16.sp,
-                color = Color.Red,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(vertical = 4.dp)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Giá: ${formatGiaTien(sanpham.Gia)}",
+                    fontSize = 16.sp,
+                    color = Color.Red,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
+                if(sanpham.SoLuong == 0){
+                    Text(
+                        text = "(Hết hàng)",
+                        fontSize = 16.sp,
+                        color = Color.Red,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
+                }
+            }
+
         }
     }
 }

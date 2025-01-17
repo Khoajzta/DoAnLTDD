@@ -23,31 +23,21 @@ class ChiTietHoaDonBanViewmodel:ViewModel() {
 
     fun addHoaDon(chitiethoadonban: ChiTietHoaDonBan) {
         viewModelScope.launch {
-            try {
-                // Gọi API để thêm sản phẩm vào giỏ hàng trên server
-                val response = QuanLyBanLaptopRetrofitClient.chiTietHoaDonBanAPIService.addChiTietHoaDonBan(chitiethoadonban)
-                chitiethoadonAddResult = if (response.success) {
-                    "Cập nhật thành công: ${response.message}"
-                } else {
-                    "Cập nhật thất bại: ${response.message}"
-                }
-            } catch (e: Exception) {
-                Log.e("AddToCart", "Lỗi kết nối: ${e.message}")
+            val response = QuanLyBanLaptopRetrofitClient.chiTietHoaDonBanAPIService.addChiTietHoaDonBan(chitiethoadonban)
+            chitiethoadonAddResult = if (response.success) {
+                "Cập nhật thành công: ${response.message}"
+            } else {
+                "Cập nhật thất bại: ${response.message}"
             }
         }
     }
 
     fun getChiTietHoaDonTheoMaHoaDon(mahoadon: Int) {
         viewModelScope.launch {
-            try {
-                val response = withContext(Dispatchers.IO) {
-                    QuanLyBanLaptopRetrofitClient.chiTietHoaDonBanAPIService.getChiTietHoaDoByMaHoaDon(mahoadon)
-                }
-                danhsachchitethoadon = response.chitiethoadonban
-            } catch (e: Exception) {
-                // Xử lý lỗi nếu có
-                Log.e("HinhAnhError", "Lỗi khi lấy hình ảnh: ${e.message}")
+            val response = withContext(Dispatchers.IO) {
+                QuanLyBanLaptopRetrofitClient.chiTietHoaDonBanAPIService.getChiTietHoaDoByMaHoaDon(mahoadon)
             }
+            danhsachchitethoadon = response.chitiethoadonban
         }
     }
 }

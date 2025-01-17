@@ -285,8 +285,13 @@ fun HomeScreen(
                                 IconButton(
                                     modifier = Modifier.size(45.dp),
                                     onClick = {
-                                        navController.navigate("${NavRoute.HOME.route}?tentaikhoan=${tentaikhoan}"){
-                                            popUpTo(0) { inclusive = true }
+                                        if(taikhoan!=null){
+                                            navController.navigate("${NavRoute.HOME.route}?tentaikhoan=${tentaikhoan}"){
+                                                popUpTo(0) { inclusive = true }
+                                            }
+                                        }
+                                        else{
+                                            navController.navigate(NavRoute.HOME.route)
                                         }
                                     }
                                 ) {

@@ -43,6 +43,9 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -63,6 +66,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -72,6 +77,7 @@ import com.example.lapstore.viewmodels.DiaChiViewmodel
 import com.example.lapstore.viewmodels.KhachHangViewModel
 import com.example.lapstore.viewmodels.TaiKhoanViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -181,6 +187,7 @@ fun AcccountScreen(
 fun AccountInfoSection(
     tentaikhoan: String
 ) {
+    val maxLength = 10
 
     var taikhoanviewModel: TaiKhoanViewModel = viewModel()
     var khachhangviewModel: KhachHangViewModel = viewModel()
@@ -188,17 +195,25 @@ fun AccountInfoSection(
     val taikhoan = taikhoanviewModel.taikhoan
     val khachhang = khachhangviewModel.khachhang
 
-    val showSnackbar = remember { mutableStateOf(false) }
-    val snackbarMessage = remember { mutableStateOf("") }
+    var isFocused by remember { mutableStateOf(false) }
+    var isButtonEnabled by remember { mutableStateOf(false) }
+
+    var snackbarHostState = remember {
+        SnackbarHostState()
+    }
+    var scope = rememberCoroutineScope()
     LaunchedEffect(tentaikhoan) {
         if (tentaikhoan.isNotEmpty()) {
             taikhoanviewModel.getTaiKhoanByTentaikhoan(tentaikhoan)
         }
     }
 
+
     if (taikhoan != null) {
         khachhangviewModel.getKhachHangById(taikhoan.MaKhachHang.toString())
     }
+
+
 
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -219,13 +234,37 @@ fun AccountInfoSection(
                 val selectedMonth = remember { mutableStateOf(khachhang.NgaySinh.split("-")[1]) }
                 val selectedYear = remember { mutableStateOf(khachhang.NgaySinh.split("-")[0]) }
 
+                val initialHoTen = remember { mutableStateOf(khachhang.HoTen) }
+                val initialSoDienThoai = remember { mutableStateOf(khachhang.SoDienThoai) }
+                val initialEmail = remember { mutableStateOf(khachhang.Email) }
+                val initialGioiTinh = remember { mutableStateOf(khachhang.GioiTinh) }
+                val initialNgaySinh = remember { mutableStateOf(khachhang.NgaySinh) }
+
+                fun checkIfChanged(): Boolean {
+                    return hoTen.value != initialHoTen.value ||
+                            soDienThoai.value != initialSoDienThoai.value ||
+                            email.value != initialEmail.value ||
+                            gioiTinh.value != initialGioiTinh.value ||
+                            selectedDay.value != initialNgaySinh.value.split("-")[2] ||
+                            selectedMonth.value != initialNgaySinh.value.split("-")[1] ||
+                            selectedYear.value != initialNgaySinh.value.split("-")[0]
+                }
+
+                LaunchedEffect(hoTen.value, soDienThoai.value, email.value, gioiTinh.value, selectedDay.value, selectedMonth.value, selectedYear.value) {
+                    isButtonEnabled = checkIfChanged()
+                }
 
                 // Họ tên
                 Text("Họ Tên: ", fontWeight = FontWeight.Bold)
                 OutlinedTextField(
                     value = hoTen.value,
-                    onValueChange = { hoTen.value = it },
-                    modifier = Modifier.fillMaxWidth(),
+                    onValueChange = {
+                        hoTen.value = it
+                        isButtonEnabled = checkIfChanged()
+                                    },
+                    modifier = Modifier.fillMaxWidth().onFocusChanged {
+                        if (it.isFocused) isFocused = true
+                    },
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color.Red,
                         unfocusedBorderColor = Color.Red,
@@ -260,9 +299,16 @@ fun AccountInfoSection(
                 Text("Số điện thoại: ", fontWeight = FontWeight.Bold)
                 OutlinedTextField(
                     value = soDienThoai.value,
-                    onValueChange = { soDienThoai.value = it },
+                    onValueChange = {
+                        if(it.length <=maxLength){
+                            soDienThoai.value = it
+                            isButtonEnabled = checkIfChanged()
+                        }
+                    },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone),
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().onFocusChanged {
+                        if (it.isFocused) isFocused = true
+                    },
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color.Red,
                         unfocusedBorderColor = Color.Red,
@@ -277,9 +323,13 @@ fun AccountInfoSection(
                 Text("Email: ", fontWeight = FontWeight.Bold)
                 OutlinedTextField(
                     value = email.value,
-                    onValueChange = { email.value = it },
+                    onValueChange = {
+                        email.value = it
+                        isButtonEnabled = checkIfChanged()},
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().onFocusChanged {
+                        if (it.isFocused) isFocused = true
+                    },
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color.Red,
                         unfocusedBorderColor = Color.Red,
@@ -330,23 +380,45 @@ fun AccountInfoSection(
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-                // Nút "Lưu thay đổi"
+                SnackbarHost(
+                    modifier = Modifier.padding(4.dp),
+                    hostState = snackbarHostState,
+                )
                 Button(
                     onClick = {
+                        // Xử lý lưu dữ liệu
                         val regexName = "^[a-zA-Z\\p{L} ]+$"
                         val regexPhone = "^\\d{10}$".toRegex()
 
                         if (hoTen.value.isBlank() || !hoTen.value.matches(Regex(regexName))) {
-                            snackbarMessage.value = "Họ tên không hợp lệ!"
-                            showSnackbar.value = true
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "Họ và tên không hợp lệ",
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
                         } else if (!regexPhone.matches(soDienThoai.value)) {
-                            snackbarMessage.value = "Số điện thoại phải đúng 10 số!"
-                            showSnackbar.value = true
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "Số điện thoại phải có 10 số."
+                                )
+                            }
                         } else if (email.value.isBlank()) {
-                            snackbarMessage.value = "Email không được để trống!"
-                            showSnackbar.value = true
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "Email không được để trống.",
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
+                        } else if (!email.value.contains("@")) {
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "Email phải chứa ký tự '@'.",
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
                         } else {
-                            var khachHang = KhachHang(
+                            val khachHang = KhachHang(
                                 MaKhachHang = khachhang.MaKhachHang,
                                 HoTen = hoTen.value,
                                 GioiTinh = gioiTinh.value,
@@ -355,8 +427,12 @@ fun AccountInfoSection(
                                 SoDienThoai = soDienThoai.value
                             )
                             khachhangviewModel.updateKhachHang(khachHang)
-                            snackbarMessage.value = "Cập nhật thành công!"
-                            showSnackbar.value = true
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "Cập nhật thành công",
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
@@ -365,19 +441,6 @@ fun AccountInfoSection(
                     Text("LƯU THAY ĐỔI", color = Color.White)
                 }
             }
-        }
-    }
-
-    if (showSnackbar.value) {
-        Snackbar(
-            modifier = Modifier.padding(16.dp),
-            action = {
-                TextButton(onClick = { showSnackbar.value = false }) {
-                    Text("Đóng", color = Color.White)
-                }
-            }
-        ) {
-            Text(snackbarMessage.value)
         }
     }
 }
@@ -417,15 +480,16 @@ fun DropdownMenuField(
         )
 
         DropdownMenu(
+            containerColor = Color.White,
             expanded = isExpanded,
             onDismissRequest = { isExpanded = false },
             modifier = Modifier
-                .heightIn(max = 300.dp)
-                .widthIn(500.dp)
+                .heightIn(max = 250.dp)
+                .widthIn(300.dp)
         ) {
             items.forEach { item ->
                 DropdownMenuItem(
-                    text = { Text(item) },
+                    text = { Text(item, fontWeight = FontWeight.Bold, fontSize = 15.sp) },
                     onClick = {
                         onValueChange(item)
                         isExpanded = false

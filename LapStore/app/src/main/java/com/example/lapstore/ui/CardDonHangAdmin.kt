@@ -13,6 +13,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.lapstore.models.HoaDonBan
+import com.example.lapstore.viewmodels.ChiTietHoaDonBanViewmodel
 import com.example.lapstore.viewmodels.DiaChiViewmodel
 import com.example.lapstore.viewmodels.HoaDonBanVỉewModel
 import com.example.lapstore.views.formatDate
@@ -31,6 +33,21 @@ fun CardDonHangAdmin(
     trangthai: Int,
     hoaDonBanVỉewModel: HoaDonBanVỉewModel
 ) {
+    val chiTietHoaDonBanViewModel: ChiTietHoaDonBanViewmodel = viewModel()
+    val sanPhamViewModel: SanPhamViewModel = viewModel()
+
+    // Lấy danh sách chi tiết hóa đơn
+    val danhsachchitiethoadon = chiTietHoaDonBanViewModel.danhsachchitethoadon
+    LaunchedEffect(hoaDonBan) {
+        chiTietHoaDonBanViewModel.getChiTietHoaDonTheoMaHoaDon(hoaDonBan.MaHoaDonBan)
+    }
+
+    // Lấy danh sách sản phẩm
+    val danhSachAllSanPham = sanPhamViewModel.danhSachSanPhamTrongHoaDon
+    LaunchedEffect(hoaDonBan) {
+        sanPhamViewModel.getSanPhamTrongHoaDon(hoaDonBan.MaHoaDonBan)
+    }
+
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color.White
@@ -73,6 +90,32 @@ fun CardDonHangAdmin(
                         ),
                         shape = RoundedCornerShape(10.dp),
                         onClick = {
+                            if(trangthai == 5){
+                                // Duyệt qua danh sách chi tiết hóa đơn để cộng số lượng vào sản phẩm
+                                for (chiTiet in danhsachchitiethoadon) {
+                                    val sanPham = danhSachAllSanPham.find { it.MaSanPham == chiTiet.MaSanPham }
+                                    if (sanPham != null) {
+                                        // Cộng số lượng trong chi tiết hóa đơn vào sản phẩm
+                                        sanPham.SoLuong += chiTiet.SoLuong
+
+                                        // Cập nhật lại sản phẩm
+                                        sanPhamViewModel.updateSanPham(sanPham)
+                                    }
+                                }
+                            }
+
+                            if(trangthai==2){
+                                for (chiTiet in danhsachchitiethoadon) {
+                                    val sanPham = danhSachAllSanPham.find { it.MaSanPham == chiTiet.MaSanPham }
+                                    if (sanPham != null) {
+                                        // Cộng số lượng trong chi tiết hóa đơn vào sản phẩm
+                                        sanPham.SoLuong -= chiTiet.SoLuong
+
+                                        // Cập nhật lại sản phẩm
+                                        sanPhamViewModel.updateSanPham(sanPham)
+                                    }
+                                }
+                            }
                             XacNhan(trangthai, hoaDonBan, hoaDonBanVỉewModel)
                         }
                     ) {
