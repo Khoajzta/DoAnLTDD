@@ -1,5 +1,5 @@
 <?php
-class giohang{
+class giohang extends SanPham{
     private $conn;
 
     //Thuoc tinh

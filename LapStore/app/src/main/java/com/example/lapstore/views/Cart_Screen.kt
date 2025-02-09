@@ -43,14 +43,20 @@ import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+<<<<<<< Updated upstream
 import androidx.compose.material3.RadioButtonDefaults
+=======
+>>>>>>> Stashed changes
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+<<<<<<< Updated upstream
 import androidx.compose.runtime.derivedStateOf
+=======
+>>>>>>> Stashed changes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -63,7 +69,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.motionEventSpy
+<<<<<<< Updated upstream
 import androidx.compose.ui.res.colorResource
+=======
+>>>>>>> Stashed changes
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -71,6 +80,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lapstore.R
+
 
 
 @Composable
@@ -86,11 +96,26 @@ fun MainContent(modifier: Modifier = Modifier) {
         TapDieuHuong()
     }
 }
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TapDieuHuong() {
     var selectedTabIndexItem by remember { mutableStateOf(0) }
     val tabs = listOf("Đơn hàng", "Chưa Thanh Toán", "Chờ vận chuyển", "Đang vận chuyển", "Đang giao", "Đã giao")
+<<<<<<< Updated upstream
+
+    Scaffold(
+        topBar = {
+            ScrollableTabRow(selectedTabIndexItem,
+                edgePadding = 0.dp,
+                modifier = Modifier
+                , contentColor = Color.Red
+            ) {
+                tabs.forEachIndexed { index, title ->
+=======
 
     Scaffold(
         topBar = {
@@ -115,8 +140,216 @@ fun TapDieuHuong() {
                         ) {
                             Text(
                                 text = title,
+                                  fontSize = 20.sp
+                            )
+                        }
+                    }
+                }
+            }
+        },
+        content = { padding ->
+            when (selectedTabIndexItem) {
+                0 -> DonHangScreen(modifier = Modifier.padding(padding))
+                1 -> ChuaThanhToanScreen(modifier = Modifier.padding(padding))
+                2 -> ChoVanChuyenScreen(modifier = Modifier.padding(padding))
+                3 -> DangVanChuyenScreen(modifier = Modifier.padding(padding))
+                4 -> DangGiaoScreen(modifier = Modifier.padding(padding))
+                5 -> DaGiaoScreen(modifier = Modifier.padding(padding))
+            }
+        }
+    )
+}
+
+@Composable
+fun DonHangScreen(modifier: Modifier=Modifier) {
+    Text(
+        text = "Đây là màn hình đơn hàng",
+        modifier = Modifier.fillMaxWidth()
+    )
+    NutThanhToan()
+}
+@Composable
+fun DaGiaoScreen(modifier: Modifier=Modifier) {
+    Text(text = "Đây là màn hình Đã giao", modifier = Modifier.fillMaxWidth())
+}
+
+@Composable
+fun DangGiaoScreen(modifier: Modifier=Modifier) {
+    Text(text = "Đây là màn hình Đang giao", modifier = Modifier.fillMaxWidth())
+}
+
+@Composable
+fun DangVanChuyenScreen(modifier: Modifier=Modifier) {
+    Text(text = "Đây là màn hình Đang vận chuyển", modifier = Modifier.fillMaxWidth())
+}
+
+@Composable
+fun ChoVanChuyenScreen(modifier: Modifier=Modifier) {
+    Text(text = "Đây là màn hình Chờ vận chuyển", modifier = Modifier.fillMaxWidth())
+}
+
+@Composable
+fun ChuaThanhToanScreen(modifier: Modifier=Modifier) {
+    Text(text = "Đây là màn hình Chưa Thanh Toán", modifier = Modifier.fillMaxWidth())
+}
+
+
+@Composable
+fun NutThanhToan(){
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = "Tổng tiền:",
+            fontSize = 16.sp,
+            color = Color.Black
+        )
+
+        Text(
+            text = "1300000000000",
+            fontSize = 16.sp,
+            color = Color.Red
+        )
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    // Nút "Đặt hàng ngay"
+    Button(
+
+        onClick = { /* Xử lý đặt hàng */ },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        shape = RoundedCornerShape(4.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+    ) {
+        Text(
+            text = "ĐẶT HÀNG NGAY",
+            fontSize = 16.sp,
+            color = Color.White
+        )
+    }
+}
+
+
+@Composable
+fun CardScreen() {
+    // Trạng thái danh sách sản phẩm
+    val products = remember {
+        mutableStateListOf(
+            Product(
+                name = "Laptop gaming Acer Nitro 16 Phoenix AN16 41 R76E",
+                Describe="null",
+                discountPrice=31300000,
+                originalPrice = 29490000,
+                quantity = 1,
+                gift = "Đế Tản Nhiệt Cooler Master Notepal C3 - Trị giá: 230.000đ",
+                imageRes = 1
+            )
+        )
+    }
+>>>>>>> Stashed changes
+
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .padding(vertical = 8.dp, horizontal = 4.dp)
+                            .clip(shape = RectangleShape)
+                            .clickable { selectedTabIndexItem = index }
+
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(8.dp)
+                        ) {
+<<<<<<< Updated upstream
+                            Text(
+                                text = title,
                                 fontSize = 20.sp
                             )
+=======
+
+                            Column(
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text(
+                                    text = product.name,
+                                    fontSize = 16.sp,
+                                    color = Color.Black
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = "Quà tặng: ${product.gift}",
+                                    fontSize = 12.sp,
+                                    color = Color.Gray
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        // Hàng thứ hai: Điều chỉnh số lượng và hiển thị giá
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            // Nút trừ, hiển thị số lượng, và nút cộng
+                            Row {
+                                Button(
+                                    onClick = {
+                                        if (product.quantity > 1) {
+                                            product.quantity -= 1
+                                        }
+                                    },
+                                    modifier = Modifier.size(40.dp),
+                                    shape = RoundedCornerShape(0.dp),
+                                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                                    contentPadding = PaddingValues(0.dp)
+                                ) {
+                                    Text("-", fontSize = 20.sp, color = Color.Black)
+                                }
+
+                                Text(
+                                    text = "${product.quantity}",
+                                    modifier = Modifier
+                                        .padding(horizontal = 16.dp)
+                                        .align(Alignment.CenterVertically),
+                                    fontSize = 16.sp
+                                )
+
+                                Button(
+                                    onClick = {
+                                        product.quantity += 1
+                                    },
+                                    modifier = Modifier.size(40.dp),
+                                    shape = RoundedCornerShape(0.dp),
+                                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                                    contentPadding = PaddingValues(0.dp)
+                                ) {
+                                    Text("+", fontSize = 20.sp, color = Color.Black)
+                                }
+                            }
+
+                            // Hiển thị giá bên phải
+                            Column(
+                                horizontalAlignment = Alignment.End
+                            ) {
+                                Text(
+                                    text = "${product.discountPrice * product.quantity}đ",
+                                    fontSize = 16.sp,
+                                    color = Color.Red
+                                )
+                                Text(
+                                    text = "31.490.000đ", // Giá cũ (nếu có)
+                                    fontSize = 12.sp,
+                                    color = Color.Gray,
+                                    textDecoration = TextDecoration.LineThrough
+                                )
+                            }
+>>>>>>> Stashed changes
                         }
                     }
                 }
@@ -239,6 +472,7 @@ fun NutThanhToan(
             )
         }
         Button(
+
             onClick = { /* Xử lý đặt hàng */ },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
