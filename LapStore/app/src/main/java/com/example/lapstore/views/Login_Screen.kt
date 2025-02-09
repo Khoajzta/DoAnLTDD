@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 package com.example.lapstore.views
 =======
+=======
+>>>>>>> main
 package com.example.lapstore.views
 
 import NavRoute
@@ -14,11 +17,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+<<<<<<< HEAD
+=======
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+>>>>>>> main
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+<<<<<<< HEAD
+=======
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+>>>>>>> main
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
@@ -40,6 +55,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+<<<<<<< HEAD
+=======
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+>>>>>>> main
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -64,8 +85,14 @@ fun LoginScreen(
 
     val systemUiController = rememberSystemUiController()
 
+<<<<<<< HEAD
     var tendangnhap by remember { mutableStateOf("hoangoanh") }
     var matkhau by remember { mutableStateOf("123456") }
+=======
+    var tendangnhap by remember { mutableStateOf("") }
+    var matkhau by remember { mutableStateOf("") }
+    var isPasswordVisible by remember { mutableStateOf(false) }
+>>>>>>> main
 
     val loginResult = taiKhoanViewModel.loginResult.value
 
@@ -121,6 +148,19 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth(),
                 value = matkhau,
                 label = { Text("Mật khẩu") },
+<<<<<<< HEAD
+=======
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+                        Icon(
+                            imageVector = if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                            contentDescription = if (isPasswordVisible) "Ẩn mật khẩu" else "Hiển thị mật khẩu"
+                        )
+                    }
+                },
+>>>>>>> main
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Red,
                     unfocusedBorderColor = Color.Red,
@@ -178,7 +218,13 @@ fun LoginScreen(
                     fontWeight = FontWeight.Bold
                 )
                 TextButton(
+<<<<<<< HEAD
                     onClick = {}
+=======
+                    onClick = {
+                        navController.navigate(NavRoute.REGISTERSCREEN.route)
+                    }
+>>>>>>> main
                 ) {
                     Text(
                         "Đăng ký ngay!",
@@ -196,6 +242,7 @@ fun LoginScreen(
 
             if (openDialog == true) {
                 AlertDialog(
+<<<<<<< HEAD
                     onDismissRequest = { openDialog = false }, // Đóng khi nhấn ngoài dialog
                     text = {
                         if(loginResult!=null){
@@ -204,16 +251,48 @@ fun LoginScreen(
                             }
                             else if(loginResult.result == false){
                                 Text("Tài khoản hoặc mật khẩu không chính xác")
+=======
+                    containerColor = Color.White,
+                    title = { Text("Đăng nhâp", color = Color.Red) },
+                    onDismissRequest = { openDialog = false },
+                    text = {
+                        if(loginResult!=null){
+                            if(tendangnhap == "" || matkhau ==""){
+                                Text(
+                                    "Vui lòng nhập đầy đủ thông tin!!!",
+                                    fontSize = 17.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                            else if(loginResult.result == false){
+                                Text(
+                                    "Tài khoản hoặc mật khẩu không chính xác",
+                                    fontSize = 17.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+>>>>>>> main
                             }
                         }
                     },
                     confirmButton = {
+<<<<<<< HEAD
                         Button(
+=======
+                        TextButton(
+>>>>>>> main
                             onClick = {
                                 openDialog = false
                             }
                         ) {
+<<<<<<< HEAD
                             Text("OK")
+=======
+                            Text(
+                                "OK",
+                                fontSize = 17.sp,
+                                color = Color.Red
+                            )
+>>>>>>> main
                         }
                     },
                 )
@@ -230,4 +309,7 @@ fun LoginScreen(
 
 
 
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> main

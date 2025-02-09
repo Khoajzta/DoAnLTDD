@@ -25,9 +25,9 @@ $hoadon->MaHoaDonBan = $data->MaHoaDonBan;
 // Gọi hàm deleteHoaDon() để xóa hóa đơn
 if ($hoadon->deleteHoaDonBan()) {
     // Nếu xóa thành công
-    echo json_encode(array('message' => 'HoaDonBan delete'));
+    echo json_encode(array('message' => 'Hóa đơn bán đã được xóa.'));
 } else {
     // Nếu xóa thất bại
-    echo json_encode(array('message' => 'HoaDonBan can not delete '));
+    echo json_encode(array('message' => 'Không thể xóa hóa đơn bán.'));
 }
 ?>

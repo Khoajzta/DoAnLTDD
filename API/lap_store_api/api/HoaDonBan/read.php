@@ -30,6 +30,7 @@ if ($num > 0) {
             'NgayDatHang' => $NgayDatHang,
             'MaDiaChi' => $MaDiaChi,
             'TongTien' => $TongTien,
+            'PhuongThucThanhToan' => $PhuongThucThanhToan,
             'TrangThai' => $TrangThai
         );
 

@@ -1,22 +1,21 @@
 package com.example.lapstore.models
 
+import com.google.gson.annotations.SerializedName
+
 data class SanPham(
-    var MaSanPham: Int,
-    var TenSanPham: String,
-    var MaLoaiSanPham: Int,
-    var MaHangSanXuat: Int,
-    var MaCPU: String,
-    var MaRAM: Int,
-    var MaCardDoHoa: String,
-    var MaROM: Int,
-    var MaManHinh: String,
-    var MaMauSac: Int,
-    var Gia: Int,
-    var SoLuong: Int,
-    var MoTa: String,
-    var HinhAnh: String,
-    var TrangThai: Int,
+    @SerializedName("MaSanPham") var MaSanPham: Int,
+    @SerializedName("TenSanPham") var TenSanPham: String,
+    @SerializedName("MaLoaiSanPham") var MaLoaiSanPham: Int,
+    @SerializedName("CPU") var CPU: String,
+    @SerializedName("RAM") var RAM: String,
+    @SerializedName("CardManHinh") var CardManHinh: String,
+    @SerializedName("SSD") var SSD: String,
+    @SerializedName("ManHinh") var ManHinh: String,
+    @SerializedName("MaMauSac") var MaMauSac: Int,
+    @SerializedName("Gia") var Gia: Int,
+    @SerializedName("SoLuong") var SoLuong: Int,
+    @SerializedName("MoTa") var MoTa: String,
+    @SerializedName("HinhAnh") var HinhAnh: String,
+    @SerializedName("TrangThai") var TrangThai: Int,
 )
-data class SanPhamResponse(
-    val sanpham:List<SanPham>
-)
+

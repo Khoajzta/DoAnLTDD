@@ -19,17 +19,15 @@
     $sanpham->MaSanPham = $data->MaSanPham;
     $sanpham->TenSanPham = $data->TenSanPham;
     $sanpham->MaLoaiSanPham = $data->MaLoaiSanPham;
-    $sanpham->MaHangSanXuat = $data->MaHangSanXuat;
-    $sanpham->MaCPU = $data->MaCPU;
-    $sanpham->MaRAM = $data->MaRAM;
-    $sanpham->MaCardDoHoa = $data->MaCardDoHoa;
-    $sanpham->MaROM = $data->MaROM;
-    $sanpham->MaManHinh = $data->MaManHinh;
+    $sanpham->CPU = $data->CPU;
+    $sanpham->RAM = $data->RAM;
+    $sanpham->CardManHinh = $data->CardManHinh;
+    $sanpham->SSD = $data->SSD;
+    $sanpham->ManHinh = $data->ManHinh;
     $sanpham->MaMauSac = $data->MaMauSac;
     $sanpham->Gia = $data->Gia;
     $sanpham->SoLuong = $data->SoLuong;
     $sanpham->MoTa = $data->MoTa;
-    $sanpham->HinhAnh = $data->HinhAnh;
     $sanpham->TrangThai = $data->TrangThai;
 
 

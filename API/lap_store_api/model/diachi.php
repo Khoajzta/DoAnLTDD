@@ -1,13 +1,14 @@
 <?php
-class diachi{
+class DiaChi{
     private $conn;
 
     //Thuoc tinh
     public $MaDiaChi;
-    public $MaTinh;
-    public $MaHuyen;
-    public $MaXa;
-    public $SoNha;
+    public $MaKhachHang;
+    public $ThongTinDiaChi;
+    public $TenNguoiNhan;
+    public$SoDienThoai;
+    public$MacDinh;
     //connect db
 
     public function __construct($database){
@@ -30,28 +31,48 @@ class diachi{
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $this->MaDiaChi = $row['MaDiaChi'];
-        $this->MaTinh = $row['MaTinh'];
-        $this->MaHuyen = $row['MaHuyen'];
-        $this->MaXa = $row['MaXa'];
-        $this->SoNha = $row['SoNha'];
-    } 
+        $this->MaKhachHang = $row['MaKhachHang'];
+        $this->ThongTinDiaChi = $row['ThongTinDiaChi'];
+        $this->TenNguoiNhan = $row['TenNguoiNhan'];
+        $this->SoDienThoai = $row['SoDienThoai'];
+        $this->MacDinh = $row['MacDinh'];
+    }  
+
+    public function GetDiaChiByMaKhachHang() {
+        $query = "SELECT *
+                  FROM  diachi
+                  WHERE MaKhachHang = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->MaKhachHang);
+        $stmt->execute();
+        return $stmt; // Trả về PDOStatement
+    }
+
+    public function GetDiaChiMacDinh() {
+        $query = "SELECT * FROM diachi WHERE MaKhachHang = ? AND MacDinh = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->MaKhachHang);
+        $stmt->bindParam(2, $this->MacDinh);
+    
+        $stmt->execute();
+        return $stmt;
+    }
 
     public function AddDiaChi() {
-    $query = "INSERT INTO diachi SET MaTinh=:MaTinh, MaHuyen=:MaHuyen, MaXa=:MaXa, SoNha=:SoNha";
+    $query = "INSERT INTO diachi SET  ThongTinDiaChi=:ThongTinDiaChi,MaKhachHang =:MaKhachHang, TenNguoiNhan =:TenNguoiNhan, SoDienThoai =:SoDienThoai, MacDinh =:MacDinh";
 
     $stmt = $this->conn->prepare($query);
+    $this->ThongTinDiaChi = htmlspecialchars(strip_tags($this->ThongTinDiaChi));
+    $this->MaKhachHang = htmlspecialchars(strip_tags($this->MaKhachHang));
+    $this->TenNguoiNhan = htmlspecialchars(strip_tags($this->TenNguoiNhan));
+    $this->SoDienThoai = htmlspecialchars(strip_tags($this->SoDienThoai));
+    $this->MacDinh = htmlspecialchars(strip_tags($this->MacDinh));
 
-    $this->MaDiaChi = htmlspecialchars(strip_tags($this->MaDiaChi));
-    $this->MaTinh = htmlspecialchars(strip_tags($this->MaTinh));
-    $this->MaHuyen = htmlspecialchars(strip_tags($this->MaHuyen));
-    $this->MaXa = htmlspecialchars(strip_tags($this->MaXa));
-    $this->SoNha = htmlspecialchars(strip_tags($this->SoNha));
-
-    $stmt->bindParam(':MaDiaChi', $this->MaDiaChi);
-    $stmt->bindParam(':MaTinh', $this->MaTinh);
-    $stmt->bindParam(':MaHuyen', $this->MaHuyen);
-    $stmt->bindParam(':MaXa', $this->MaXa);
-    $stmt->bindParam(':SoNha', $this->SoNha);
+    $stmt->bindParam(':ThongTinDiaChi', $this->ThongTinDiaChi);
+    $stmt->bindParam(':MaKhachHang', $this->MaKhachHang);
+    $stmt->bindParam(':TenNguoiNhan', $this->TenNguoiNhan);
+    $stmt->bindParam(':SoDienThoai', $this->SoDienThoai);
+    $stmt->bindParam(':MacDinh', $this->MacDinh);
 
     if ($stmt->execute()) {
         return true;
@@ -62,23 +83,42 @@ class diachi{
 
 
     public function UpdateDiaChi(){
-        $query = "UPDATE diachi SET MaTinh =:MaTinh, MaHuyen=:MaHuyen, MaXa=:MaXa, SoNha=:SoNha  WHERE MaDiaChi =:MaDiaChi";
+        $query = "UPDATE diachi SET ThongTinDiaChi=:ThongTinDiaChi, MaKhachHang =:MaKhachHang, TenNguoiNhan =:TenNguoiNhan, SoDienThoai =:SoDienThoai, MacDinh =:MacDinh WHERE MaDiaChi =:MaDiaChi";
 
         $stmt = $this->conn->prepare($query);
 
+
         $this->MaDiaChi = htmlspecialchars(strip_tags($this->MaDiaChi));
-        $this->MaTinh = htmlspecialchars(strip_tags($this->MaTinh));
-        $this->MaHuyen = htmlspecialchars(strip_tags($this->MaHuyen));
-        $this->MaXa = htmlspecialchars(strip_tags($this->MaXa));
-        $this->SoNha = htmlspecialchars(strip_tags($this->SoNha));
+        $this->ThongTinDiaChi = htmlspecialchars(strip_tags($this->ThongTinDiaChi));
+        $this->MaKhachHang = htmlspecialchars(strip_tags($this->MaKhachHang));
+        $this->TenNguoiNhan = htmlspecialchars(strip_tags($this->TenNguoiNhan));
+        $this->SoDienThoai = htmlspecialchars(strip_tags($this->SoDienThoai));
+        $this->MacDinh = htmlspecialchars(strip_tags($this->MacDinh));
 
 
-        $stmt->bindParam(':MaDiaChi',$this->MaDiaChi);
-        $stmt->bindParam(':MaTinh',$this->MaTinh);
-        $stmt->bindParam(':MaHuyen',$this->MaHuyen);
-        $stmt->bindParam(':MaXa',$this->MaXa);
-        $stmt->bindParam(':SoNha',$this->SoNha);
+        $stmt->bindParam(':MaDiaChi', $this->MaDiaChi);
+        $stmt->bindParam(':ThongTinDiaChi', $this->ThongTinDiaChi);
+        $stmt->bindParam(':MaKhachHang', $this->MaKhachHang);
+        $stmt->bindParam(':TenNguoiNhan', $this->TenNguoiNhan);
+        $stmt->bindParam(':SoDienThoai', $this->SoDienThoai);
+        $stmt->bindParam(':MacDinh', $this->MacDinh);
 
+        if($stmt->execute()){
+            return true;
+        }
+        printf("Error %s.\n",$stmt->error);
+        return false;
+    }
+
+    public function UpdateDiaChiMacDinh(){
+        $query = "UPDATE diachi SET  MacDinh = 0 WHERE MaKhachHang =:MaKhachHang";
+
+        $stmt = $this->conn->prepare($query);
+        $this->MaDiaChi = htmlspecialchars(strip_tags($this->MaKhachHang));
+    
+
+        $stmt->bindParam(':MaKhachHang', $this->MaKhachHang);
+        
         if($stmt->execute()){
             return true;
         }

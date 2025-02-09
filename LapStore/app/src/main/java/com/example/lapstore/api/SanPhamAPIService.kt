@@ -1,3 +1,4 @@
+import com.example.lapstore.models.KhachHang
 import com.example.lapstore.models.SanPham
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
@@ -17,20 +18,26 @@ data class SeachSanphamResponse(
     val data: List<SanPham>
 )
 
-
 interface SanPhamAPIService{
     @GET("SanPham/read.php")
-    fun getAllSanPham(): Call<SanPhamResponse>
+    suspend fun getAllSanPham(): SanPhamResponse
 
-    @GET("SanPham/readByLoaiSanPham.php?MaLoaiSanPham=2")
-    fun getAllSanPhamGaming(): Call<SanPhamResponse>
+    @GET("SanPham/readByLoaiSanPham.php")
+    suspend fun getSanPhamTheoLoai(
+        @Query("MaLoaiSanPham") MaLoaiSanPham: Int
+    ): SanPhamResponse
 
-    @GET("SanPham/readByLoaiSanPham.php?MaLoaiSanPham=1")
-    fun getAllSanPhamVanPhong(): Call<SanPhamResponse>
+    @GET("SanPham/getproductCardCuaKhachHang.php")
+    suspend fun getSanPhamByGioHang(
+        @Query("MaKhachHang") MaKhachHang: Int
+    ): SanPhamResponse
 
-    @GET("SanPhamapi/searchSanPham.php")
-    fun searchSanPham(@Query("search") search: String): Call<SanPhamResponse>
+    @GET("SanPham/show.php")
+    suspend fun getSanPhamById(
+        @Query("MaSanPham") MaSanPham: String
+    ): SanPham
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
     @GET("SanPham/show.php")
@@ -42,4 +49,18 @@ interface SanPhamAPIService{
     suspend fun searchTenSanPham(@Query("query") query: String): SeachSanphamResponse
 
 >>>>>>> Stashed changes
+=======
+    @GET("SanPham/searchSanPham.php")
+    suspend fun searchSanPham(@Query("search") search: String): SanPhamResponse
+
+    @GET("SanPham/laysanphamtheohoadon.php")
+    suspend fun getSanPhamTheoHoaDon(
+        @Query("MaHoaDonBan") MaHoaDonBan: Int
+    ): SanPhamResponse
+
+    @PUT("SanPham/update.php")
+    suspend fun updateSanPham(
+        @Body sanpham: SanPham
+    ): KhachHangUpdateResponse
+>>>>>>> main
 }

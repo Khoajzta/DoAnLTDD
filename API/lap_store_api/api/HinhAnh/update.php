@@ -17,7 +17,7 @@
     $data = json_decode(file_get_contents("php://input"));
 
     $hinhanh->MaHinhAnh = $data->MaHinhAnh;
-    $hinhanh->TenHinhAnh = $data->TenHinhAnh;
+    $hinhanh->DuongDan = $data->DuongDan;
     $hinhanh->MaSanPham = $data->MaSanPham;
 
     if($hinhanh->UpdateHinhAnh()){

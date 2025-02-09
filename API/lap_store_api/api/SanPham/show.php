@@ -1,32 +1,34 @@
 <?php
-    header('Access-Control-Allow-Origin:*');
-    header('Content-Type: application/json');
+header('Access-Control-Allow-Origin:*');
+header('Content-Type: application/json');
 
-    include_once('../../config/database.php');
-    include_once('../../model/sanpham.php');
+include_once('../../config/database.php');
+include_once('../../model/sanpham.php');
 
-    // Tạo đối tượng database và kết nối
-    $database = new database();
-    $conn = $database->Connect(); // Lấy kết nối PDO
+// Tạo đối tượng database và kết nối
+$database = new database();
+$conn = $database->Connect(); // Lấy kết nối PDO
 
-    // Khởi tạo lớp Khachhang với kết nối PDO
-    $sanpham = new SanPham($conn);
+// Khởi tạo lớp SanPham với kết nối PDO
+$sanpham = new SanPham($conn);
 
-    $sanpham->MaSanPham = isset($_GET['id']) ? $_GET['id'] : die();
+// Lấy MaSanPham từ query string
+$sanpham->MaSanPham = isset($_GET['MaSanPham']) ? $_GET['MaSanPham'] : die("Sản phẩm không tồn tại");
 
-    $sanpham->GetSanPhamById();
+// Lấy thông tin sản phẩm theo MaSanPham
+$sanpham->GetSanPhamById();
 
-
+// Kiểm tra nếu sản phẩm tồn tại và trả về dữ liệu
+if ($sanpham->TenSanPham) {
     $sanpham_item = array(
         'MaSanPham' => $sanpham->MaSanPham,
         'TenSanPham' => $sanpham->TenSanPham,
         'MaLoaiSanPham' => $sanpham->MaLoaiSanPham,
-        'MaHangSanXuat' => $sanpham->MaHangSanXuat,
-        'MaCPU' => $sanpham->MaCPU,
-        'MaRAM' => $sanpham->MaRAM,
-        'MaCardDoHoa' => $sanpham->MaCardDoHoa,
-        'MaROM' => $sanpham->MaROM,
-        'MaManHinh' => $sanpham->MaManHinh,
+        'CPU' => $sanpham->CPU,
+        'RAM' => $sanpham->RAM,
+        'CardManHinh' => $sanpham->CardManHinh,
+        'SSD' => $sanpham->SSD,
+        'ManHinh' => $sanpham->ManHinh,
         'MaMauSac' => $sanpham->MaMauSac,
         'Gia' => $sanpham->Gia,
         'SoLuong' => $sanpham->SoLuong,
@@ -34,9 +36,9 @@
         'HinhAnh' => $sanpham->HinhAnh,
         'TrangThai' => $sanpham->TrangThai
     );
-    
-
-    print_r(json_encode($sanpham_item, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
-
-
+    echo json_encode($sanpham_item, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+} else {
+    // Trả về thông báo lỗi nếu không tìm thấy sản phẩm
+    echo json_encode(array("message" => "Sản phẩm không tồn tại."));
+}
 ?>

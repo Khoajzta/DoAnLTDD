@@ -17,14 +17,13 @@
     $data = json_decode(file_get_contents("php://input"));
 
     $taikhoan->TenTaiKhoan = $data->TenTaiKhoan;
-    $taikhoan->MaNguoiDung = $data->MaNguoiDung;
+    $taikhoan->MaKhachHang = $data->MaKhachHang;
     $taikhoan->MatKhau = $data->MatKhau;
 
-    if($taikhoan->UpdateTaiKhoan()){
-        echo json_encode(array('message','Tai Khoan Updated'));
-    }
-    else{
-        echo json_encode(array('message','Tai Khoan Not Updated'));
+    if ($taikhoan->UpdateTaiKhoan()) {
+        echo json_encode(array('message' => 'Tai Khoan Updated'));
+    } else {
+        echo json_encode(array('message' => 'Tai Khoan Not Updated'));
     }
 
 ?>

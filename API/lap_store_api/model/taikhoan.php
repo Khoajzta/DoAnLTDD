@@ -4,8 +4,10 @@ class TaiKhoan{
 
     //Thuoc tinh
     public $TenTaiKhoan;
-    public $MaNguoiDung;
+    public $MaKhachHang;
     public $MatKhau;
+    public $LoaiTaiKhoan;
+    public $TrangThai;
 
     //connect db
 
@@ -21,6 +23,7 @@ class TaiKhoan{
         $stmt->execute();
         return $stmt; // Trả về PDOStatement
     }
+
     public function GetTaiKhoanByUsername() {
         $query = "SELECT * FROM taikhoan WHERE TenTaiKhoan = ? LIMIT 1"; 
         $stmt = $this->conn->prepare($query);
@@ -29,22 +32,61 @@ class TaiKhoan{
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $this->TenTaiKhoan = $row['TenTaiKhoan'];
-        $this->MaNguoiDung = $row['MaNguoiDung'];
+        $this->MaKhachHang = $row['MaKhachHang'];
         $this->MatKhau = $row['MatKhau'];
-    } 
+        $this->LoaiTaiKhoan = $row['LoaiTaiKhoan'];
+        $this->TrangThai = $row['TrangThai'];
+    }
 
-    public function AddTaiKhoan(){
-        $query = "INSERT INTO taikhoan SET TenTaiKhoan =:TenTaiKhoan ,  MaNguoiDung =:MaNguoiDung, MatKhau =:MatKhau";
-
+    public function KiemTraDangNhap() {
+        $query = "SELECT * FROM taikhoan WHERE TenTaiKhoan = ? AND MatKhau = ?";
         $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->TenTaiKhoan);
+        $stmt->bindParam(2, $this->MatKhau);
+    
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        if ($row) {
+            // Nếu tài khoản và mật khẩu đúng, trả về true
+            return true;
+        } else {
+            // Nếu không tìm thấy tài khoản hoặc mật khẩu sai, trả về false
+            return false;
+        }
+    }
+
+    public function KiemTraTrungUsername() {
+        $query = "SELECT * FROM taikhoan WHERE TenTaiKhoan = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->TenTaiKhoan);
+   
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        if ($row) {
+            // Nếu tài khoản và mật khẩu đúng, trả về true
+            return true;
+        } else {
+            // Nếu không tìm thấy tài khoản hoặc mật khẩu sai, trả về false
+            return false;
+        }
+    }
+    
+    public function AddTaiKhoan(){
+        $query = "INSERT INTO taikhoan (TenTaiKhoan, MaKhachHang, MatKhau, LoaiTaiKhoan, TrangThai) 
+                        VALUES (:TenTaiKhoan,(SELECT MAX(MaKhachHang) FROM KhachHang) , :MatKhau, :LoaiTaiKhoan, :TrangThai)";
+            $stmt = $this->conn->prepare($query);
 
         $this->TenTaiKhoan = htmlspecialchars(strip_tags($this->TenTaiKhoan));
-        $this->MaNguoiDung = htmlspecialchars(strip_tags($this->MaNguoiDung));
         $this->MatKhau = htmlspecialchars(strip_tags($this->MatKhau));
+        $this->LoaiTaiKhoan = htmlspecialchars(strip_tags($this->LoaiTaiKhoan));
+        $this->TrangThai = htmlspecialchars(strip_tags($this->TrangThai));
 
         $stmt->bindParam(':TenTaiKhoan',$this->TenTaiKhoan);
-        $stmt->bindParam(':MaNguoiDung',$this->MaNguoiDung);
         $stmt->bindParam(':MatKhau',$this->MatKhau);
+        $stmt->bindParam(':LoaiTaiKhoan',$this->LoaiTaiKhoan);
+        $stmt->bindParam(':TrangThai',$this->TrangThai);
 
         if($stmt->execute()){
             return true;
@@ -77,7 +119,7 @@ class TaiKhoan{
 
         $stmt = $this->conn->prepare($query);
 
-        $this->MaNguoiDung = htmlspecialchars(strip_tags($this->TenTaiKhoan));
+        $this->MaKhachHang = htmlspecialchars(strip_tags($this->TenTaiKhoan));
 
         $stmt->bindParam(':TenTaiKhoan',$this->TenTaiKhoan);
 

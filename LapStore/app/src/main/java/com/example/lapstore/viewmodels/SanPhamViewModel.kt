@@ -9,12 +9,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.lapstore.api.QuanLyBanLaptopRetrofitClient
+import com.example.lapstore.models.HoaDonBan
+import com.example.lapstore.models.KhachHang
 import com.example.lapstore.models.SanPham
 import kotlinx.coroutines.Dispatchers
+<<<<<<< HEAD
 <<<<<<< Updated upstream
+=======
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+>>>>>>> main
 import kotlinx.coroutines.launch/**/
+import kotlinx.coroutines.withContext
 
 class SanPhamViewModel : ViewModel() {
+<<<<<<< HEAD
     val allSanPham = liveData(Dispatchers.IO) {
         try {
             val response = QuanLyBanLaptopRetrofitClient.sanphamAPIService.getAllSanPham().execute()
@@ -41,6 +51,17 @@ class SanPhamViewModel : ViewModel() {
         private set
     var danhSachSanPhamGaming by mutableStateOf<List<SanPham>>(emptyList())
         private set
+=======
+    var danhSachAllSanPham by mutableStateOf<List<SanPham>>(emptyList())
+    var danhSachSanPhamTrongHoaDon by mutableStateOf<List<SanPham>>(emptyList())
+
+    private val _danhSachSanPhamGaming = MutableStateFlow<List<SanPham>>(emptyList())
+    val danhSachSanPhamGaming: StateFlow<List<SanPham>> = _danhSachSanPhamGaming
+
+    private val _danhSachSanPhamVanPhong = MutableStateFlow<List<SanPham>>(emptyList())
+    val danhSachSanPhamVanPhong: StateFlow<List<SanPham>> = _danhSachSanPhamVanPhong
+
+>>>>>>> main
     var danhSachSanPhamCuaKhachHang by mutableStateOf<List<SanPham>>(emptyList())
         private set
     var isLoading by mutableStateOf(false)
@@ -48,6 +69,7 @@ class SanPhamViewModel : ViewModel() {
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
+<<<<<<< HEAD
     var sanPham by mutableStateOf<SanPham?>(null)
         private set
 
@@ -75,6 +97,19 @@ class SanPhamViewModel : ViewModel() {
     val tenSanPhamList = mutableStateOf<List<SanPham>>(emptyList())
 
     private var searchJob: Job? = null
+=======
+    var sanPhamUpdateResult by mutableStateOf("")
+        private set
+
+    var sanPham by mutableStateOf<SanPham?>(null)
+        private set
+
+    var danhSach by mutableStateOf<List<SanPham>>(emptyList())
+
+    private val _danhsachSanPham = MutableStateFlow<List<SanPham>>(emptyList())
+    val danhsachSanPham: StateFlow<List<SanPham>> get() = _danhsachSanPham
+
+>>>>>>> main
     fun getAllSanPham() {
         viewModelScope.launch(Dispatchers.IO) {
             isLoading = true
@@ -86,53 +121,56 @@ class SanPhamViewModel : ViewModel() {
                 errorMessage = e.message
             } finally {
                 isLoading = false
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> main
             }
-        } catch (e: Exception) {
-            emit(emptyList())  // Emit danh sách trống nếu có lỗi
         }
     }
 
-    val allSanPhamGaming = liveData(Dispatchers.IO) {
-        try {
-            val response = QuanLyBanLaptopRetrofitClient.sanphamAPIService.getAllSanPhamGaming().execute()
-            if (response.isSuccessful) {
-                emit(response.body()?.sanpham ?: emptyList())
-            } else {
-                emit(emptyList())
+    fun getSanPhamTheoLoaiGaming() {
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.sanphamAPIService.getSanPhamTheoLoai(2)
+                }
+                _danhSachSanPhamGaming.value = response.sanpham ?: emptyList()
+            } catch (e: Exception) {
+                Log.e("SanPham Error", "Lỗi khi lấy sanpham: ${e.message}")
+                _danhSachSanPhamGaming.value = emptyList()
             }
-        } catch (e: Exception) {
-            emit(emptyList())
         }
     }
 
-    val allSanPhamVanPhong = liveData(Dispatchers.IO) {
-        try {
-            val response = QuanLyBanLaptopRetrofitClient.sanphamAPIService.getAllSanPhamVanPhong().execute()
-            if (response.isSuccessful) {
-                emit(response.body()?.sanpham ?: emptyList())
-            } else {
-                emit(emptyList())
+    fun getSanPhamTheoLoaiVanPhong() {
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.sanphamAPIService.getSanPhamTheoLoai(1)
+                }
+                _danhSachSanPhamVanPhong.value = response.sanpham ?: emptyList()
+            } catch (e: Exception) {
+                Log.e("SanPham Error", "Lỗi khi lấy sanpham: ${e.message}")
+                _danhSachSanPhamVanPhong.value = emptyList()
             }
-        } catch (e: Exception) {
-            emit(emptyList())
         }
     }
 
-    fun searchSanPham(search: String) = liveData(Dispatchers.IO) {
-        try {
-            val response = QuanLyBanLaptopRetrofitClient.sanphamAPIService.searchSanPham(search).execute()
-            if (response.isSuccessful) {
-                // Emit danh sách sản phẩm tìm thấy
-                emit(response.body()?.sanpham ?: emptyList())
-            } else {
-                emit(emptyList())  // Nếu API trả về lỗi
+    fun getSanPhamTheoGioHang(MaKhachHang: Int) {
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.sanphamAPIService.getSanPhamByGioHang(MaKhachHang)
+                }
+                danhSachSanPhamCuaKhachHang = response.sanpham
+            } catch (e: Exception) {
+                Log.e("SanPham Error", "Lỗi khi lấy sản phẩm: ${e.message}")
             }
-        } catch (e: Exception) {
-            emit(emptyList())  // Nếu có lỗi xảy ra trong quá trình gọi API
         }
     }
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 }
 
@@ -187,3 +225,74 @@ class SanPhamViewModel : ViewModel() {
 
 
 >>>>>>> Stashed changes
+=======
+    fun getSanPhamById(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                sanPham = QuanLyBanLaptopRetrofitClient.sanphamAPIService.getSanPhamById(id)
+            } catch (e: Exception) {
+                Log.e("SanPhamViewModel", "Error getting SanPham", e)
+            }
+        }
+    }
+
+    fun getSanPhamById2(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val sanPham = QuanLyBanLaptopRetrofitClient.sanphamAPIService.getSanPhamById(id)
+                _danhsachSanPham.update { currentList -> currentList + sanPham }
+            } catch (e: Exception) {
+                Log.e("SanPhamViewModel", "Error getting SanPham", e)
+            }
+        }
+    }
+
+    fun getSanPhamSearch(search:String) {
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.sanphamAPIService.searchSanPham(search)
+                }
+                danhSach = response.sanpham
+            } catch (e: Exception) {
+                Log.e("SanPham Error", "Lỗi khi lấy sản phẩm: ${e.message}")
+            }
+        }
+    }
+
+    fun getSanPhamTrongHoaDon(MaHoaDonBan: Int) {
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.sanphamAPIService.getSanPhamTheoHoaDon(MaHoaDonBan)
+                }
+                danhSachSanPhamTrongHoaDon = response.sanpham
+            } catch (e: Exception) {
+                Log.e("Sản Phẩm Error", "Lỗi khi lấy Sản Phẩm")
+            }
+        }
+    }
+
+    fun clearSanPhamSearch() {
+        danhSach = emptyList()
+    }
+
+    fun updateSanPham(sanpham: SanPham) {
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    QuanLyBanLaptopRetrofitClient.sanphamAPIService.updateSanPham(sanpham)
+                }
+                sanPhamUpdateResult = if (response.success) {
+                    "Cập nhật thành công: ${response.message}"
+                } else {
+                    "Cập nhật thất bại: ${response.message}"
+                }
+            } catch (e: Exception) {
+                sanPhamUpdateResult = "Lỗi khi cập nhật khách hàng: ${e.message}"
+                Log.e("SanPham Error", "Lỗi khi cập nhật khách hàng: ${e.message}")
+            }
+        }
+    }
+}
+>>>>>>> main

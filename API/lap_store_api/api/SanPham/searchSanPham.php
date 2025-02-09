@@ -1,6 +1,6 @@
 <?php
-header('Access-Control-Allow-Origin:*');
-header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Content-Type: application/json; charset=UTF-8');
 
 include_once('../../config/database.php');
 include_once('../../model/sanpham.php');
@@ -16,8 +16,6 @@ $sanpham = new SanPham($conn);
 $searchTerm = isset($_GET['search']) ? $_GET['search'] : die(json_encode(["message" => "Từ khóa tìm kiếm không được cung cấp."]));
 
 // Lấy danh sách sản phẩm theo từ khóa tìm kiếm
-$sanpham->TenSanPham = $searchTerm;
-$sanpham->MoTa = $searchTerm;
 $getSanPhamBySearch = $sanpham->GetSanPhamBySearch($searchTerm);
 
 // Kiểm tra nếu có sản phẩm
@@ -32,21 +30,21 @@ if ($getSanPhamBySearch->rowCount() > 0) {
             'MaSanPham'=> $MaSanPham,
             'TenSanPham'=> $TenSanPham,
             'MaLoaiSanPham'=> $MaLoaiSanPham,
-            'MaHangSanXuat'=> $MaHangSanXuat,
-            'MaCPU'=> $TenHangCPU,
-            'MaRAM'=> $DungLuongRAM,
-            'MaCardDoHoa'=> $TenCard,
-            'MaROM'=> $DungLuongROM,
-            'MaManHinh'=> $DoPhanGiai,
+            'CPU'=> $CPU,
+            'RAM'=> $RAM,
+            'CardManHinh'=> $CardManHinh,
+            'SSD'=> $SSD,
+            'ManHinh'=> $ManHinh,
             'MaMauSac'=> $MaMauSac,
             'Gia'=> $Gia,
             'SoLuong'=> $SoLuong,
             'MoTa'=> $MoTa,
-            'HinhAnh'=> $TenHinhAnh,
+            'HinhAnh'=> $DuongDan,
             'TrangThai'=> $TrangThai,
         );
         array_push($sanphamBySearch_array['sanpham'], $sanpham_item);
     }
+
     echo json_encode($sanphamBySearch_array, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
 } else {
     echo json_encode(["message" => "Không tìm thấy sản phẩm nào với từ khóa tìm kiếm: " . $searchTerm]);
